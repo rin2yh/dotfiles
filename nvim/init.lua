@@ -1,3 +1,6 @@
+-- cache init.lua
+vim.loader.enable()
+
 -- vim
 vim.opt.number = true
 vim.cmd('syntax enable')
@@ -264,3 +267,15 @@ later(function()
   })
 end)
 
+-- disable unused plugin
+now(function()
+  local default_rtp = vim.opt.runtimepath:get()
+  vim.opt.runtimepath:remove(vim.env.VIMRUNTIME)
+  vim.api.nvim_create_autocmd("SourcePre", {
+    pattern = "*/plugin/*",
+    once = true,
+    callback = function()
+      vim.opt.runtimepath = default_rtp
+    end
+  })
+end)
