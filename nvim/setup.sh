@@ -16,3 +16,7 @@ mkdir -p "$(dirname "$TARGET_DIR")"
 ln -sfn "$SCRIPT_DIR" "$TARGET_DIR"
 
 echo "Linked $SCRIPT_DIR to $TARGET_DIR"
+
+# gopls
+go install golang.org/x/tools/gopls@latest
+
