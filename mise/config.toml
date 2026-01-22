@@ -3,6 +3,7 @@
 deno = "latest"
 gcloud = "latest"
 go = "latest"
+gopls = "latest"
 node = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:ccusage" = "latest"
