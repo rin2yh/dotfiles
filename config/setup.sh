@@ -17,12 +17,13 @@ find "$DOT_DIR" -maxdepth 1 -mindepth 1 -type d | while read -r src_dir; do
     # -s: symbolic, -f: force, -n: リンク先がディレクトリでも上書き
     ln -sfn "$src_dir" "$target"
     echo "Linked: $dir_name"
-
-    # そのディレクトリ内に setup.sh があれば実行
-    if [ -f "$src_dir/setup.sh" ]; then
-        echo "Running setup script for $dir_name..."
-        bash "$src_dir/setup.sh"
-    fi
 done
+
+echo "Extra setup tasks..."
+echo "Installing mise tools..."
+mise install
+
+echo "Installing gopls for nvim LSP..."
+go install golang.org/x/tools/gopls@latest
 
 echo "Done!"
