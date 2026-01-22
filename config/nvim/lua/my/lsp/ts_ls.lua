@@ -2,6 +2,7 @@ local M = {}
 
 M.cmd = { 'typescript-language-server', '--stdio' }
 M.filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
+M.root_markers = { 'package.json', 'tsconfig.json' }
 
 local inlayHints = {
   includeInlayParameterNameHints = 'all',
@@ -15,7 +16,10 @@ local inlayHints = {
 
 M.settings = {
   typescript = {
-    inlayHints = inlayHints
+    inlayHints = inlayHints,
+    tsserver = {
+      path = "", -- 空文字列でnode_modules内のtypescriptを自動検出
+    },
   },
   javascript = {
     inlayHints = inlayHints
