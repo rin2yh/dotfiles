@@ -11,6 +11,8 @@ M.settings = {
     },
     staticcheck = true,
     gofumpt = true,
+    completeUnimported = true,
+    semanticTokens = true,
     hints = {
       assignVariableTypes = true,
       compositeLiteralFields = true,
