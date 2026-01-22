@@ -1,0 +1,36 @@
+[user]
+	name = rin2yh
+	email = hyuki749@gmail.com
+[url "git@github.com:uzuPJ/"]
+	insteadOf = https://github.com/uzuPJ/　
+[alias]
+	br=branch
+	brd=branch -d
+	brm=branch --merged
+	brr=branch -a
+	st=status
+	sw = "!f() { git switch \"$1\" && git pull; }; f"
+	swb=switch -
+	swc=switch -c
+	cm=commit -m
+	ca=commit -a
+	pushoh=push origin HEAD
+	upushoh=push -u origin HEAD
+	ll=log --oneline
+	graph=log --graph
+	tree=log --graph --pretty=format:'%x09%C(auto) %h %Cgreen %ar %Creset%x09by%C(cyan ul)%an%Creset %x09%C(auto)%s %d'
+	cl=clone
+	pl=pull
+	cp=cherry-pick
+	cfg=config
+	cfgg=config --global
+	wt=worktree
+	wtrm=worktree remove
+	wtsw=worktree add
+[init]
+	defaultBranch = main
+[core]
+	ignorecase = false
+	editor = nvim
+[ghq]
+	root = ~/workspace
