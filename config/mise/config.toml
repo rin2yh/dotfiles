@@ -1,4 +1,5 @@
 [tools]
+"aqua:BurntSushi/ripgrep" = "latest"
 "aqua:LuaLS/lua-language-server" = "latest"
 deno = "latest"
 gcloud = "latest"
