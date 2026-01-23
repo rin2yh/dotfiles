@@ -252,7 +252,8 @@ add({
 
 
 later(function()
-  require('nvim-treesitter').install({ 'lua', 'vim', 'tsx', 'go', 'typescript', 'html', 'markdown', 'markdown_inline', 'bash' })
+  require('nvim-treesitter').install({ 'lua', 'vim', 'tsx', 'go', 'typescript', 'html', 'markdown', 'markdown_inline',
+    'bash' })
 
   -- 全てのファイルタイプでハイライト有効化
   vim.api.nvim_create_autocmd('FileType', {
