@@ -157,6 +157,8 @@ now(function()
     end,
     { desc = 'Open file exproler' }
   )
+  -- command+bでFilesを実行する
+  vim.keymap.set('n', '<D-b>', ':Files<CR>', { silent = true, desc = 'Toggle files' })
 end)
 
 later(function()
@@ -263,6 +265,8 @@ later(function()
     end,
   })
 end)
+
+add("pcolladosoto/tinygo.nvim")
 
 -- disable unused plugin
 now(function()
