@@ -36,8 +36,8 @@ vim.opt.grepformat = '%f:%l:%c:%m'
 -- ref: `:NewGrep` in `:help grep`
 vim.api.nvim_create_user_command('Grep', function(arg)
   local grep_cmd = 'silent grep! '
-    .. (arg.bang and '--fixed-strings -- ' or '')
-    .. vim.fn.shellescape(arg.args, true)
+      .. (arg.bang and '--fixed-strings -- ' or '')
+      .. vim.fn.shellescape(arg.args, true)
   vim.cmd(grep_cmd)
   if vim.fn.getqflist({ size = true }).size > 0 then
     vim.cmd.copen()
@@ -49,3 +49,13 @@ end, { nargs = '+', bang = true, desc = 'Enhounced grep' })
 
 vim.keymap.set('n', '<space>/', ':Grep ', { desc = 'Grep' })
 vim.keymap.set('n', '<space>?', ':Grep <c-r><c-w>', { desc = 'Grep current word' })
+
+-- 一括置換 :s<Space>
+vim.keymap.set('ca', 's', function()
+  if vim.fn.getcmdtype() == ':' and vim.fn.getcmdline() == 's' then
+    return '%s///g<Left><Left><Left>'
+  end
+  return 's'
+end, { expr = true })
+-- 置換の進捗をリアルタイムでプレビュー
+vim.opt.inccommand = "split"
