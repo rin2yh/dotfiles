@@ -9,6 +9,11 @@ later(function()
     },
   })
 
+  -- LSP capabilities設定
+  vim.lsp.config('*', {
+    capabilities = require('mini.completion').get_lsp_capabilities(),
+  })
+
   -- improve fallback completion
   vim.opt.complete = { '.', 'w', 'k', 'b', 'u' }
   vim.opt.completeopt:append('fuzzy')

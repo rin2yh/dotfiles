@@ -29,7 +29,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 vim.lsp.config('*', {
   root_markers = { '.git' },
-  capabilities = require('mini.completion').get_lsp_capabilities(),
 })
 
 -- load my/lsp/lua_ls.lua
