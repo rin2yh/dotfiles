@@ -8,7 +8,7 @@
 
 This will:
 1. Install Homebrew (if not installed)
-2. Install mise (if not installed)
+2. Load PATH from `.zprofile`
 3. Run mise tasks in dependency order:
    - `home:link` - Deploy home dotfiles (`~/.Brewfile` etc.)
    - `brew-bundle` - Install packages via Homebrew
