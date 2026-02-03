@@ -1,3 +1,13 @@
+# golang
+if command -v go &> /dev/null; then
+    export PATH=$PATH:$(go env GOPATH)/bin
+fi
+
+# GCloud
+if [ -f '/Users/yuuki/google-cloud-sdk/path.zsh.inc' ]; then
+    . '/Users/yuuki/google-cloud-sdk/path.zsh.inc'
+fi
+
 # alias
 ## PathShow
 alias path="echo $PATH | tr ':' '\n'"
@@ -13,6 +23,9 @@ alias mtr="mise t r"
 
 # PROMPT
 PROMPT='%F{white}%~%f %# '
+
+# Completion path
+fpath=(~/.zsh/completion $fpath)
 
 # load completion
 autoload -U compinit
@@ -47,3 +60,11 @@ if [ -f '/Users/yuuki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yuu
 
 # OrbStack
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+
+# mise
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+# Path重複解除
+typeset -U PATH
