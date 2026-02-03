@@ -1,1 +1,17 @@
 macos-option-as-alt = true
+
+background-opacity = 0.85
+background-blur-radius = 20
+
+shell-integration = zsh
+
+# env
+env = EDITOR=vim
+
+# cmd+rで設定を再度読み込み
+keybind = super+r=reload_config
+
+# ブラウザライクにウィンドウをcmd+opt+矢印で移動
+keybind = super+alt+right=next_tab
+keybind = super+alt+left=previous_tab
+
