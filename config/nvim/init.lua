@@ -1,6 +1,6 @@
 require('my/vim')
 require('my/user_command')
-require('my/lsp')
-
--- mini内部で不要なプラグインを起動時に動作させないようにするため、最後に配置
 require('my/mini')
+
+-- miniを内部で使用するため、mini以降に配置
+require('my/lsp')
