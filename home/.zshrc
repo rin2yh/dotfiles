@@ -3,11 +3,11 @@ if command -v go &> /dev/null; then
     export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
-# GCloud
-if [ -f '/Users/yuuki/google-cloud-sdk/path.zsh.inc' ]; then
-    . '/Users/yuuki/google-cloud-sdk/path.zsh.inc'
-fi
-
+# # GCloud
+# if [ -f '/Users/yuuki/google-cloud-sdk/path.zsh.inc' ]; then
+#     . '/Users/yuuki/google-cloud-sdk/path.zsh.inc'
+# fi
+#
 # alias
 ## PathShow
 alias path="echo $PATH | tr ':' '\n'"
@@ -55,12 +55,12 @@ if type docker &>/dev/null; then
   zstyle ':completion:*:*:docker-*:*' option-stacking yes
 fi
 
-# GCloud completion
-if [ -f '/Users/yuuki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yuuki/google-cloud-sdk/completion.zsh.inc'; fi
-
-# OrbStack
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-
+# # GCloud completion
+# if [ -f '/Users/yuuki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yuuki/google-cloud-sdk/completion.zsh.inc'; fi
+#
+# # OrbStack
+# source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+#
 # mise
 if command -v mise &> /dev/null; then
     eval "$(mise activate zsh)"
