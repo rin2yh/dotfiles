@@ -34,3 +34,5 @@
 	editor = nvim
 [ghq]
 	root = ~/workspace
+[push]
+	autoSetupRemote = true
