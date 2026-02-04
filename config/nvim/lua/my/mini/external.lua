@@ -18,7 +18,7 @@ add({
 
 later(function()
   require('nvim-treesitter').install({ 'lua', 'vim', 'tsx', 'go', 'typescript', 'html', 'markdown', 'markdown_inline',
-    'bash', 'terraform', 'hcl' })
+    'bash', 'terraform', 'hcl', 'dockerfile' })
 
   -- 全てのファイルタイプでハイライト有効化
   vim.api.nvim_create_autocmd('FileType', {
