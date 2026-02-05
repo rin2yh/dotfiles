@@ -1,7 +1,7 @@
 local M = {}
 
 M.cmd = { 'gopls' }
-M.filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' }
+M.filetypes = { 'go', 'gomod'}
 
 M.settings = {
   gopls = {
