@@ -59,3 +59,11 @@ vim.keymap.set('ca', 's', function()
 end, { expr = true })
 -- 置換の進捗をリアルタイムでプレビュー
 vim.opt.inccommand = "split"
+
+-- インサートモードを抜ける時にIMEをオフ
+vim.api.nvim_create_autocmd("InsertLeave", {
+  pattern = "*",
+  callback = function()
+    vim.fn.system("im-select com.apple.keylayout.ABC")
+  end,
+})
