@@ -15,3 +15,6 @@ idiomatic_version_file_enable_tools = ["node"]
 
 [env]
 DISABLE_AUTOUPDATER = "1"
+
+[tool_alias]
+terraform = "tf"
