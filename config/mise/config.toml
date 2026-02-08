@@ -1,6 +1,7 @@
 [tools]
 "aqua:BurntSushi/ripgrep" = "latest"
 "aqua:LuaLS/lua-language-server" = "latest"
+"aqua:hashicorp/terraform-ls" = "latest"
 "aqua:peco/peco" = "latest"
 "aqua:x-motemen/ghq" = "latest"
 deno = "latest"
