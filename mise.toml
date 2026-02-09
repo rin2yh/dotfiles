@@ -34,7 +34,7 @@ done
 """
 
 [tasks.tools]
-description = "Install development tools (mise, gopls)"
+description = "Install development tools (mise, gopls, docker-language-server)"
 depends = ["config:link"]
 run = """
 echo "Installing mise tools..."
@@ -42,4 +42,7 @@ mise install
 
 echo "Installing gopls for nvim LSP..."
 go install golang.org/x/tools/gopls@latest
+
+echo "Installing docker-language-server for nvim LSP..."
+go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 """
