@@ -1,7 +1,5 @@
-local later = MiniDeps.later
-
 -- completion
-later(function()
+MiniDeps.later(function()
   require('mini.fuzzy').setup()
   require('mini.completion').setup({
     lsp_completion = {
@@ -55,26 +53,4 @@ later(function()
     -- popup is visible but item is NOT selected -> hide popup and insert newline
     return keys.cy .. keys.cr
   end, { expr = true, desc = 'Complete current item if item is selected' })
-end)
-
-require('mini.snippets').setup({
-  mappings = {
-    jump_prev = '<c-k>',
-  },
-})
-
-later(function()
-  require('mini.pairs').setup()
-end)
-
-later(function()
-  require('mini.trailspace').setup()
-  vim.api.nvim_create_user_command(
-    'Trim',
-    function()
-      MiniTrailspace.trim()
-      MiniTrailspace.trim_last_lines()
-    end,
-    { desc = 'Trim trailing space and last blank lines' }
-  )
 end)
