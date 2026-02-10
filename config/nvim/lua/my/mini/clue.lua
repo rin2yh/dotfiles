@@ -1,14 +1,4 @@
-local later = MiniDeps.later
-
-later(function()
-  require('mini.jump2d').setup()
-end)
-
-later(function()
-  require('mini.bracketed').setup()
-end)
-
-later(function()
+MiniDeps.later(function()
   local function mode_nx(keys)
     return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
   end
