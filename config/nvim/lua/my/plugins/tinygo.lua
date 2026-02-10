@@ -1,3 +1,5 @@
-local add = MiniDeps.add
+local add, later = MiniDeps.add, MiniDeps.later
 
-add("pcolladosoto/tinygo.nvim")
+later(function()
+  add("pcolladosoto/tinygo.nvim")
+end)
