@@ -6,6 +6,7 @@
 "aqua:x-motemen/ghq" = "latest"
 go = "latest"
 neovim = "latest"
+node = "latest"
 "npm:difit" = "latest"
 "npm:typescript" = "latest"
 "npm:typescript-language-server" = "latest"
