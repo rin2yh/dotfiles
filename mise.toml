@@ -44,9 +44,5 @@ echo "Installing gopls for nvim LSP..."
 go install golang.org/x/tools/gopls@latest
 
 echo "Installing docker-language-server for nvim LSP..."
-DOCKER_LS_VERSION=$(curl -sL "https://api.github.com/repos/docker/docker-language-server/releases/latest" | grep -o '"tag_name": *"[^"]*"' | head -1 | grep -o 'v[^"]*')
-ARCH=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-curl -sL "https://github.com/docker/docker-language-server/releases/download/${DOCKER_LS_VERSION}/docker-language-server-${OS}-${ARCH}-${DOCKER_LS_VERSION}" -o "$(go env GOPATH)/bin/docker-language-server"
-chmod +x "$(go env GOPATH)/bin/docker-language-server"
+go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
 """
