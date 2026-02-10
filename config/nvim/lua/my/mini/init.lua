@@ -20,7 +20,7 @@ require('my.mini.file')
 require('my.mini.edit')
 require('my.mini.git')
 require('my.mini.navigate')
-require('my.mini.external')
+require('my.plugins')
 
 -- disable unused plugin
 MiniDeps.now(function()
