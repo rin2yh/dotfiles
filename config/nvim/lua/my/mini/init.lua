@@ -15,33 +15,27 @@ end
 -- Set up 'mini.deps' (customize to your liking)
 require('mini.deps').setup({ path = { package = path_package } })
 
--- UI
-require('my.mini.icons')
-require('my.mini.basics')
+-- Simple plugins (now)
+for _, name in ipairs({ 'icons', 'basics', 'starter' }) do
+  MiniDeps.now(require('mini.' .. name).setup)
+end
+
+-- Simple plugins (later)
+for _, name in ipairs({ 'indentscope', 'pairs', 'diff', 'jump2d', 'bracketed' }) do
+  MiniDeps.later(require('mini.' .. name).setup)
+end
+
+-- Plugins with custom settings
 require('my.mini.statusline')
 require('my.mini.notify')
-require('my.mini.starter')
 require('my.mini.misc')
-require('my.mini.indentscope')
 require('my.mini.hipatterns')
-
--- File
 require('my.mini.files')
 require('my.mini.pick')
-
--- Edit
 require('my.mini.completion')
 require('my.mini.snippets')
-require('my.mini.pairs')
 require('my.mini.trailspace')
-
--- Git
-require('my.mini.diff')
 require('my.mini.git')
-
--- Navigate
-require('my.mini.jump2d')
-require('my.mini.bracketed')
 require('my.mini.clue')
 
 require('my.plugins')
