@@ -14,6 +14,7 @@ node = "latest"
 "npm:difit" = "latest"
 "npm:typescript" = "latest"
 "npm:typescript-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
 "npm:zenn-cli" = "latest"
 uv = "latest"
 
