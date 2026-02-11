@@ -11,7 +11,8 @@
 	st=status
 	sw = "!f() { git switch \"$1\" && git pull; }; f"
 	swb=switch -
-	swc=switch -c
+  swc=switch -c
+  c=commit
 	cm=commit -m
 	ca=commit -a
 	pushoh=push origin HEAD
