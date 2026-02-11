@@ -20,6 +20,7 @@ alias dc="docker-compose"
 
 ## Mise
 alias mtr="mise t r"
+alias m="mise"
 
 # PROMPT
 PROMPT='%F{white}%~%f %# '
