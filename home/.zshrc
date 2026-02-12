@@ -64,7 +64,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # mise
 if command -v mise &> /dev/null; then
-    eval "$(mise activate zsh)"
+    eval "$(mise activate zsh --shims)"
 fi
 
 # Path重複解除
