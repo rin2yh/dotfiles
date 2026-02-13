@@ -9,6 +9,7 @@ echo "Deploying dotfiles from ./home to $HOME..."
 find ./home -type f | while read -r src; do
     rel_path="${src#./home/}"
     target="$HOME/$rel_path"
+    mkdir -p "$(dirname "$target")"
     ln -snf "$(pwd)/home/$rel_path" "$target"
     echo "Linked: $rel_path"
 done
