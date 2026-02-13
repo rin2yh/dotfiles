@@ -1,7 +1,7 @@
 local add, later = MiniDeps.add, MiniDeps.later
 
 add({
-  source = 'https://github.com/nvim-treesitter/nvim-treesitter',
+  source = 'nvim-treesitter/nvim-treesitter',
   hooks = {
     post_checkout = function()
       vim.cmd.TSUpdate()
@@ -10,13 +10,18 @@ add({
 })
 
 later(function()
-  require('nvim-treesitter').install({ 'lua', 'vim', 'tsx', 'go', 'typescript', 'html', 'markdown', 'markdown_inline',
-    'bash', 'terraform', 'hcl', 'dockerfile' })
+  local status, configs = pcall(require, 'nvim-treesitter.configs')
+  if not status then return end
 
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = '*',
-    callback = function()
-      pcall(vim.treesitter.start)
-    end,
+  configs.setup({
+    ensure_installed = {
+      'lua', 'vim', 'vimdoc', 'query', 'tsx', 'go', 'typescript',
+      'html', 'markdown', 'markdown_inline', 'bash', 'terraform',
+      'hcl', 'dockerfile'
+    },
+    auto_install = true,
+    highlight = {
+      enable = true,
+    },
   })
 end)
