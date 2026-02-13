@@ -1,3 +1,7 @@
 # for macOS
 /**/.DS_store
 
+/**/ide
+/**/logs
+/**/pkg
+/**/session-state
