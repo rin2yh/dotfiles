@@ -26,4 +26,11 @@ M.get_language_id = function(_, filetype)
   return map[filetype] or filetype
 end
 
+M.on_attach = function(client, bufnr)
+  -- mini.completionではdocker_lsの補完が動かないため、
+  -- バッファ単位で無効化し、Neovim組み込みのLSP補完を使う
+  vim.b[bufnr].minicompletion_disable = true
+  vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
+end
+
 return M
