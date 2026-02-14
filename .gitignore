@@ -5,3 +5,9 @@
 **/.claude/**/*
 !**/.claude/settings.json
 !**/.claude/CLAUDE.md
+
+# Copilot
+/**/ide
+/**/logs
+/**/pkg
+/**/session-state
