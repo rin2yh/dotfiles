@@ -17,6 +17,17 @@ vim.opt.tabstop = 2
 -- scroll offset as 3 lines
 vim.opt.scrolloff = 3
 
+
+-- detect Docker Compose files explicitly
+vim.filetype.add({
+  filename = {
+    ['compose.yaml'] = 'yaml.compose',
+    ['compose.yml'] = 'yaml.compose',
+    ['docker-compose.yaml'] = 'yaml.compose',
+    ['docker-compose.yml'] = 'yaml.compose',
+  },
+})
+
 -- move the cursor to the previous/next line across the first/last character
 vim.opt.whichwrap = 'b,s,h,l,<,>,[,],~'
 
