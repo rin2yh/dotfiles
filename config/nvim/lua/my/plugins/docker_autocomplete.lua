@@ -1,11 +1,12 @@
 local M = {}
 
 local config = {
-  filetypes = { 'dockerfile', 'compose-filetype' }, -- デフォルト
+  filetypes = { 'dockerfile', 'yaml.docker-compose' },
   min_word_length = 2,
 }
 
--- filetype判定のみ
+local augroup = vim.api.nvim_create_augroup('my.plugins.docker_autocomplete', { clear = true })
+
 local function is_target_filetype(buf)
   local ft = vim.api.nvim_get_option_value('filetype', { buf = buf })
   for _, allowed in ipairs(config.filetypes) do
@@ -16,26 +17,24 @@ local function is_target_filetype(buf)
   return false
 end
 
--- LSPが補完提供するか確認
 local function has_completion_provider(buf)
   for _, client in ipairs(vim.lsp.get_clients({ bufnr = buf })) do
-    if client.server_capabilities
-      and client.server_capabilities.completionProvider then
+    if client.server_capabilities and client.server_capabilities.completionProvider then
       return true
     end
   end
   return false
 end
 
--- カーソル直前の単語取得
 local function get_word_before_cursor(buf)
-  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local line = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] or ''
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row = cursor[1] - 1
+  local col = cursor[2]
+  local line = vim.api.nvim_buf_get_lines(buf, row, row + 1, false)[1] or ''
   local before_cursor = line:sub(1, col)
   return before_cursor:match('%w+$')
 end
 
--- 補完トリガー
 local function trigger_completion(buf)
   if vim.fn.pumvisible() == 1 then
     return
@@ -57,7 +56,6 @@ local function trigger_completion(buf)
   vim.lsp.buf.completion()
 end
 
--- 設定バリデーション
 local function validate_config()
   if type(config.filetypes) ~= 'table' or #config.filetypes == 0 then
     error('[docker_autocomplete] filetypes must be a non-empty table')
@@ -70,12 +68,12 @@ local function validate_config()
   end
 end
 
--- setup
 function M.setup(opts)
   config = vim.tbl_deep_extend('force', config, opts or {})
   validate_config()
 
   vim.api.nvim_create_autocmd('TextChangedI', {
+    group = augroup,
     callback = function(args)
       trigger_completion(args.buf)
     end,
