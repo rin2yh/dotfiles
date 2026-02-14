@@ -4,3 +4,4 @@
 # Claude Code
 **/.claude/**/*
 !**/.claude/settings.json
+!**/.claude/CLAUDE.md
