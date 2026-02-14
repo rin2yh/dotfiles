@@ -1,3 +1,6 @@
 # for macOS
 /**/.DS_store
 
+# Claude Code
+**/.claude/**/*
+!**/.claude/settings.json
