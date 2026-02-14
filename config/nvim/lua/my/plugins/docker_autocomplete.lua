@@ -1,7 +1,7 @@
 local M = {}
 
 local config = {
-  filetypes = { 'dockerfile', 'yaml.docker-compose' },
+  filetypes = { 'dockerfile', 'yaml.compose' },
   min_word_length = 2,
 }
 
