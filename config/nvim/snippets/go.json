@@ -1,0 +1,29 @@
+{
+  "if err != nil": {
+    "prefix": "iferr",
+    "body": [
+      "if err != nil {",
+      "\t${0:return err}",
+      "}"
+    ],
+    "desc": "if err != nil { ... }"
+  },
+  "for range": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:i}, ${2:v} := range ${3:slice} {",
+      "\t$0",
+      "}"
+    ],
+    "desc": "for range loop"
+  },
+  "Test function": {
+    "prefix": "test",
+    "body": [
+      "func Test${1:Xxx}(t *testing.T) {",
+      "\t$0",
+      "}"
+    ],
+    "desc": "Go test function"
+  }
+}
