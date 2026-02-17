@@ -67,3 +67,6 @@ vim.api.nvim_create_autocmd("InsertLeave", {
     vim.fn.system("im-select com.apple.keylayout.ABC")
   end,
 })
+
+-- leader + Code Action で呼び出し
+vim.keymap.set('n', '<space>w', vim.lsp.buf.code_action, { desc = "LSP code action" })
