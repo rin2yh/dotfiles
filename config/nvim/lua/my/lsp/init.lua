@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, { buffer = args.buf, desc = 'vim.lsp.buf.definition()' })
 
     vim.keymap.set('n', '<M-f>', function()
-      vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+      vim.lsp.buf.format({ bufnr = args.buf })
     end, { buffer = args.buf, desc = 'Format buffer' })
   end,
 })
