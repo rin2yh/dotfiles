@@ -8,4 +8,4 @@ require('mini.snippets').setup({
   },
 })
 
-MiniSnippets.start_lsp_server({ match = false })
+MiniSnippets.start_lsp_server()
