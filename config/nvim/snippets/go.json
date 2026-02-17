@@ -18,7 +18,7 @@
     "desc": "for range loop"
   },
   "Test function": {
-    "prefix": "func Test",
+    "prefix": "ftest",
     "body": [
       "func Test${1:Xxx}(t *testing.T) {",
       "\t$0",
