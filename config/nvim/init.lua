@@ -1,4 +1,26 @@
-require('my/vim')
+vim.loader.enable()
+
+-- editor options
+vim.opt.number = true
+vim.cmd('syntax enable')
+vim.opt.clipboard:append('unnamedplus,unnamed')
+vim.opt.expandtab = true
+vim.opt.shiftround = true
+vim.opt.shiftwidth = 2
+vim.opt.softtabstop = 2
+vim.opt.tabstop = 2
+vim.opt.scrolloff = 3
+vim.opt.whichwrap = 'b,s,h,l,<,>,[,],~'
+vim.opt.inccommand = "split"
+
+-- IME auto-off
+vim.api.nvim_create_autocmd("InsertLeave", {
+  pattern = "*",
+  callback = function()
+    vim.fn.system("im-select com.apple.keylayout.ABC")
+  end,
+})
+
 require('my/user_command')
 require('my/mini')
 
