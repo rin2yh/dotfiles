@@ -21,6 +21,8 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   end,
 })
 
+vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true })
+
 require('my/user_command')
 require('my/mini')
 

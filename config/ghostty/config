@@ -5,9 +5,6 @@ background-blur-radius = 20
 
 shell-integration = zsh
 
-# env
-env = EDITOR=vim
-
 # cmd+rで設定を再度読み込み
 keybind = super+r=reload_config
 
