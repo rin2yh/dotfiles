@@ -4,6 +4,7 @@
 "aqua:anthropics/claude-code" = "latest"
 "aqua:hashicorp/terraform-ls" = "latest"
 "aqua:peco/peco" = "latest"
+"aqua:tree-sitter/tree-sitter" = "latest"
 "aqua:x-motemen/ghq" = "latest"
 deno = "latest"
 gcloud = "latest"
