@@ -89,6 +89,6 @@ end
 require('mini.deps').setup({ path = { package = path_package } })
 
 require('my/mini')
-
--- miniを内部で使用するため、mini以降に配置
 require('my/lsp')
+require('my/plugins')
+

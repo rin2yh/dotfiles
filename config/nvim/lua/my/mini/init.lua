@@ -21,17 +21,3 @@ require('my.mini.trailspace')
 require('my.mini.git')
 require('my.mini.clue')
 
-require('my.plugins')
-
--- disable unused plugin
-MiniDeps.now(function()
-  local default_rtp = vim.opt.runtimepath:get()
-  vim.opt.runtimepath:remove(vim.env.VIMRUNTIME)
-  vim.api.nvim_create_autocmd("SourcePre", {
-    pattern = "*/plugin/*",
-    once = true,
-    callback = function()
-      vim.opt.runtimepath = default_rtp
-    end
-  })
-end)
