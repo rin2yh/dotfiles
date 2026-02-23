@@ -12,3 +12,4 @@ keybind = super+r=reload_config
 keybind = super+alt+right=next_tab
 keybind = super+alt+left=previous_tab
 
+unfocused-split-opacity = 0.85
