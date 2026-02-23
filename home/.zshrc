@@ -22,6 +22,9 @@ alias dc="docker-compose"
 alias mtr="mise t r"
 alias m="mise"
 
+## nvim
+alias n="nvim"
+
 # PROMPT
 PROMPT='%F{white}%~%f %# '
 
