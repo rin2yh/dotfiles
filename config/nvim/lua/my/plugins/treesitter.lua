@@ -21,12 +21,6 @@ now(function()
     },
     highlight = { enable = true },
   })
-  vim.api.nvim_create_autocmd({ "FileType" }, {
-    pattern = { 'lua', 'vim', 'markdown', 'sh', 'typescriptreact', 'typescript', 'html', 'go', 'terraform', 'dockerfile' },
-    callback = function()
-      vim.treesitter.start()
-    end,
-  })
 end)
 
 later(function()
