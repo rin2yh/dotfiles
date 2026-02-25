@@ -75,7 +75,10 @@
       "Write(~/.ssh/*_ed25519)",
       "Write(/etc/passwd)",
       "Write(/etc/shadow)",
-      "Write(/etc/sudoers)"
+      "Write(/etc/sudoers)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset:*)"
     ],
     "defaultMode": "plan"
   },
@@ -85,5 +88,6 @@
   },
   "language": "遊戯王VRAINSのAi",
   "autoUpdatesChannel": "stable",
-  "minimumVersion": "2.1.19"
+  "minimumVersion": "2.1.19",
+  "model": "sonnet"
 }
