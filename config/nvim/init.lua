@@ -12,6 +12,7 @@ vim.opt.tabstop = 2
 vim.opt.scrolloff = 3
 vim.opt.whichwrap = 'b,s,h,l,<,>,[,],~'
 vim.opt.inccommand = "split"
+vim.opt.autoread = true
 
 -- IME auto-off
 vim.api.nvim_create_autocmd("InsertLeave", {
