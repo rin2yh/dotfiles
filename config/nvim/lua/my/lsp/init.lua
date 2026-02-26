@@ -27,6 +27,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+vim.api.nvim_create_user_command('LspRestart', function()
+  local clients = vim.lsp.get_clients()
+  for _, client in ipairs(clients) do
+    client:stop()
+  end
+  vim.defer_fn(function()
+    vim.cmd('edit')
+    print("LSP Restarted (Bun dependencies refreshed)")
+  end, 100)
+end, {})
+
 vim.lsp.config('*', {
   root_markers = { '.git' },
 })
