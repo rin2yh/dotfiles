@@ -86,6 +86,12 @@ if not vim.uv.fs_stat(mini_path) then
   vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
+vim.api.nvim_create_user_command('CopyPath', function()
+  local path = vim.fn.expand('%')
+  vim.fn.setreg('+', path)
+  print("Copied: " .. path)
+end, {})
+
 -- Set up 'mini.deps' (customize to your liking)
 require('mini.deps').setup({ path = { package = path_package } })
 
