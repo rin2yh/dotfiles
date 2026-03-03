@@ -1,10 +1,12 @@
-local add, later = MiniDeps.add, MiniDeps.later
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
-later(function()
+now(function()
   add({
     source = 'iamcco/markdown-preview.nvim',
-    hooks = { post_install = function() vim.fn['mkdp#util#install']() end },
   })
+end)
 
+later(function()
+  vim.fn['mkdp#util#install']()
   vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<cr>', { desc = 'Markdown Preview Toggle' })
 end)
