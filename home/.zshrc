@@ -25,6 +25,9 @@ alias m="mise"
 ## nvim
 alias n="nvim"
 
+## Rust Cargo
+alias c="cargo"
+
 # PROMPT
 PROMPT='%F{white}%~%f %# '
 
