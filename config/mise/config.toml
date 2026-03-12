@@ -10,6 +10,7 @@
 deno = "latest"
 gcloud = "latest"
 go = "latest"
+lazygit = "latest"
 neovim = "latest"
 node = "latest"
 "npm:@github/copilot" = "latest"
