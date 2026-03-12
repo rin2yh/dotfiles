@@ -77,5 +77,7 @@ if command -v mise &> /dev/null; then
     eval "$(mise activate zsh --shims)"
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # Path重複解除
 typeset -U PATH

@@ -9,5 +9,33 @@
       "host": "https://github.com",
       "login": "rin2yh"
     }
-  ]
+  ],
+  "render_markdown": true,
+  "experimental": false,
+  "marketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
+  },
+  "installed_plugins": [
+    {
+      "name": "example-skills",
+      "marketplace": "anthropic-agent-skills",
+      "installed_at": "2026-02-27T01:46:55.044Z",
+      "enabled": true,
+      "cache_path": "/Users/yukihayashi/.copilot/installed-plugins/anthropic-agent-skills/example-skills"
+    },
+    {
+      "name": "document-skills",
+      "marketplace": "anthropic-agent-skills",
+      "installed_at": "2026-02-27T01:47:04.245Z",
+      "enabled": true,
+      "cache_path": "/Users/yukihayashi/.copilot/installed-plugins/anthropic-agent-skills/document-skills"
+    }
+  ],
+  "model": "gpt-5.4",
+  "reasoning_effort": "high"
 }

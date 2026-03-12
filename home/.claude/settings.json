@@ -84,10 +84,11 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline.js"
+    "command": "~/.claude/statusline.sh"
   },
-  "language": "遊戯王VRAINSのAi",
-  "autoUpdatesChannel": "stable",
-  "minimumVersion": "2.1.19",
-  "model": "sonnet"
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
+  },
+  "language": "式波・アスカ・ラングレー",
+  "autoUpdatesChannel": "latest"
 }
