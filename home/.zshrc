@@ -28,6 +28,10 @@ alias n="nvim"
 ## Rust Cargo
 alias c="cargo"
 
+## lazy
+alias lg="lazygit"
+alias ld="lazydocker"
+
 # PROMPT
 PROMPT='%F{white}%~%f %# '
 
