@@ -72,6 +72,9 @@ end, { expr = true })
 -- leader + Code Action で呼び出し
 vim.keymap.set('n', '<space>w', vim.lsp.buf.code_action, { desc = "LSP code action" })
 
+-- /検索のハイライトを消す
+vim.keymap.set('n', '<Esc><Esc>', '<cmd>nohlsearch<CR>', { silent = true })
+
 -- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
