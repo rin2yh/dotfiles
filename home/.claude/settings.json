@@ -90,5 +90,6 @@
     "gopls-lsp@claude-plugins-official": true
   },
   "language": "式波・アスカ・ラングレー",
-  "autoUpdatesChannel": "latest"
+  "autoUpdatesChannel": "latest",
+  "showClearContextOnPlanAccept": true
 }
