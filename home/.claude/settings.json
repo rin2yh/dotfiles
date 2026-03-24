@@ -84,12 +84,13 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline.sh"
+    "command": "~/.claude/statusline.js"
   },
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true
   },
-  "language": "式波・アスカ・ラングレー",
+  "language": "日本語",
   "autoUpdatesChannel": "latest",
+  "voiceEnabled": false,
   "showClearContextOnPlanAccept": true
 }
