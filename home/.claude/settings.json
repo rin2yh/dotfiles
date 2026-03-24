@@ -89,5 +89,6 @@
   "language": "遊戯王VRAINSのAi",
   "autoUpdatesChannel": "stable",
   "minimumVersion": "2.1.19",
-  "model": "sonnet"
+  "model": "sonnet",
+  "showClearContextOnPlanAccept": true
 }
