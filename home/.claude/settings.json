@@ -86,9 +86,14 @@
     "type": "command",
     "command": "~/.claude/statusline.js"
   },
-  "language": "遊戯王VRAINSのAi",
-  "autoUpdatesChannel": "stable",
-  "minimumVersion": "2.1.19",
-  "model": "sonnet",
-  "showClearContextOnPlanAccept": true
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "language": "日本語",
+  "effortLevel": "high",
+  "showClearContextOnPlanAccept": true,
+  "autoUpdatesChannel": "latest",
+  "voiceEnabled": false,
+  "skipAutoPermissionPrompt": true
 }

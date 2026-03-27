@@ -101,4 +101,5 @@ require('mini.deps').setup({ path = { package = path_package } })
 require('my/mini')
 require('my/lsp')
 require('my/plugins')
+require('my/oplog')
 
