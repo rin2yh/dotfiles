@@ -87,10 +87,13 @@
     "command": "~/.claude/statusline.js"
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "language": "日本語",
+  "effortLevel": "high",
+  "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "voiceEnabled": false,
-  "showClearContextOnPlanAccept": true
+  "skipAutoPermissionPrompt": true
 }
