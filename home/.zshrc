@@ -75,6 +75,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 # mise
 if command -v mise &> /dev/null; then
     eval "$(mise activate zsh --shims)"
+    fastfetch
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
