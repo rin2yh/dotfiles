@@ -1,5 +1,9 @@
 MiniDeps.now(function()
   require('mini.statusline').setup()
-  vim.opt.laststatus = 3
+
+  -- 下に表示されるステータスを非表示にして、上に表示する
+  vim.opt.laststatus = 0
+  vim.o.winbar = "%{%v:lua.MiniStatusline.active()%}"
+
   vim.opt.cmdheight = 0
 end)
