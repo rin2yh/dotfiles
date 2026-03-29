@@ -13,9 +13,9 @@ now(function()
       -- tsx:typescriptreact, bash:sh
       require('nvim-treesitter.configs').setup({
         ensure_installed = {
-          'lua', 'vim', 'markdown', 'markdown_inline', 'bash',
+          'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
           'tsx', 'typescript', 'html',
-          'go',
+          'go', 'rust',
           'terraform', 'dockerfile'
         },
         highlight = { enable = true },
