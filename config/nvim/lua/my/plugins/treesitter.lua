@@ -8,19 +8,21 @@ now(function()
         vim.cmd.TSUpdate()
       end
     },
+    config = function()
+      -- tree-sitterとfiletypeが違う罠
+      -- tsx:typescriptreact, bash:sh
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = {
+          'lua', 'vim', 'markdown', 'markdown_inline', 'bash',
+          'tsx', 'typescript', 'html',
+          'go',
+          'terraform', 'dockerfile'
+        },
+        highlight = { enable = true },
+      })
+    end
   })
-
-  -- tree-sitterとfiletypeが違う罠
-  -- tsx:typescriptreact, bash:sh
-  require('nvim-treesitter.config').setup({
-    ensure_installed = {
-      'lua', 'vim', 'markdown', 'markdown_inline', 'bash',
-      'tsx', 'typescript', 'html',
-      'go',
-      'terraform', 'dockerfile'
-    },
-    highlight = { enable = true },
-  })
+  require('nvim-treesitter.install').update({ with_sync = true })
 end)
 
 later(function()
@@ -30,3 +32,7 @@ later(function()
   })
   require('ts-comments').setup()
 end)
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99
