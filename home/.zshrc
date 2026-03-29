@@ -55,7 +55,7 @@ git_prompt() {
     ((behind > 0)) && flags+="⇣"
   fi
 
-  print -P "%K{#1f3b73}%F{white}  ${branch}${flags:+ ${flags}} %f%k"
+  echo -n "%K{#1f3b73}%F{white}  ${branch}${flags:+ ${flags}} %f%k"
 }
 setopt prompt_subst
 PROMPT='%F{white}%~%f $(git_prompt) %# '
