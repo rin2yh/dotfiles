@@ -1,6 +1,8 @@
-require('my.plugins.colorscheme')
-require('my.plugins.treesitter')
-require('my.plugins.vimdoc_ja')
-require('my.plugins.tinygo')
-require('my.plugins.copilot')
-require('my.plugins.markdown-preview')
+local plugin_dir = vim.fn.stdpath('config') .. '/lua/my/plugins'
+
+for _, file in ipairs(vim.fn.readdir(plugin_dir)) do
+  local name = file:match('^(.+)%.lua$')
+  if name and name ~= 'init' then
+    require('my.plugins.' .. name)
+  end
+end
