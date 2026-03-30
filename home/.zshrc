@@ -42,7 +42,8 @@ git_prompt() {
 
   # staged / unstaged / untracked
   [[ "$s" == *$'\n1 '* || "$s" == *$'\n2 '* ]] && flags+="!"
-  [[ "$s" == *$'\nu '* ]] && flags+="?"
+  [[ "$s" == *$'\n? '* ]] && flags+="?"
+  [[ "$s" == *$'\nu '* ]] && flags+="="
   [[ "$s" == *$'\n1 '* && "$s" == *"M."* ]] && flags+="+"  # staged（簡易判定）
 
   # ahead / behind（数値で判定）
