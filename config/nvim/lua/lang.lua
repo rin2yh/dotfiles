@@ -6,7 +6,7 @@ now(function()
     hooks = {
       post_checkout = function()
         vim.cmd.TSUpdate()
-      end
+      end,
     },
     config = function()
       -- tree-sitterとfiletypeが違う罠
@@ -16,11 +16,11 @@ now(function()
           'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
           'tsx', 'typescript', 'html',
           'go', 'rust',
-          'terraform', 'dockerfile'
+          'terraform', 'dockerfile',
         },
         highlight = { enable = true },
       })
-    end
+    end,
   })
   require('nvim-treesitter.install').update({ with_sync = true })
 end)
@@ -33,6 +33,11 @@ later(function()
   require('ts-comments').setup()
 end)
 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+later(function()
+  add('pcolladosoto/tinygo.nvim')
+  require('tinygo').setup({})
+end)
+
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldlevel = 99
