@@ -4,7 +4,7 @@ for _, name in ipairs({ 'icons', 'basics', 'starter' }) do
 end
 
 -- Simple plugins (later)
-for _, name in ipairs({ 'indentscope', 'pairs', 'diff', 'jump2d', 'bracketed' }) do
+for _, name in ipairs({ 'indentscope', 'pairs', 'diff', 'jump2d', 'bracketed', 'surround' }) do
   MiniDeps.later(require('mini.' .. name).setup)
 end
 
