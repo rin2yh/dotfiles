@@ -42,22 +42,3 @@ MiniDeps.later(function()
   end, { desc = 'mini.pick.files' })
 end)
 
--- git
-MiniDeps.later(function()
-  require('mini.git').setup()
-
-  vim.keymap.set({ 'n', 'x' }, '<space>gs', MiniGit.show_at_cursor, { desc = 'Show at cursor' })
-end)
-
--- trailspace
-MiniDeps.later(function()
-  require('mini.trailspace').setup()
-  vim.api.nvim_create_user_command(
-    'Trim',
-    function()
-      MiniTrailspace.trim()
-      MiniTrailspace.trim_last_lines()
-    end,
-    { desc = 'Trim trailing space and last blank lines' }
-  )
-end)
