@@ -1,14 +1,11 @@
-vim.o.winbar = " %m %f "
-
-require('ui')
-require('editor')
-require('nav')
+-- キーバインド系
 
 -- clue (全体のキーバインドヒント)
 MiniDeps.later(function()
   local function mode_nx(keys)
     return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
   end
+
   local clue = require('mini.clue')
   clue.setup({
     triggers = {
