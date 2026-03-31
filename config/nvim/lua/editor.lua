@@ -73,4 +73,3 @@ MiniDeps.later(function()
     return keys.cy .. keys.cr
   end, { expr = true, desc = 'Complete current item if item is selected' })
 end)
-

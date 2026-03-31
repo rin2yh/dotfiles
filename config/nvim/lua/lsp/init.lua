@@ -9,7 +9,7 @@ vim.api.nvim_create_user_command(
   { desc = 'LSP health check' })
 
 -- augroup for this config file
-local augroup = vim.api.nvim_create_augroup('my/lsp/init.lua', {})
+local augroup = vim.api.nvim_create_augroup('lsp/init.lua', {})
 
 -- format
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -40,8 +40,8 @@ vim.lsp.config('*', {
   root_markers = { '.git' },
 })
 
--- load my/lsp/lua_ls.lua
-local dirname = vim.fn.stdpath('config') .. '/lua/my/lsp'
+-- load lsp/lua_ls.lua
+local dirname = vim.fn.stdpath('config') .. '/lua/lsp'
 
 -- 設定したlspを保存する配列
 local lsp_names = {}
@@ -50,7 +50,7 @@ local lsp_names = {}
 for file, ftype in vim.fs.dir(dirname) do
   if ftype == 'file' and vim.endswith(file, '.lua') and file ~= 'init.lua' then
     local lsp_name = file:sub(1, -5)
-    local ok, result = pcall(require, 'my/lsp/' .. lsp_name)
+    local ok, result = pcall(require, 'lsp/' .. lsp_name)
     if ok then
       vim.lsp.config(lsp_name, result)
       table.insert(lsp_names, lsp_name)
