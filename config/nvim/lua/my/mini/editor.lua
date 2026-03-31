@@ -1,3 +1,22 @@
+-- 操作系
+
+-- Simple plugins
+for _, name in ipairs({ 'pairs', 'surround', 'move', 'bracketed', 'jump2d' }) do
+  MiniDeps.later(require('mini.' .. name).setup)
+end
+
+-- snippets
+local gen_loader = require('mini.snippets').gen_loader
+require('mini.snippets').setup({
+  snippets = {
+    gen_loader.from_lang(),
+  },
+  mappings = {
+    jump_prev = '<c-k>',
+  },
+})
+MiniSnippets.start_lsp_server()
+
 -- completion
 MiniDeps.later(function()
   require('mini.fuzzy').setup()
@@ -53,4 +72,65 @@ MiniDeps.later(function()
     -- popup is visible but item is NOT selected -> hide popup and insert newline
     return keys.cy .. keys.cr
   end, { expr = true, desc = 'Complete current item if item is selected' })
+end)
+
+-- clue
+MiniDeps.later(function()
+  local function mode_nx(keys)
+    return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
+  end
+  local clue = require('mini.clue')
+  clue.setup({
+    triggers = {
+      -- Leader triggers
+      mode_nx('<leader>'),
+
+      -- Built-in completion
+      { mode = 'i', keys = '<c-x>' },
+
+      -- `g` key
+      mode_nx('g'),
+
+      -- Marks
+      mode_nx("'"),
+      mode_nx('`'),
+
+      -- Registers
+      mode_nx('"'),
+      { mode = 'i', keys = '<c-r>' },
+      { mode = 'c', keys = '<c-r>' },
+
+      -- Window commands
+      { mode = 'n', keys = '<c-w>' },
+
+      -- bracketed commands
+      { mode = 'n', keys = '[' },
+      { mode = 'n', keys = ']' },
+
+      -- `z` key
+      mode_nx('z'),
+
+      -- surround
+      mode_nx('s'),
+
+      -- text object
+      { mode = 'x', keys = 'i' },
+      { mode = 'x', keys = 'a' },
+      { mode = 'o', keys = 'i' },
+      { mode = 'o', keys = 'a' },
+
+      -- option toggle (mini.basics)
+      { mode = 'n', keys = 'm' },
+    },
+
+    clues = {
+      -- Enhance this by adding descriptions for <Leader> mapping groups
+      clue.gen_clues.builtin_completion(),
+      clue.gen_clues.g(),
+      clue.gen_clues.marks(),
+      clue.gen_clues.registers({ show_contents = true }),
+      clue.gen_clues.windows({ submode_resize = true, submode_move = true }),
+      clue.gen_clues.z(),
+    },
+  })
 end)
