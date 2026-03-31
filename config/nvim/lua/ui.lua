@@ -1,5 +1,7 @@
 -- 表示系
 
+vim.o.winbar = " %m %f "
+
 -- Simple plugins
 MiniDeps.now(require('mini.icons').setup)
 for _, name in ipairs({ 'indentscope', 'diff' }) do
