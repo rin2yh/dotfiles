@@ -41,4 +41,3 @@ MiniDeps.later(function()
     MiniPick.builtin.files({ tool = 'git' })
   end, { desc = 'mini.pick.files' })
 end)
-
