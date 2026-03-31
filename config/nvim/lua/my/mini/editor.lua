@@ -1,3 +1,22 @@
+-- 操作系
+
+-- Simple plugins
+for _, name in ipairs({ 'pairs', 'surround', 'move', 'bracketed', 'jump2d' }) do
+  MiniDeps.later(require('mini.' .. name).setup)
+end
+
+-- snippets
+local gen_loader = require('mini.snippets').gen_loader
+require('mini.snippets').setup({
+  snippets = {
+    gen_loader.from_lang(),
+  },
+  mappings = {
+    jump_prev = '<c-k>',
+  },
+})
+MiniSnippets.start_lsp_server()
+
 -- completion
 MiniDeps.later(function()
   require('mini.fuzzy').setup()
@@ -54,3 +73,4 @@ MiniDeps.later(function()
     return keys.cy .. keys.cr
   end, { expr = true, desc = 'Complete current item if item is selected' })
 end)
+
