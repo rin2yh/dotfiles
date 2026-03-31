@@ -1,8 +1,8 @@
 vim.o.winbar = " %m %f "
 
-require('mini_conf.ui')
-require('mini_conf.editor')
-require('mini_conf.nav')
+require('mini.ui')
+require('mini.editor')
+require('mini.nav')
 
 -- clue (全体のキーバインドヒント)
 MiniDeps.later(function()
