@@ -1,5 +1,6 @@
 -- キーバインド系
 
+-- clue (全体のキーバインドヒント)
 MiniDeps.later(function()
   local function mode_nx(keys)
     return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
@@ -50,6 +51,7 @@ MiniDeps.later(function()
     },
 
     clues = {
+      -- Enhance this by adding descriptions for <Leader> mapping groups
       clue.gen_clues.builtin_completion(),
       clue.gen_clues.g(),
       clue.gen_clues.marks(),
