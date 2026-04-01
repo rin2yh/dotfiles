@@ -3,25 +3,25 @@
 ## Setup
 
 ```bash
-./setup.sh
+make
 ```
 
 This will:
 1. Install Homebrew (if not installed)
-2. Install mise via Brewfile (if not installed)
-3. Run mise tasks in dependency order:
-   - `home:link` - Deploy home dotfiles (`~/.Brewfile` etc.)
-   - `brew-bundle` - Install packages via Homebrew
-   - `config:link` - Deploy config dotfiles (`~/.config/*`)
-   - `tools` - Install development tools (mise install, gopls)
+2. Deploy home dotfiles (`~/`)
+3. Install packages via Homebrew (`brew bundle --global`)
+4. Deploy config dotfiles (`~/.config/`)
+5. Install development tools (mise install, gopls)
 
-### Individual Tasks
+### Individual Targets
 
 ```bash
-mise run home:link      # home dotfiles only
-mise run brew-bundle    # brew bundle only
-mise run config:link    # config dotfiles only
-mise run tools          # tool installation only
+make brew-install  # Install Homebrew
+make home-link     # home dotfiles only
+make brew-bundle   # brew bundle only
+make config-link   # config dotfiles only
+make tools         # tool installation only
+make clean         # remove created symlinks
 ```
 
 ## Structure
@@ -30,6 +30,5 @@ mise run tools          # tool installation only
 .
 ├── config/   # -> ~/.config/
 ├── home/     # -> ~/
-├── mise.toml # Task definitions
-└── setup.sh  # Bootstrap script
+└── Makefile  # Setup tasks
 ```
