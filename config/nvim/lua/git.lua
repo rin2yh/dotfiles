@@ -1,6 +1,8 @@
 -- Git系
 
-MiniDeps.later(function()
+local later = MiniDeps.later
+
+later(function()
   require('mini.diff').setup()
 end)
 

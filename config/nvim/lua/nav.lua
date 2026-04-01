@@ -1,10 +1,12 @@
 -- 探索系
 
+local now = MiniDeps.now
+
 -- starter
-MiniDeps.now(require('mini.starter').setup)
+now(require('mini.starter').setup)
 
 -- misc
-MiniDeps.now(function()
+now(function()
   require('mini.misc').setup()
 
   MiniMisc.setup_restore_cursor()
@@ -15,7 +17,7 @@ MiniDeps.now(function()
 end)
 
 -- files
-MiniDeps.now(function()
+now(function()
   require('mini.files').setup()
 
   -- mini.files.setup() がハイライトを上書きするため、setup() 後に再設定
