@@ -1,4 +1,6 @@
 -- config of lsp
+
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 vim.diagnostic.config({
   virtual_text = true,
 })
@@ -54,7 +56,7 @@ end
 
 vim.lsp.enable(lsp_names)
 
-MiniDeps.later(function()
-  MiniDeps.add("pcolladosoto/tinygo.nvim")
+later(function()
+  add("pcolladosoto/tinygo.nvim")
   require("tinygo").setup({})
 end)

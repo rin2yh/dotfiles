@@ -1,10 +1,10 @@
 -- Git系
 
-MiniDeps.later(function()
-  require('mini.diff').setup()
-end)
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
-MiniDeps.later(function()
+later(require('mini.diff').setup)
+
+later(function()
   require('mini.git').setup()
 
   vim.keymap.set({ 'n', 'x' }, '<space>gs', MiniGit.show_at_cursor, { desc = 'Show at cursor' })
