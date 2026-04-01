@@ -22,6 +22,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<M-f>', function()
       vim.lsp.buf.format({ bufnr = args.buf })
     end, { buffer = args.buf, desc = 'Format buffer' })
+
+    vim.keymap.set('n', '<space>w', vim.lsp.buf.code_action,
+      { buffer = args.buf, desc = 'LSP code action' })
   end,
 })
 
