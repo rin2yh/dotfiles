@@ -31,7 +31,7 @@ end, { expr = true })
 -- /検索のハイライトを消す
 vim.keymap.set('n', '<Esc><Esc>', '<cmd>nohlsearch<CR>', { silent = true })
 
-require('ui')
+require('appearance')
 require('edit')
 require('completion')
 require('git')
