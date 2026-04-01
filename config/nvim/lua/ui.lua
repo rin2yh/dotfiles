@@ -2,6 +2,37 @@
 
 vim.o.winbar = " %m %f "
 
+-- colorscheme
+MiniDeps.now(function()
+  MiniDeps.add({ source = 'https://github.com/folke/tokyonight.nvim' })
+  require("tokyonight").setup({
+    style = "storm",
+    transparent = true,
+    on_highlights = function(hl, c)
+      hl.WinSeparator = {
+        fg = c.blue,
+        bold = true,
+      }
+
+      -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
+      hl.LineNr = { fg = c.fg_dark }
+
+      -- mini.filesの背景も透過させる
+      hl.MiniFilesNormal = { bg = "NONE" }
+      hl.MiniFilesBorder = { bg = "NONE" }
+      hl.MiniFilesBorderModified = { bg = "NONE" }
+      hl.MiniFilesTitle = { bg = "NONE" }
+      hl.MiniFilesTitleFocused = { bg = "NONE" }
+    end,
+  })
+  vim.cmd.colorscheme('tokyonight')
+end)
+
+MiniDeps.later(function()
+  MiniDeps.add('https://github.com/vim-jp/vimdoc-ja')
+  vim.opt.helplang:prepend('ja')
+end)
+
 -- Simple plugins
 MiniDeps.now(require('mini.icons').setup)
 for _, name in ipairs({ 'indentscope', 'diff' }) do
