@@ -103,6 +103,4 @@ require('editor')
 require('nav')
 require('keybind')
 require('lsp')
-require('plugins')
 require('oplog')
-
