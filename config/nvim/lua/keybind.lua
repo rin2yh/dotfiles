@@ -1,5 +1,18 @@
 -- キーバインド系
 
+vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true })
+
+-- 一括置換 :s<Space>
+vim.keymap.set('ca', 's', function()
+  if vim.fn.getcmdtype() == ':' and vim.fn.getcmdline() == 's' then
+    return '%s///g<Left><Left><Left>'
+  end
+  return 's'
+end, { expr = true })
+
+-- /検索のハイライトを消す
+vim.keymap.set('n', '<Esc><Esc>', '<cmd>nohlsearch<CR>', { silent = true })
+
 -- clue (全体のキーバインドヒント)
 MiniDeps.later(function()
   local function mode_nx(keys)
