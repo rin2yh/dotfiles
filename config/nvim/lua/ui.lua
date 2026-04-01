@@ -17,12 +17,6 @@ MiniDeps.now(function()
       -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
       hl.LineNr = { fg = c.fg_dark }
 
-      -- mini.filesの背景も透過させる
-      hl.MiniFilesNormal = { bg = "NONE" }
-      hl.MiniFilesBorder = { bg = "NONE" }
-      hl.MiniFilesBorderModified = { bg = "NONE" }
-      hl.MiniFilesTitle = { bg = "NONE" }
-      hl.MiniFilesTitleFocused = { bg = "NONE" }
     end,
   })
   vim.cmd.colorscheme('tokyonight')
