@@ -1,9 +1,7 @@
 -- 探索系
 
--- Simple plugins
-for _, name in ipairs({ 'basics', 'starter' }) do
-  MiniDeps.now(require('mini.' .. name).setup)
-end
+-- starter
+MiniDeps.now(require('mini.starter').setup)
 
 -- misc
 MiniDeps.now(function()
