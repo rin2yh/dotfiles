@@ -62,7 +62,3 @@ end
 
 vim.lsp.enable(lsp_names)
 
-MiniDeps.later(function()
-  MiniDeps.add("pcolladosoto/tinygo.nvim")
-  require("tinygo").setup({})
-end)
