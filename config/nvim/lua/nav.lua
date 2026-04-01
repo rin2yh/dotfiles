@@ -1,6 +1,6 @@
 -- 探索系
 
-local now = MiniDeps.now
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 -- starter
 now(require('mini.starter').setup)
@@ -43,7 +43,7 @@ now(function()
 end)
 
 -- pick
-MiniDeps.later(function()
+later(function()
   require('mini.pick').setup()
 
   vim.ui.select = MiniPick.ui_select

@@ -1,6 +1,6 @@
 -- Git系
 
-local later = MiniDeps.later
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 later(require('mini.diff').setup)
 
