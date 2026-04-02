@@ -1,6 +1,6 @@
 -- 探索系
 
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local now, later = MiniDeps.now, MiniDeps.later
 
 -- starter
 now(require('mini.starter').setup)

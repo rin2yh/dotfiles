@@ -19,6 +19,16 @@ now(function()
       -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
       hl.LineNr = { fg = c.fg_dark }
 
+      -- telescope 透過
+      for _, name in ipairs({
+        'Normal', 'Border',
+        'PromptNormal', 'PromptBorder', 'PromptTitle',
+        'ResultsNormal', 'ResultsBorder', 'ResultsTitle',
+        'PreviewNormal', 'PreviewBorder', 'PreviewTitle',
+        'Title',
+      }) do
+        hl['Telescope' .. name] = { bg = 'NONE' }
+      end
     end,
   })
   vim.cmd.colorscheme('tokyonight')
@@ -30,7 +40,10 @@ later(function()
 end)
 
 -- Simple plugins
-now(require('mini.icons').setup)
+now(function()
+  require('mini.icons').setup()
+  MiniIcons.mock_nvim_web_devicons()
+end)
 later(require('mini.indentscope').setup)
 
 -- statusline
