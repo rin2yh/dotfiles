@@ -1,5 +1,7 @@
 -- 補完系
 
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+
 -- snippets
 local gen_loader = require('mini.snippets').gen_loader
 require('mini.snippets').setup({
@@ -13,7 +15,7 @@ require('mini.snippets').setup({
 MiniSnippets.start_lsp_server()
 
 -- completion
-MiniDeps.later(function()
+later(function()
   require('mini.fuzzy').setup()
   require('mini.completion').setup({
     lsp_completion = {

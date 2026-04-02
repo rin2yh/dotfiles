@@ -66,9 +66,11 @@ vim.api.nvim_create_user_command('CopyPath', function()
   print("Copied: " .. path)
 end, {})
 
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+
 -- treesitter
-MiniDeps.now(function()
-  MiniDeps.add({
+now(function()
+  add({
     source = 'https://github.com/nvim-treesitter/nvim-treesitter',
     hooks = {
       post_checkout = function()
@@ -92,8 +94,8 @@ MiniDeps.now(function()
   require('nvim-treesitter.install').update({ with_sync = true })
 end)
 
-MiniDeps.later(function()
-  MiniDeps.add({
+later(function()
+  add({
     source = 'https://github.com/folke/ts-comments.nvim',
     depends = { 'nvim-treesitter/nvim-treesitter' },
   })
@@ -106,8 +108,8 @@ vim.opt.foldlevel = 99
 
 -- Simple plugins
 for _, name in ipairs({ 'pairs', 'surround', 'move', 'bracketed', 'jump2d' }) do
-  MiniDeps.later(require('mini.' .. name).setup)
+  later(require('mini.' .. name).setup)
 end
 
 -- basics
-MiniDeps.now(require('mini.basics').setup)
+now(require('mini.basics').setup)

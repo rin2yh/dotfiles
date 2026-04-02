@@ -2,9 +2,11 @@
 
 vim.o.winbar = " %m %f "
 
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+
 -- colorscheme
-MiniDeps.now(function()
-  MiniDeps.add({ source = 'https://github.com/folke/tokyonight.nvim' })
+now(function()
+  add({ source = 'https://github.com/folke/tokyonight.nvim' })
   require("tokyonight").setup({
     style = "storm",
     transparent = true,
@@ -17,35 +19,48 @@ MiniDeps.now(function()
       -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
       hl.LineNr = { fg = c.fg_dark }
 
+      -- telescope 透過
+      for _, name in ipairs({
+        'Normal', 'Border',
+        'PromptNormal', 'PromptBorder', 'PromptTitle',
+        'ResultsNormal', 'ResultsBorder', 'ResultsTitle',
+        'PreviewNormal', 'PreviewBorder', 'PreviewTitle',
+        'Title',
+      }) do
+        hl['Telescope' .. name] = { bg = 'NONE' }
+      end
     end,
   })
   vim.cmd.colorscheme('tokyonight')
 end)
 
-MiniDeps.later(function()
-  MiniDeps.add('https://github.com/vim-jp/vimdoc-ja')
+later(function()
+  add('https://github.com/vim-jp/vimdoc-ja')
   vim.opt.helplang:prepend('ja')
 end)
 
 -- Simple plugins
-MiniDeps.now(require('mini.icons').setup)
-MiniDeps.later(require('mini.indentscope').setup)
+now(function()
+  require('mini.icons').setup()
+  MiniIcons.mock_nvim_web_devicons()
+end)
+later(require('mini.indentscope').setup)
 
 -- statusline
-MiniDeps.now(function()
+now(function()
   require('mini.statusline').setup()
   vim.opt.laststatus = 3
   vim.opt.cmdheight = 0
 end)
 
 -- notify
-MiniDeps.now(function()
+now(function()
   require('mini.notify').setup()
   vim.notify = require('mini.notify').make_notify({})
 end)
 
 -- hipatterns
-MiniDeps.later(function()
+later(function()
   local hipatterns = require('mini.hipatterns')
   local hi_words = require('mini.extra').gen_highlighter.words
   hipatterns.setup({
@@ -59,7 +74,7 @@ MiniDeps.later(function()
 end)
 
 -- trailspace
-MiniDeps.later(function()
+later(function()
   require('mini.trailspace').setup()
   vim.api.nvim_create_user_command(
     'Trim',
@@ -72,7 +87,7 @@ MiniDeps.later(function()
 end)
 
 -- clue (全体のキーバインドヒント)
-MiniDeps.later(function()
+later(function()
   local function mode_nx(keys)
     return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
   end

@@ -25,6 +25,7 @@ node = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:vscode-langservers-extracted" = "latest"
 "npm:zenn-cli" = "latest"
+starship = "latest"
 uv = "latest"
 
 [settings]
