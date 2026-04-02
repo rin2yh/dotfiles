@@ -9,3 +9,8 @@ later(function()
 
   vim.keymap.set({ 'n', 'x' }, '<space>gs', MiniGit.show_at_cursor, { desc = 'Show at cursor' })
 end)
+
+later(function()
+  add({ source = 'https://github.com/kdheepak/lazygit.nvim' })
+  vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<cr>', { desc = 'Lazygit' })
+end)
