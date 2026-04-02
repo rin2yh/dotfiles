@@ -2,6 +2,7 @@ macos-option-as-alt = true
 
 background-opacity = 0.85
 background-blur-radius = 20
+unfocused-split-opacity = 0.85
 
 shell-integration = zsh
 
@@ -12,4 +13,8 @@ keybind = super+r=reload_config
 keybind = super+alt+right=next_tab
 keybind = super+alt+left=previous_tab
 
-unfocused-split-opacity = 0.85
+# resize split tab
+keybind = super+shift+up=resize_split:up,10
+keybind = super+shift+down=resize_split:down,10
+keybind = super+shift+left=resize_split:left,10
+keybind = super+shift+right=resize_split:right,10
