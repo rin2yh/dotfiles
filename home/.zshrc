@@ -32,35 +32,6 @@ alias c="cargo"
 alias lg="lazygit"
 alias ld="lazydocker"
 
-# PROMPT
-git_prompt() {
-  local s branch flags=""
-  s=$(git status --porcelain=2 --branch 2>/dev/null) || return
-
-  # branch
-  branch=$(printf "%s\n" "$s" | sed -n 's/^# branch.head //p')
-
-  # staged / unstaged / untracked
-  [[ "$s" == *$'\n1 '* || "$s" == *$'\n2 '* ]] && flags+="!"
-  [[ "$s" == *$'\n? '* ]] && flags+="?"
-  [[ "$s" == *$'\nu '* ]] && flags+="="
-  [[ "$s" == *$'\n1 '* && "$s" == *"M."* ]] && flags+="+"  # staged（簡易判定）
-
-  # ahead / behind（数値で判定）
-  local ahead=0 behind=0
-  if printf "%s\n" "$s" | grep -q '^# branch.ab'; then
-    read ahead behind <<<$(printf "%s\n" "$s" \
-      | sed -n 's/^# branch.ab +\([0-9]*\) -\([0-9]*\)$/\1 \2/p')
-
-    ((ahead > 0)) && flags+="⇡"
-    ((behind > 0)) && flags+="⇣"
-  fi
-
-  echo -n "%K{#1f3b73}%F{white}  ${branch}${flags:+ ${flags}} %f%k"
-}
-setopt prompt_subst
-PROMPT='%F{white}%~%f $(git_prompt) %# '
-
 # Completion path
 fpath=(~/.zsh/completion $fpath)
 
@@ -102,6 +73,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 if command -v mise &> /dev/null; then
     eval "$(mise activate zsh --shims)"
     fastfetch
+    eval "$(starship init zsh)"
 fi
 
 # Path重複解除
