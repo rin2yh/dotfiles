@@ -16,6 +16,8 @@ now(function()
         bold = true,
       }
 
+      hl.NormalFloat = { bg = "NONE" }
+      hl.FloatBorder = { bg = "NONE" }
       -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
       hl.LineNr = { fg = c.fg_dark }
 

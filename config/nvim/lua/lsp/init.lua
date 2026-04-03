@@ -34,6 +34,17 @@ vim.lsp.config('*', {
   root_markers = { '.git' },
 })
 
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'LSP hover information' })
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local opts = { buffer = args.buf }
+
+    -- hoverを実行する時に直接UI設定を渡す
+    vim.keymap.set('n', 'K', function()
+      vim.lsp.buf.hover({ border = "rounded" })
+    end, opts)
+  end,
+})
 -- load lsp/lua_ls.lua
 local dirname = vim.fn.stdpath('config') .. '/lua/lsp'
 
