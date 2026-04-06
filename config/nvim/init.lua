@@ -18,7 +18,14 @@ end
 require('mini.deps').setup({ path = { package = path_package } })
 
 -- keymaps
-vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true })
+
+-- jkで抜ける系
+vim.keymap.set('t', 'jk', [[<C-\><C-n>]], { noremap = true })
+vim.keymap.set("i", "jk", "<Esc>")
+vim.keymap.set("v", "jk", "<Esc>")
+
+-- /検索のハイライトを消す
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { silent = true })
 
 -- 一括置換 :s<Space>
 vim.keymap.set('ca', 's', function()
@@ -27,9 +34,6 @@ vim.keymap.set('ca', 's', function()
   end
   return 's'
 end, { expr = true })
-
--- /検索のハイライトを消す
-vim.keymap.set('n', '<Esc><Esc>', '<cmd>nohlsearch<CR>', { silent = true })
 
 require('appearance')
 require('edit')
