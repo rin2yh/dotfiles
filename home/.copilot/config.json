@@ -10,7 +10,7 @@
       "login": "rin2yh"
     }
   ],
-  "render_markdown": true,
+  "renderMarkdown": true,
   "experimental": false,
   "marketplaces": {
     "anthropic-agent-skills": {
@@ -38,5 +38,5 @@
   ],
   "firstLaunchAt": "2026-03-11T00:00:00.000Z",
   "model": "gpt-5.4",
-  "reasoning_effort": "medium"
+  "effortLevel": "medium"
 }

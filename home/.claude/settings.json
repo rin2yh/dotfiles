@@ -82,7 +82,6 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "opus[1m]",
   "hooks": {
     "SessionEnd": [
       {
