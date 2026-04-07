@@ -82,18 +82,6 @@
     ],
     "defaultMode": "plan"
   },
-  "hooks": {
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/yukihayashi/workspace/3shake/claude-code-plugins/usage-analytics/bin/usage-analytics"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.js"
@@ -101,7 +89,16 @@
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "usage-analytics@3shake-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "3shake-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "3-shake/claude-code-plugins"
+      }
+    }
   },
   "language": "日本語",
   "effortLevel": "high",
