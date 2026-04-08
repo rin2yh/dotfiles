@@ -54,7 +54,7 @@ if type brew &>/dev/null; then
     zle clear-screen
   }
   zle -N peco-src
-  bindkey '^]' peco-src
+  bindkey '^;' peco-src
 fi
 
 # Docker completion
