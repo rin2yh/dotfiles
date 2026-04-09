@@ -18,9 +18,7 @@ end
 require('mini.deps').setup({ path = { package = path_package } })
 
 -- keymaps
-
 -- jkで抜ける系
-vim.keymap.set('t', 'jk', [[<C-\><C-n>]], { noremap = true })
 vim.keymap.set("i", "jk", "<Esc>")
 vim.keymap.set("v", "jk", "<Esc>")
 
