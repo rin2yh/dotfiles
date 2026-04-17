@@ -23,7 +23,7 @@ alias mtr="mise t r"
 alias m="mise"
 
 ## nvim
-alias n="nvim"
+alias n="nvim ."
 
 ## Rust Cargo
 alias c="cargo"

@@ -90,7 +90,8 @@
     "gopls-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "usage-analytics@3shake-plugins": true
+    "usage-analytics@3shake-plugins": true,
+    "commit-commands@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
