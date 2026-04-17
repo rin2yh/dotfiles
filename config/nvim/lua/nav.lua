@@ -48,7 +48,8 @@ later(function()
 
   vim.ui.select = MiniPick.ui_select
 
-  vim.keymap.set('n', '<space>f', function()
+  vim.keymap.set('n', '<leader>f', function()
     MiniPick.builtin.files({ tool = 'git' })
   end, { desc = 'mini.pick.files' })
+  vim.keymap.set('n', '<space>b', MiniPick.builtin.buffers)
 end)
