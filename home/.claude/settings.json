@@ -119,35 +119,12 @@
     }
   },
   "language": "日本語",
-  "effortLevel": "xhigh",
-  "showClearContextOnPlanAccept": true,
-  "autoUpdatesChannel": "latest",
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false,
   "sandbox": {
     "enabled": true,
-    "allowUnsandboxedCommands": false,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["gh", "git", "go"],
+    "allowUnsandboxedCommands": false,
     "filesystem": {
-      "denyRead": [
-        "~/.ssh",
-        "~/.aws",
-        "~/.config/gcloud",
-        "~/.kube",
-        "~/.gnupg",
-        "~/.netrc",
-        "~/.authinfo",
-        "~/.zsh_history",
-        "~/.bash_history",
-        "~/Library/Keychains",
-        "~/Library/Cookies",
-        "~/Library/Messages",
-        "~/Library/Mail",
-        "~/.codex",
-        "/Users/yuuki/workspace/dotfiles/home/.codex"
-      ],
-      "allowRead": [],
+      "allowWrite": [],
       "denyWrite": [
         "~/.ssh",
         "~/.aws",
@@ -167,7 +144,34 @@
         "/Users/yuuki/workspace/dotfiles/home/.gitconfig",
         "/Users/yuuki/workspace/dotfiles/home/.codex"
       ],
-      "allowWrite": []
-    }
-  }
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.config/gcloud",
+        "~/.kube",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.authinfo",
+        "~/.zsh_history",
+        "~/.bash_history",
+        "~/Library/Keychains",
+        "~/Library/Cookies",
+        "~/Library/Messages",
+        "~/Library/Mail",
+        "~/.codex",
+        "/Users/yuuki/workspace/dotfiles/home/.codex"
+      ],
+      "allowRead": []
+    },
+    "excludedCommands": [
+      "gh",
+      "git",
+      "go"
+    ]
+  },
+  "effortLevel": "xhigh",
+  "showClearContextOnPlanAccept": true,
+  "autoUpdatesChannel": "latest",
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": false
 }
