@@ -115,6 +115,11 @@
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "api.github.com"
+      ]
+    },
     "filesystem": {
       "allowWrite": [],
       "denyWrite": [
