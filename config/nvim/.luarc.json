@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "LuaJIT",
+  "diagnostics.globals": [
+    "vim",
+    "MiniDeps",
+    "MiniIcons",
+    "MiniTrailspace",
+    "MiniGit",
+    "MiniSnippets",
+    "MiniFuzzy",
+    "MiniMisc",
+    "MiniFiles",
+    "MiniPick"
+  ],
+  "diagnostics.unusedLocalExclude": ["_*"],
+  "workspace.checkThirdParty": false,
+  "workspace.library": ["$VIMRUNTIME/lua", "${3rd}/luv/library"]
+}
