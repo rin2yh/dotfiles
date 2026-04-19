@@ -12,17 +12,21 @@ now(function()
   -- 絶対パスで読み取って TinyGoSetTarget を直接呼ぶ。
   tinygo.applyConfigFile = function()
     local bufname = vim.api.nvim_buf_get_name(0)
+    local search_path = nil
+    if bufname ~= "" then
+      search_path = vim.fs.dirname(bufname)
+    end
     local found = vim.fs.find(tinygo.config_file, {
       upward = true,
-      path = bufname ~= "" and vim.fs.dirname(bufname) or nil,
+      path = search_path,
     })
-    if #found == 0 then return end
+    if vim.tbl_isempty(found) then return end
     local f = io.open(found[1], "r")
-    if not f then return end
+    if f == nil then return end
     local raw = f:read("a")
     f:close()
     local ok, cfg = pcall(vim.json.decode, raw)
-    if not ok or type(cfg) ~= "table" or not cfg.target then return end
+    if not ok or type(cfg) ~= "table" or cfg.target == nil then return end
     vim.cmd.TinyGoSetTarget(cfg.target)
   end
 

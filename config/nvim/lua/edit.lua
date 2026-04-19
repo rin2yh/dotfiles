@@ -45,8 +45,12 @@ vim.opt.grepformat = '%f:%l:%c:%m'
 
 -- ref: `:NewGrep` in `:help grep`
 vim.api.nvim_create_user_command('Grep', function(arg)
+  local fixed_strings_opt = ''
+  if arg.bang then
+    fixed_strings_opt = '--fixed-strings -- '
+  end
   local grep_cmd = 'silent grep! '
-      .. (arg.bang and '--fixed-strings -- ' or '')
+      .. fixed_strings_opt
       .. vim.fn.shellescape(arg.args, true)
   vim.cmd(grep_cmd)
   if vim.fn.getqflist({ size = true }).size > 0 then
