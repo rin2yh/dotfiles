@@ -4,6 +4,5 @@ brew "zsh-autosuggestions"
 
 cask "fuwari"
 cask "ghostty"
-cask "orbstack"
 cask "raycast"
 
