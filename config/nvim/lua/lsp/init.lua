@@ -77,4 +77,3 @@ for file, ftype in vim.fs.dir(dirname) do
 end
 
 vim.lsp.enable(lsp_names)
-
