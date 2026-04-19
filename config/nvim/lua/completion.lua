@@ -14,14 +14,38 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect', 'fuzzy', 'popup' }
 vim.opt.complete = { '.', 'w', 'k', 'b', 'u' }
 vim.opt.dictionary:append('/usr/share/dict/words')
 
--- LSP attach 時にネイティブ補完を有効化
+local autotrigger_group = vim.api.nvim_create_augroup('lsp/completion', {})
+local autotrigger_timer = vim.uv.new_timer()
+local autotrigger_ms = 150
+
 vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('lsp/completion', {}),
+  group = autotrigger_group,
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client and client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    if not (client and client:supports_method('textDocument/completion')) then
+      return
     end
+    vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+
+    -- 単語途中でも LSP 補完を自動発火（triggerCharacters 以外もデバウンス付きで）
+    vim.api.nvim_create_autocmd('TextChangedI', {
+      group = autotrigger_group,
+      buffer = ev.buf,
+      callback = function()
+        autotrigger_timer:stop()
+        local col = vim.api.nvim_win_get_cursor(0)[2]
+        if col == 0 then return end
+        if vim.fn.pumvisible() == 1 then return end
+        local prev_char = vim.api.nvim_get_current_line():sub(col, col)
+        if not prev_char:match('[%w_]') then return end
+        local buf = ev.buf
+        autotrigger_timer:start(autotrigger_ms, 0, vim.schedule_wrap(function()
+          if vim.api.nvim_get_current_buf() ~= buf then return end
+          if vim.fn.mode() ~= 'i' or vim.fn.pumvisible() ~= 0 then return end
+          vim.lsp.completion.get()
+        end))
+      end,
+    })
   end,
 })
 
