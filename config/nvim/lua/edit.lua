@@ -86,6 +86,7 @@ now(function()
   })
   -- tree-sitterとfiletypeが違う罠
   -- tsx:typescriptreact, bash:sh
+  local reinstalled = {}
   vim.api.nvim_create_autocmd('FileType', {
     pattern = {
       'lua', 'vim', 'markdown', 'sh', 'yaml', 'zsh',
@@ -93,8 +94,16 @@ now(function()
       'go', 'rust',
       'terraform', 'dockerfile'
     },
-    callback = function()
-      vim.treesitter.start()
+    callback = function(ev)
+      if pcall(vim.treesitter.start, ev.buf) then return end
+      local ft = vim.bo[ev.buf].filetype
+      local lang = vim.treesitter.language.get_lang(ft) or ft
+      if reinstalled[lang] then return end
+      reinstalled[lang] = true
+      vim.notify(('treesitter %s: reinstalling parser...'):format(lang), vim.log.levels.WARN)
+      require('nvim-treesitter').install({ lang }, { force = true }):await(function()
+        vim.schedule(function() pcall(vim.treesitter.start, ev.buf) end)
+      end)
     end,
   })
 end)
