@@ -20,7 +20,7 @@ now(function()
       upward = true,
       path = search_path,
     })
-    if #found == 0 then return end
+    if vim.tbl_isempty(found) then return end
     local f = io.open(found[1], "r")
     if f == nil then return end
     local raw = f:read("a")

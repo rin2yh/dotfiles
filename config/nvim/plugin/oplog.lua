@@ -63,7 +63,7 @@ local function rotate_if_needed()
 end
 
 local function flush()
-  if #buf == 0 then return end
+  if vim.tbl_isempty(buf) then return end
   local lines = buf
   buf = {}
   rotate_if_needed()
