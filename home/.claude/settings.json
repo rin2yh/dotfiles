@@ -5,7 +5,16 @@
   },
   "includeCoAuthoredBy": false,
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(go build:*)",
+      "Bash(go test:*)",
+      "Bash(go vet:*)",
+      "Bash(go run:*)",
+      "Bash(go env:*)",
+      "Bash(go mod:*)",
+      "Bash(go fmt:*)",
+      "Bash(gofmt:*)"
+    ],
     "deny": [
       "Bash(rm -rf /)",
       "Bash(rm -rf ~)",
@@ -106,5 +115,51 @@
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "sandbox": {
+    "enabled": true,
+    "allowUnsandboxedCommands": false,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": ["gh", "git", "go"],
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.config/gcloud",
+        "~/.kube",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.authinfo",
+        "~/.zsh_history",
+        "~/.bash_history",
+        "~/Library/Keychains",
+        "~/Library/Cookies",
+        "~/Library/Messages",
+        "~/Library/Mail",
+        "~/.codex",
+        "/Users/yuuki/workspace/dotfiles/home/.codex"
+      ],
+      "allowRead": [],
+      "denyWrite": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.config/gcloud",
+        "~/.kube",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.authinfo",
+        "~/Library/Keychains",
+        "~/Library/LaunchAgents",
+        "~/.zshrc",
+        "~/.zprofile",
+        "~/.bashrc",
+        "~/.bash_profile",
+        "/Users/yuuki/workspace/dotfiles/home/.zshrc",
+        "/Users/yuuki/workspace/dotfiles/home/.zprofile",
+        "/Users/yuuki/workspace/dotfiles/home/.gitconfig",
+        "/Users/yuuki/workspace/dotfiles/home/.codex"
+      ],
+      "allowWrite": []
+    }
+  }
 }
