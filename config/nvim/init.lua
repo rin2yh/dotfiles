@@ -3,7 +3,7 @@ vim.loader.enable()
 -- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
-if not vim.uv.fs_stat(mini_path) then
+if vim.uv.fs_stat(mini_path) == nil then
   vim.cmd('echo "Installing `mini.nvim`" | redraw')
   local clone_cmd = {
     'git', 'clone', '--filter=blob:none',
