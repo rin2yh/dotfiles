@@ -45,23 +45,21 @@ end
 
 local function rotate_if_needed()
   local stat = vim.uv.fs_stat(log_path)
-  if stat and stat.size > max_size then
-    local f = io.open(log_path, 'r')
-    if not f then return end
-    local content = f:read('*a')
-    f:close()
-    -- 先頭半分を切り捨てて後半を残す
-    local half = math.floor(#content / 2)
-    local newline_pos = content:find('\n', half)
-    if newline_pos then
-      content = content:sub(newline_pos + 1)
-    end
-    local wf = io.open(log_path, 'w')
-    if wf then
-      wf:write(content)
-      wf:close()
-    end
+  if stat == nil or stat.size <= max_size then return end
+  local f = io.open(log_path, 'r')
+  if f == nil then return end
+  local content = f:read('*a')
+  f:close()
+  -- 先頭半分を切り捨てて後半を残す
+  local half = math.floor(#content / 2)
+  local newline_pos = content:find('\n', half)
+  if newline_pos ~= nil then
+    content = content:sub(newline_pos + 1)
   end
+  local wf = io.open(log_path, 'w')
+  if wf == nil then return end
+  wf:write(content)
+  wf:close()
 end
 
 local function flush()
@@ -70,7 +68,7 @@ local function flush()
   buf = {}
   rotate_if_needed()
   local f = io.open(log_path, 'a')
-  if not f then return end
+  if f == nil then return end
   for _, line in ipairs(lines) do
     f:write(line .. '\n')
   end
@@ -78,11 +76,10 @@ local function flush()
 end
 
 local function cancel_timer()
-  if flush_timer then
-    flush_timer:stop()
-    flush_timer:close()
-    flush_timer = nil
-  end
+  if flush_timer == nil then return end
+  flush_timer:stop()
+  flush_timer:close()
+  flush_timer = nil
 end
 
 local function schedule_flush()

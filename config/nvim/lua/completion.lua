@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = autotrigger_group,
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if not (client and client:supports_method('textDocument/completion')) then
+    if client == nil or not client:supports_method('textDocument/completion') then
       return
     end
     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
@@ -60,11 +60,17 @@ local keys = {
 }
 
 vim.keymap.set('i', '<tab>', function()
-  return vim.fn.pumvisible() == 1 and keys.cn or keys.ct
+  if vim.fn.pumvisible() == 1 then
+    return keys.cn
+  end
+  return keys.ct
 end, { expr = true, desc = 'Select next item if popup is visible' })
 
 vim.keymap.set('i', '<s-tab>', function()
-  return vim.fn.pumvisible() == 1 and keys.cp or keys.cd
+  if vim.fn.pumvisible() == 1 then
+    return keys.cp
+  end
+  return keys.cd
 end, { expr = true, desc = 'Select previous item if popup is visible' })
 
 vim.keymap.set('i', '<cr>', function()
