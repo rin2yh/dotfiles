@@ -41,6 +41,16 @@ vim.api.nvim_create_user_command(
   'checkhealth vim.lsp',
   { desc = 'LSP health check' })
 
+vim.api.nvim_create_user_command('LspRestart', function()
+  for _, client in ipairs(vim.lsp.get_clients()) do
+    client:stop()
+  end
+  vim.defer_fn(function()
+    vim.cmd('edit')
+    vim.notify('LSP restarted', vim.log.levels.INFO)
+  end, 100)
+end, { desc = 'Restart all LSP clients' })
+
 -- augroup for this config file
 local augroup = vim.api.nvim_create_augroup('lsp/init.lua', {})
 
