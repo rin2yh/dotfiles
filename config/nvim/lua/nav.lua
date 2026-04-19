@@ -44,7 +44,18 @@ end)
 
 -- pick
 later(function()
+  local prev_paste = vim.paste
   require('mini.pick').setup()
+
+  vim.paste = function(lines, phase)
+    if not MiniPick.is_picker_active() then
+      return prev_paste(lines, phase)
+    end
+    local query = MiniPick.get_picker_query() or {}
+    vim.list_extend(query, vim.fn.split(table.concat(lines, ' '), '\\zs'))
+    MiniPick.set_picker_query(query)
+    return true
+  end
 
   vim.ui.select = MiniPick.ui_select
 
