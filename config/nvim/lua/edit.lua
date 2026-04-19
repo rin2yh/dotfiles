@@ -77,21 +77,26 @@ now(function()
         vim.cmd.TSUpdate()
       end
     },
-    config = function()
-      -- tree-sitterとfiletypeが違う罠
-      -- tsx:typescriptreact, bash:sh
-      require('nvim-treesitter.configs').setup({
-        ensure_installed = {
-          'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
-          'tsx', 'typescript', 'html',
-          'go', 'rust',
-          'terraform', 'dockerfile'
-        },
-        highlight = { enable = true },
-      })
-    end
   })
-  require('nvim-treesitter.install').update({ with_sync = true })
+  require('nvim-treesitter').install({
+    'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
+    'tsx', 'typescript', 'html',
+    'go', 'rust',
+    'terraform', 'dockerfile'
+  })
+  -- tree-sitterとfiletypeが違う罠
+  -- tsx:typescriptreact, bash:sh
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = {
+      'lua', 'vim', 'markdown', 'sh', 'yaml', 'zsh',
+      'typescriptreact', 'typescript', 'html',
+      'go', 'rust',
+      'terraform', 'dockerfile'
+    },
+    callback = function()
+      vim.treesitter.start()
+    end,
+  })
 end)
 
 later(function()
