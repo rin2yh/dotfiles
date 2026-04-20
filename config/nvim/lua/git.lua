@@ -1,6 +1,6 @@
 -- Git系
 
-local add, later = MiniDeps.add, MiniDeps.later
+local later = MiniDeps.later
 
 later(require('mini.diff').setup)
 
@@ -11,7 +11,7 @@ later(function()
 end)
 
 later(function()
-  add({ source = 'https://github.com/kdheepak/lazygit.nvim' })
+  vim.pack.add({ 'https://github.com/kdheepak/lazygit.nvim' })
   vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<cr>', { desc = 'Lazygit' })
 end)
 
