@@ -70,7 +70,7 @@ vim.api.nvim_create_user_command('CopyPath', function()
   print("Copied: " .. path)
 end, {})
 
-local now, later = MiniDeps.now, MiniDeps.later
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 -- treesitter
 now(function()
@@ -115,7 +115,10 @@ now(function()
 end)
 
 later(function()
-  vim.pack.add({ 'https://github.com/folke/ts-comments.nvim' })
+  add({
+    source = 'https://github.com/folke/ts-comments.nvim',
+    depends = { 'nvim-treesitter/nvim-treesitter' },
+  })
   require('ts-comments').setup()
 end)
 
