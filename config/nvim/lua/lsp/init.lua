@@ -1,6 +1,7 @@
 -- config of lsp
 
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+
 vim.diagnostic.config({
   virtual_text = true,
 })

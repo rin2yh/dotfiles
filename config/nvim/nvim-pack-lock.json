@@ -1,0 +1,20 @@
+{
+  "plugins": {
+    "lazygit.nvim": {
+      "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
+      "src": "https://github.com/kdheepak/lazygit.nvim"
+    },
+    "tinygo.nvim": {
+      "rev": "0f38894d50ad5a02aae8f3df14a24576acc304f1",
+      "src": "https://github.com/pcolladosoto/tinygo.nvim"
+    },
+    "tokyonight.nvim": {
+      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+      "src": "https://github.com/folke/tokyonight.nvim"
+    },
+    "vimdoc-ja": {
+      "rev": "ee16ecb8f802287302ff0317e52e27c274c16194",
+      "src": "https://github.com/vim-jp/vimdoc-ja"
+    }
+  }
+}
