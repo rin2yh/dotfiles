@@ -2,11 +2,11 @@
 
 vim.o.winbar = " %m %f "
 
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local now, later = MiniDeps.now, MiniDeps.later
 
 -- colorscheme
 now(function()
-  add({ source = 'https://github.com/folke/tokyonight.nvim' })
+  vim.pack.add({ 'https://github.com/folke/tokyonight.nvim' })
   require("tokyonight").setup({
     style = "storm",
     transparent = true,
@@ -42,7 +42,7 @@ now(function()
 end)
 
 later(function()
-  add('https://github.com/vim-jp/vimdoc-ja')
+  vim.pack.add({ 'https://github.com/vim-jp/vimdoc-ja' })
   vim.opt.helplang:prepend('ja')
 end)
 

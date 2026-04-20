@@ -1,9 +1,9 @@
 -- config of lsp
 
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local now = MiniDeps.now
 
 now(function()
-  add("pcolladosoto/tinygo.nvim")
+  vim.pack.add({ 'https://github.com/pcolladosoto/tinygo.nvim' })
   local tinygo = require("tinygo")
   tinygo.setup({})
 
