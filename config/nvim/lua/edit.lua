@@ -74,16 +74,14 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 -- treesitter
 now(function()
-  vim.api.nvim_create_autocmd('PackChanged', {
-    desc = 'Run TSUpdate after nvim-treesitter install/update',
-    callback = function(ev)
-      local data = ev.data
-      if data.spec.name == 'nvim-treesitter' and data.kind ~= 'delete' then
+  add({
+    source = 'https://github.com/nvim-treesitter/nvim-treesitter',
+    hooks = {
+      post_checkout = function()
         vim.cmd.TSUpdate()
       end
-    end,
+    },
   })
-  vim.pack.add({ 'https://github.com/nvim-treesitter/nvim-treesitter' })
   require('nvim-treesitter').install({
     'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
     'tsx', 'typescript', 'html',
