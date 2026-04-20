@@ -18,24 +18,8 @@ now(function()
 
       hl.NormalFloat = { bg = "NONE" }
       hl.FloatBorder = { bg = "NONE" }
-      -- 補完ポップアップも透過（選択行は視認性のため残す）
-      hl.Pmenu = { bg = "NONE" }
-      hl.PmenuKind = { bg = "NONE" }
-      hl.PmenuExtra = { bg = "NONE" }
-      hl.PmenuSbar = { bg = "NONE" }
       -- 透過設定の場合、デフォルトでかなり薄いのでテーマカラーを適用
       hl.LineNr = { fg = c.fg_dark }
-
-      -- telescope 透過
-      for _, name in ipairs({
-        'Normal', 'Border',
-        'PromptNormal', 'PromptBorder', 'PromptTitle',
-        'ResultsNormal', 'ResultsBorder', 'ResultsTitle',
-        'PreviewNormal', 'PreviewBorder', 'PreviewTitle',
-        'Title',
-      }) do
-        hl['Telescope' .. name] = { bg = 'NONE' }
-      end
     end,
   })
   vim.cmd.colorscheme('tokyonight')
