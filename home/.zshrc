@@ -44,18 +44,6 @@ if type brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
   # auto-suggest
   source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-  # peco
-  function peco-src() {
-    local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
-    if [ -n "$selected_dir" ]; then
-      BUFFER="cd ${selected_dir}"
-      zle accept-line
-    fi
-    zle clear-screen
-  }
-  zle -N peco-src
-  bindkey '^g' peco-src
 fi
 
 # Docker completion
