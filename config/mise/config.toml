@@ -9,6 +9,7 @@
 "aqua:tree-sitter/tree-sitter" = "latest"
 "aqua:x-motemen/ghq" = "latest"
 fastfetch = "latest"
+fzf = "latest"
 gcloud = "latest"
 "github:k1LoW/mo" = "v0.23.2"
 go = "latest"
@@ -21,7 +22,9 @@ node = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:vscode-langservers-extracted" = "latest"
 "npm:zenn-cli" = "latest"
+shfmt = "latest"
 starship = "latest"
+zoxide = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
