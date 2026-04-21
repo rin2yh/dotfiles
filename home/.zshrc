@@ -77,13 +77,12 @@ if command -v mise &>/dev/null; then
   eval "$(starship init zsh)"
   eval "$(zoxide init zsh)"
 
-  export FZF_DEFAULT_OPTS='--layout=reverse'
   zi() {
+    local prefix="$HOME/workspace"
     local dir
-    dir=$(zoxide query -l | head -50 | fzf)
+    dir=$(zoxide query -l | grep "^$prefix" | head -n 50 | sed "s|^$prefix/||" | fzf --reverse)
     [ -n "$dir" ] && z "$dir"
   }
-
 fi
 
 # Path重複解除
