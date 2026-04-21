@@ -1,11 +1,11 @@
 # golang
-if command -v go &> /dev/null; then
-    export PATH=$PATH:$(go env GOPATH)/bin
+if command -v go &>/dev/null; then
+  export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
 # GCloud
 if [ -f '/Users/yuuki/google-cloud-sdk/path.zsh.inc' ]; then
-    . '/Users/yuuki/google-cloud-sdk/path.zsh.inc'
+  . '/Users/yuuki/google-cloud-sdk/path.zsh.inc'
 fi
 
 # alias
@@ -46,7 +46,7 @@ if type brew &>/dev/null; then
   source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
   # peco
-  function peco-src () {
+  function peco-src() {
     local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
     if [ -n "$selected_dir" ]; then
       BUFFER="cd ${selected_dir}"
@@ -71,10 +71,19 @@ if [ -f '/Users/yuuki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yuu
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # mise
-if command -v mise &> /dev/null; then
-    eval "$(mise activate zsh --shims)"
-    fastfetch
-    eval "$(starship init zsh)"
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh --shims)"
+  fastfetch
+  eval "$(starship init zsh)"
+  eval "$(zoxide init zsh)"
+
+  export FZF_DEFAULT_OPTS='--layout=reverse'
+  zi() {
+    local dir
+    dir=$(zoxide query -l | head -50 | fzf)
+    [ -n "$dir" ] && z "$dir"
+  }
+
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
