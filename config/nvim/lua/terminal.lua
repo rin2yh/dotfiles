@@ -2,8 +2,9 @@
 
 local later = MiniDeps.later
 
+vim.pack.add({ 'https://github.com/akinsho/toggleterm.nvim' })
+
 later(function()
-  vim.pack.add({ 'https://github.com/akinsho/toggleterm.nvim' })
   require('toggleterm').setup()
 
   local Terminal = require('toggleterm.terminal').Terminal
