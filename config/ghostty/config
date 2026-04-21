@@ -21,3 +21,14 @@ keybind = super+shift+right=resize_split:right,10
 
 keybind = super+l=clear_screen
 
+# Custom shader
+# custom-shader = shaders/mnoise.glsl
+# custom-shader = shaders/starfield.glsl
+custom-shader = shaders/in-game-crt-cursor.glsl
+# custom-shader = shaders/cursor_blaze.glsl
+# custom-shader = shaders/matrix-hallway.glsl
+# custom-shader = shaders/inside-the-matrix.glsl
+# custom-shader = shaders/in-game-crt.glsl
+# custom-shader = shaders/tft.glsl
+# custom-shader = shaders/cubes.glsl
+# custom-shader = shaders/spotlight.glsl

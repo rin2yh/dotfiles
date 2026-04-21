@@ -131,7 +131,9 @@
       ]
     },
     "filesystem": {
-      "allowWrite": [],
+      "allowWrite": [
+        "~/go/pkg/mod"
+      ],
       "denyWrite": [
         "~/.ssh",
         "~/.aws",
@@ -173,7 +175,9 @@
     "excludedCommands": [
       "gh",
       "git",
-      "go"
+      "go",
+      "tinygo",
+      "mise"
     ]
   },
   "effortLevel": "xhigh",
