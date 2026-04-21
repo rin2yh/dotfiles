@@ -102,7 +102,9 @@
     "skill-creator@claude-plugins-official": true,
     "usage-analytics@3shake-plugins": true,
     "commit-commands@claude-plugins-official": true,
-    "example-skills@anthropic-agent-skills": true
+    "example-skills@anthropic-agent-skills": true,
+    "slack@claude-plugins-official": true,
+    "notion@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
