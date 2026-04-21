@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "lazygit.nvim": {
-      "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
-      "src": "https://github.com/kdheepak/lazygit.nvim"
-    },
     "tinygo.nvim": {
       "rev": "0f38894d50ad5a02aae8f3df14a24576acc304f1",
       "src": "https://github.com/pcolladosoto/tinygo.nvim"

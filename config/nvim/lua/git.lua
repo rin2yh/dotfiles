@@ -11,7 +11,18 @@ later(function()
 end)
 
 later(function()
-  vim.pack.add({ 'https://github.com/kdheepak/lazygit.nvim' })
-  vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<cr>', { desc = 'Lazygit' })
+  vim.pack.add({ 'https://github.com/akinsho/toggleterm.nvim' })
+  require('toggleterm').setup()
+
+  local Terminal = require('toggleterm.terminal').Terminal
+  local lazygit = Terminal:new({
+    cmd = 'lazygit',
+    direction = 'float',
+    hidden = true,
+    float_opts = { border = 'rounded' },
+  })
+
+  vim.keymap.set('n', '<leader>lg', function() lazygit:toggle() end,
+    { desc = 'Lazygit' })
 end)
 
