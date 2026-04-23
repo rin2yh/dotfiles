@@ -5,7 +5,7 @@ export PATH := $(BREW_PREFIX)/bin:$(PATH)
 
 RSYNC_OPTS := -av --checksum --exclude='.DS_Store' --exclude='.git'
 
-.PHONY: setup brew-install home-deploy brew-bundle config-deploy tools help
+.PHONY: setup brew-install home-deploy brew-bundle config-deploy tools clean help
 
 setup: brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
 
@@ -28,6 +28,26 @@ config-deploy: ## Deploy config dotfiles (./config/ -> ~/.config/)
 tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
+
+clean: ## Remove deployed files from ~/ and ~/.config/
+	@echo "Removing deployed files from \$$HOME..."
+	@find ./home -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
+		rel="$${src#./home/}"; \
+		target="$$HOME/$$rel"; \
+		if [ -f "$$target" ]; then \
+			rm "$$target"; \
+			echo "Removed: $$target"; \
+		fi; \
+	done
+	@echo "Removing deployed files from \$$HOME/.config..."
+	@find ./config -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
+		rel="$${src#./config/}"; \
+		target="$$HOME/.config/$$rel"; \
+		if [ -f "$$target" ]; then \
+			rm "$$target"; \
+			echo "Removed: $$target"; \
+		fi; \
+	done
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'
