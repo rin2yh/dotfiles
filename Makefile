@@ -5,7 +5,7 @@ export PATH := $(BREW_PREFIX)/bin:$(PATH)
 
 RSYNC_OPTS := -av --checksum --exclude='.DS_Store' --exclude='.git'
 
-.PHONY: setup brew-install home-deploy brew-bundle config-deploy tools clean clean-check help
+.PHONY: setup brew-install home-deploy brew-bundle config-deploy tools clean help
 
 setup: brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
 
@@ -29,43 +29,27 @@ tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
 
-clean-check: ## Preview files that clean would remove
-	@echo "Files to be removed from \$$HOME:"
-	@find ./home -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-		rel="$${src#./home/}"; \
-		target="$$HOME/$$rel"; \
-		if [ -f "$$target" ]; then \
-			echo "  $$target"; \
-		fi; \
-	done
-	@echo "Files to be removed from \$$HOME/.config:"
-	@find ./config -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-		rel="$${src#./config/}"; \
-		target="$$HOME/.config/$$rel"; \
-		if [ -f "$$target" ]; then \
-			echo "  $$target"; \
-		fi; \
-	done
-
-clean: ## Remove deployed files from ~/ and ~/.config/
-	@echo "Removing deployed files from \$$HOME..."
-	@find ./home -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-		rel="$${src#./home/}"; \
-		target="$$HOME/$$rel"; \
-		if [ -f "$$target" ]; then \
-			rm "$$target"; \
-			echo "Removed: $$target"; \
-		fi; \
-	done
-	@echo "Removing deployed files from \$$HOME/.config..."
-	@find ./config -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-		rel="$${src#./config/}"; \
-		target="$$HOME/.config/$$rel"; \
-		if [ -f "$$target" ]; then \
-			rm "$$target"; \
-			echo "Removed: $$target"; \
-		fi; \
-	done
+clean: ## Remove deployed files from ~/ and ~/.config/ (prompts for confirmation)
+	@files=$$( \
+		{ find ./home -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
+			rel="$${src#./home/}"; target="$$HOME/$$rel"; \
+			[ -f "$$target" ] && echo "$$target"; \
+		  done; \
+		  find ./config -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
+			rel="$${src#./config/}"; target="$$HOME/.config/$$rel"; \
+			[ -f "$$target" ] && echo "$$target"; \
+		  done; \
+		} \
+	); \
+	if [ -z "$$files" ]; then echo "No files to remove."; exit 0; fi; \
+	echo "Files to be removed:"; \
+	echo "$$files" | sed 's/^/  /'; \
+	printf "Continue? [y/N]: "; \
+	read ans; \
+	case "$$ans" in \
+		[yY]) echo "$$files" | while read -r f; do rm "$$f" && echo "Removed: $$f"; done ;; \
+		*) echo "Aborted." ;; \
+	esac
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'
