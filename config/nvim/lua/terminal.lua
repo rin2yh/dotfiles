@@ -65,14 +65,6 @@ later(function()
     float_opts = { border = 'rounded' },
   })
 
-  local btop = Terminal:new({
-    cmd = 'btop',
-    direction = 'float',
-    hidden = true,
-    float_opts = { border = 'curved' },
-  })
-
   vim.keymap.set('n', '<leader>lg', function() lazygit:toggle() end, { desc = 'Lazygit' })
   vim.keymap.set('n', '<leader>ld', function() lazydocker:toggle() end, { desc = 'Lazydocker' })
-  vim.keymap.set('n', '<leader>tb', function() btop:toggle() end, { desc = 'btop' })
 end)
