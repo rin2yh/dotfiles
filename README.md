@@ -16,12 +16,11 @@ This will:
 ### Individual Targets
 
 ```bash
-make brew-install  # Install Homebrew
-make home-link     # home dotfiles only
-make brew-bundle   # brew bundle only
-make config-link   # config dotfiles only
-make tools         # tool installation only
-make clean         # remove created symlinks
+make brew-install   # Install Homebrew
+make home-deploy    # home dotfiles only
+make brew-bundle    # brew bundle only
+make config-deploy  # config dotfiles only
+make tools          # tool installation only
 ```
 
 ## Structure
