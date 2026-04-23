@@ -3,7 +3,8 @@ BREW         := $(BREW_PREFIX)/bin/brew
 
 export PATH := $(BREW_PREFIX)/bin:$(PATH)
 
-RSYNC_OPTS := -av --checksum --exclude='.DS_Store' --exclude='.git'
+FIND_EXCLUDES := ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*'
+RSYNC_OPTS    := -av --checksum --exclude='.DS_Store' --exclude='.git'
 
 .PHONY: setup brew-install home-deploy brew-bundle config-deploy tools clean help
 
@@ -30,24 +31,21 @@ tools: ## Install development tools (mise install, gopls)
 	mise exec -- go install golang.org/x/tools/gopls@latest
 
 clean: ## Remove deployed files from ~/ and ~/.config/ (prompts for confirmation)
-	@files=$$( \
-		{ find ./home -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-			rel="$${src#./home/}"; target="$$HOME/$$rel"; \
+	@list() { \
+		src_dir="$$1"; dest_dir="$$2"; \
+		find "$$src_dir" -type f $(FIND_EXCLUDES) | while read -r src; do \
+			rel="$${src#$$src_dir/}"; target="$$dest_dir/$$rel"; \
 			[ -f "$$target" ] && echo "$$target"; \
-		  done; \
-		  find ./config -type f ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*' | while read -r src; do \
-			rel="$${src#./config/}"; target="$$HOME/.config/$$rel"; \
-			[ -f "$$target" ] && echo "$$target"; \
-		  done; \
-		} \
-	); \
+		done; \
+	}; \
+	files=$$( { list ./home $$HOME; list ./config $$HOME/.config; } ); \
 	if [ -z "$$files" ]; then echo "No files to remove."; exit 0; fi; \
 	echo "Files to be removed:"; \
 	echo "$$files" | sed 's/^/  /'; \
 	printf "Continue? [y/N]: "; \
 	read ans; \
 	case "$$ans" in \
-		[yY]) echo "$$files" | while read -r f; do rm "$$f" && echo "Removed: $$f"; done ;; \
+		[yY]|[yY][eE][sS]) echo "$$files" | while read -r f; do rm "$$f" && echo "Removed: $$f"; done ;; \
 		*) echo "Aborted." ;; \
 	esac
 
