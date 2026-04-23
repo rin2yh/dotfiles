@@ -21,6 +21,7 @@ make home-deploy    # home dotfiles only
 make brew-bundle    # brew bundle only
 make config-deploy  # config dotfiles only
 make tools          # tool installation only
+make clean-check    # preview files that clean would remove
 make clean          # remove deployed files
 ```
 
