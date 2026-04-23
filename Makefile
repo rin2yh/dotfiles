@@ -11,7 +11,7 @@ RSYNC_OPTS    := -av --checksum --exclude='.DS_Store' --exclude='.git'
 setup: submodule-init brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
-	git submodule update --init --recursive
+	git submodule update --init --recursive --force
 
 brew-install: ## Install Homebrew (if not installed)
 	@if [ ! -f "$(BREW)" ]; then \
