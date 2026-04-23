@@ -6,9 +6,12 @@ export PATH := $(BREW_PREFIX)/bin:$(PATH)
 FIND_EXCLUDES := ! -name '.DS_Store' ! -name '.git' ! -path '*/.git/*'
 RSYNC_OPTS    := -av --checksum --exclude='.DS_Store' --exclude='.git'
 
-.PHONY: setup brew-install home-deploy brew-bundle config-deploy tools clean help
+.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy tools clean help
 
-setup: brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
+setup: submodule-init brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
+
+submodule-init: ## Initialize and update git submodules
+	git submodule update --init --recursive
 
 brew-install: ## Install Homebrew (if not installed)
 	@if [ ! -f "$(BREW)" ]; then \

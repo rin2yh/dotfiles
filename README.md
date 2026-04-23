@@ -7,15 +7,17 @@ make
 ```
 
 This will:
-1. Install Homebrew (if not installed)
-2. Deploy home dotfiles (`~/`)
-3. Install packages via Homebrew (`brew bundle --global`)
-4. Deploy config dotfiles (`~/.config/`)
-5. Install development tools (mise install, gopls)
+1. Initialize git submodules
+2. Install Homebrew (if not installed)
+3. Deploy home dotfiles (`~/`)
+4. Install packages via Homebrew (`brew bundle --global`)
+5. Deploy config dotfiles (`~/.config/`)
+6. Install development tools (mise install, gopls)
 
 ### Individual Targets
 
 ```bash
+make submodule-init # initialize git submodules
 make brew-install   # Install Homebrew
 make home-deploy    # home dotfiles only
 make brew-bundle    # brew bundle only
