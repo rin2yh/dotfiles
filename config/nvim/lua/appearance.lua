@@ -88,6 +88,7 @@ later(function()
     triggers = {
       -- Leader triggers
       mode_nx('<leader>'),
+      mode_nx('<Space>'),
 
       -- Built-in completion
       { mode = 'i', keys = '<c-x>' },
