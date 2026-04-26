@@ -1,12 +1,13 @@
 BREW_PREFIX  := /opt/homebrew
 BREW         := $(BREW_PREFIX)/bin/brew
+MISE         := $(HOME)/.local/bin/mise
 DOTFILES_DIR := $(CURDIR)
 
-export PATH := $(BREW_PREFIX)/bin:$(PATH)
+export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy tools clean help
+.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy mise-install tools clean help
 
-setup: submodule-init brew-install home-deploy brew-bundle config-deploy tools ## Run full setup
+setup: submodule-init brew-install home-deploy brew-bundle config-deploy mise-install tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -44,6 +45,12 @@ config-deploy: ## Deploy config dotfiles (./config/* -> ~/.config/ via symlink)
 	    ln -sfn "$(DOTFILES_DIR)/config/$$name" "$$target"; \
 	    echo "Linked: $$name"; \
 	done
+
+mise-install: ## Install mise via curl (if not installed)
+	@if [ ! -f "$(MISE)" ]; then \
+		echo "Installing mise..."; \
+		curl https://mise.run | sh; \
+	fi
 
 tools: ## Install development tools (mise install, gopls)
 	mise install
