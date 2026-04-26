@@ -1,4 +1,3 @@
-brew "mise"
 brew "tree"
 brew "zsh-autosuggestions"
 

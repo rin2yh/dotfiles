@@ -91,7 +91,6 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.js"
@@ -104,7 +103,8 @@
     "commit-commands@claude-plugins-official": true,
     "example-skills@anthropic-agent-skills": true,
     "slack@claude-plugins-official": true,
-    "notion@claude-plugins-official": true
+    "notion@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
@@ -173,16 +173,17 @@
       "allowRead": []
     },
     "excludedCommands": [
-      "gh",
       "git",
       "go",
       "tinygo",
-      "mise"
+      "mise",
+      "gh"
     ]
   },
   "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": false,
+  "skipAutoPermissionPrompt": true
 }
