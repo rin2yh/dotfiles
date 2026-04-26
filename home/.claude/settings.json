@@ -91,7 +91,6 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.js"
@@ -100,7 +99,8 @@
     "gopls-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
-    "example-skills@anthropic-agent-skills": true
+    "example-skills@anthropic-agent-skills": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -163,16 +163,17 @@
       "allowRead": []
     },
     "excludedCommands": [
-      "gh",
       "git",
       "go",
       "tinygo",
-      "mise"
+      "mise",
+      "gh"
     ]
   },
   "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": false,
+  "skipAutoPermissionPrompt": true
 }
