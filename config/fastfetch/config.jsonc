@@ -1,5 +1,18 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "source": "~/.config/fastfetch/clawd.txt",
+    "type": "file",
+    "color": {
+      "1": "yellow",
+      "2": "red",
+      "3": "yellow"
+    },
+    "padding": {
+      "top": 1,
+      "right": 3
+    }
+  },
   "modules": [
     "host",
     "kernel",
