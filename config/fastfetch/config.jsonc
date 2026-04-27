@@ -4,7 +4,7 @@
     "source": "~/.config/fastfetch/clawd.txt",
     "type": "file",
     "color": {
-      "1": "38;2;217;119;87"
+      "1": "38;2;215;119;87"
     },
     "padding": {
       "top": 1,
