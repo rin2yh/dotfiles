@@ -23,6 +23,7 @@ in
   home.packages = with pkgs; [
     git
     tree
+    zsh-autosuggestions
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

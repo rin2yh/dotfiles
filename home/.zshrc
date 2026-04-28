@@ -42,8 +42,6 @@ compinit -ui
 # brew depends
 if type brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
-  # auto-suggest
-  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 # Docker completion
