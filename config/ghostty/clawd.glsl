@@ -62,15 +62,20 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
   float t = iTime;
 
-  float bounce = abs(sin(t * 2.6)) * 0.045;
-  float tilt   = sin(t * 1.2) * 0.06;
-  float breath = 1.0 + 0.025 * sin(t * 2.6 - 0.6);
+  // Smooth floating motion — multi-frequency sines so the path never repeats
+  // sharply and there is no "ground impact" feel. Anchor itself drifts in
+  // both axes, like Claude Desktop's hovering mascot.
+  vec2 hover = vec2(
+    sin(t * 0.9 + 0.4) * 0.022 + sin(t * 0.35) * 0.012,
+    sin(t * 1.3)       * 0.030 + sin(t * 0.6 + 1.7) * 0.018
+  );
+  float tilt  = sin(t * 0.85) * 0.05 + sin(t * 0.4 + 0.9) * 0.03;
+  float pulse = 1.0 + 0.025 * sin(t * 1.5) + 0.012 * sin(t * 0.7);
 
-  // Lift a bit so the antenna has room above the body.
-  vec2 buv = cuv;
-  buv.y -= bounce - 0.02;
-  buv = rot2(tilt) * buv;
-  buv /= breath;
+  vec2 buv = cuv - hover;
+  buv.y  += 0.02;
+  buv     = rot2(tilt) * buv;
+  buv    /= pulse;
 
   float dLower = sdRoundBox(buv - vec2(0.0, -0.05), vec2(0.225, 0.07), 0.05);
   float dUpper = sdRoundBox(buv - vec2(0.0,  0.05), vec2(0.18,  0.07), 0.05);
@@ -92,6 +97,12 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   float hl = smoothstep(0.12, 0.0, length(buv - vec2(-0.06, 0.10)));
   bodyShade += vec3(0.18, 0.10, 0.06) * hl;
 
+  // Diagonal warm shimmer travelling across the body — mirrors the
+  // `claudeShimmer` highlight effect Claude Desktop uses on its mascot.
+  float shimmer = sin(buv.x * 5.5 - buv.y * 3.0 - t * 1.8) * 0.5 + 0.5;
+  shimmer = pow(shimmer, 6.0);
+  bodyShade += vec3(0.55, 0.40, 0.10) * shimmer * 0.18;
+
   // Hollow inset matching ▛███▜ / █████ in the terminal art — fills with
   // black so eyes read against it.
   float dInner    = sdRoundBox(buv, vec2(0.165, 0.10), 0.04);
@@ -106,7 +117,15 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
                   (1.0 - smoothstep(0.94, 1.0, blinkPhase));
     vec2 eyeL = buv - vec2(-0.055, 0.015);
     vec2 eyeR = buv - vec2( 0.055, 0.015);
-    vec2 look = vec2(sin(t * 0.7) * 0.008, cos(t * 0.9) * 0.004);
+
+    // Track the terminal cursor: eyes glance toward where you're typing,
+    // with a small idle wander so they aren't dead-still when nothing moves.
+    vec2 cursorCenter = iCurrentCursor.xy + iCurrentCursor.zw * 0.5;
+    vec2 toCursor = (cursorCenter - anchor) / SCALE;
+    vec2 trackDir = toCursor / (1.0 + length(toCursor));
+    vec2 idle = vec2(sin(t * 0.7) * 0.25, cos(t * 0.9) * 0.15);
+    vec2 look = (trackDir + idle * 0.15) * 0.012;
+
     float eyeMask = smoothstep(0.003, 0.0,
       min(sdCircle(eyeL, 0.018), sdCircle(eyeR, 0.018)));
     bodyCol = mix(bodyCol, vec3(1.0, 0.96, 0.92), eyeMask * blink * innerMask);
@@ -120,11 +139,16 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   float dLine = sdSegment(buv, vec2(0.0, 0.205), vec2(0.0, 0.255)) - 0.006;
   float lineMask = smoothstep(0.004, 0.0, dLine);
 
-  vec2  sp     = rot2(t * 0.9) * (buv - vec2(0.0, 0.295));
-  float pulse  = 0.025 + 0.005 * sin(t * 4.0);
-  float dSp    = sdSparkle(sp, pulse);
-  float spMask = smoothstep(0.006, 0.0, dSp);
-  float spGlow = smoothstep(0.06, 0.0, dSp) * 0.45;
+  // Sparkle: rotates at a slightly modulated rate, with a layered pulse so
+  // it shimmers like Claude Desktop's loading indicator instead of ticking
+  // metronomically.
+  float spinRate = 0.9 + 0.25 * sin(t * 0.4);
+  vec2  sp       = rot2(t * spinRate) * (buv - vec2(0.0, 0.295));
+  float spPulse  = 0.026 + 0.006 * sin(t * 4.0) + 0.003 * sin(t * 1.7);
+  float dSp      = sdSparkle(sp, spPulse);
+  float spMask   = smoothstep(0.006, 0.0, dSp);
+  float spShim   = 0.55 + 0.45 * sin(t * 3.0 + 1.0);
+  float spGlow   = smoothstep(0.07, 0.0, dSp) * 0.45 * spShim;
 
   // Compose Clawd's RGBA: body + antenna line + sparkle (with glow halo).
   vec3 clawdCol = bodyCol;
@@ -133,8 +157,13 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
   float clawdA = clamp(bodyMask + lineMask + spMask, 0.0, 1.0);
 
-  // Composite over the terminal; sparkle glow adds light on top.
+  // Soft halo under Clawd. Replaces the old contact shadow now that he
+  // floats — keeps it dim so terminal text underneath stays readable.
+  float halo = smoothstep(0.45, 0.18, length(cuv - vec2(0.0, -0.05)));
+  halo *= 0.6 + 0.4 * sin(t * 1.4);
+
   vec3 outCol = mix(term.rgb, clawdCol, clawdA);
+  outCol += BODY * halo * 0.05;
   outCol += WARN * spGlow;
 
   fragColor = vec4(outCol, term.a);
