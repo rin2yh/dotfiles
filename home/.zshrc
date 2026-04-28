@@ -61,8 +61,11 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 # mise
 if command -v mise &>/dev/null; then
   eval "$(mise activate zsh --shims)"
-  local logos=("" "--logo auto")
-  fastfetch ${=logos[RANDOM % ${#logos[@]} + 1]}
+  local logos=(default auto)
+  case ${logos[RANDOM % ${#logos[@]} + 1]} in
+    default) fastfetch ;;
+    auto) fastfetch --logo auto ;;
+  esac
   eval "$(starship init zsh)"
   eval "$(zoxide init zsh)"
 
