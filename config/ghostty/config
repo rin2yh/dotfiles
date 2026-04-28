@@ -32,3 +32,4 @@ custom-shader = shaders/in-game-crt-cursor.glsl
 # custom-shader = shaders/tft.glsl
 # custom-shader = shaders/cubes.glsl
 # custom-shader = shaders/spotlight.glsl
+# custom-shader = clawd.glsl
