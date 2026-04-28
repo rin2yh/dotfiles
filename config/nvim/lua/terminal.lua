@@ -6,7 +6,8 @@ vim.pack.add({ 'https://github.com/akinsho/toggleterm.nvim' })
 
 later(function()
   require('toggleterm').setup({
-    open_mapping = [[<C-\>]],
+    -- `open_mapping` を <C-\> に設定すると ciw など operator-pending の
+    -- キーシーケンスに割り込むため未設定。<leader>th/tv/tf や <leader>1..5 を使う。
     direction = 'horizontal',
     size = function(term)
       if term.direction == 'horizontal' then
