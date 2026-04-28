@@ -4,6 +4,7 @@
     "source": "~/.config/fastfetch/clawd.txt",
     "type": "file",
     "color": {
+      // Claude Code's clawd_body: rgb(215,119,87)
       "1": "38;2;215;119;87"
     },
     "padding": {
