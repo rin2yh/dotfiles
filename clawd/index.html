@@ -48,14 +48,13 @@ uniform vec2  u_resolution;
 uniform float u_time;
 out vec4 fragColor;
 
-// ---------- palette (mirrors Claude Code's clawd colors) ----------
-const vec3 BODY     = vec3(215.0, 119.0,  87.0) / 255.0; // clawd_body
-const vec3 INSIDE   = vec3(  0.0,   0.0,   0.0) / 255.0; // clawd_background
-const vec3 WARN     = vec3(251.0, 188.0,   4.0) / 255.0; // chromeYellow / sparkle
+// Palette mirrors Claude Code's clawd_* / chromeYellow theme tokens.
+const vec3 BODY     = vec3(215.0, 119.0,  87.0) / 255.0;
+const vec3 INSIDE   = vec3(  0.0,   0.0,   0.0) / 255.0;
+const vec3 WARN     = vec3(251.0, 188.0,   4.0) / 255.0;
 const vec3 BG_TOP   = vec3( 18.0,  10.0,  28.0) / 255.0;
 const vec3 BG_BOT   = vec3(  4.0,   2.0,   8.0) / 255.0;
 
-// ---------- SDF helpers ----------
 float sdRoundBox(vec2 p, vec2 b, float r) {
   vec2 q = abs(p) - b + r;
   return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
@@ -69,7 +68,7 @@ float sdSegment(vec2 p, vec2 a, vec2 b) {
   return length(pa - ba * h);
 }
 
-// 4-pointed sparkle SDF (approximation of ✻)
+// Approximation of the ✻ sparkle: mixes Chebyshev and 45°-rotated norms.
 float sdSparkle(vec2 p, float r) {
   p = abs(p);
   float a = max(p.x, p.y);
@@ -77,13 +76,16 @@ float sdSparkle(vec2 p, float r) {
   return mix(a, b, 0.6) - r;
 }
 
-float opUnion(float a, float b) { return min(a, b); }
 float opSmoothUnion(float a, float b, float k) {
   float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
   return mix(b, a, h) - k * h * (1.0 - h);
 }
 
-// hash / noise for stars
+mat2 rot2(float a) {
+  float c = cos(a), s = sin(a);
+  return mat2(c, -s, s, c);
+}
+
 float hash21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
@@ -96,135 +98,103 @@ void main() {
 
   float t = u_time;
 
-  // ---------- background: vertical gradient + drifting starfield ----------
   float vy = clamp(uv.y * 0.5 + 0.5, 0.0, 1.0);
   vec3 col = mix(BG_BOT, BG_TOP, vy);
 
-  // soft radial vignette behind the character
   float vignette = smoothstep(1.1, 0.2, length(uv));
   col += vec3(0.06, 0.03, 0.10) * vignette;
 
-  // distant stars
+  // Coherent per-cell branch — only the brightest 7% of cells contribute,
+  // so gating skips a length() + sin() on the other ~93% of pixels.
   vec2 starUV = uv * 6.0 + vec2(0.0, t * 0.04);
   vec2 cell   = floor(starUV);
-  vec2 fcell  = fract(starUV) - 0.5;
-  float h     = hash21(cell);
-  float starR = 0.02 + 0.04 * h;
-  float starD = length(fcell) - starR;
-  float twinkle = 0.5 + 0.5 * sin(t * (1.5 + 3.0 * h) + h * 6.28);
-  if (h > 0.93) {
+  float starH = hash21(cell);
+  if (starH > 0.93) {
+    vec2 fcell    = fract(starUV) - 0.5;
+    float starR   = 0.02 + 0.04 * starH;
+    float starD   = length(fcell) - starR;
+    float twinkle = 0.5 + 0.5 * sin(t * (1.5 + 3.0 * starH) + starH * 6.28);
     col += vec3(0.9, 0.85, 1.0) * smoothstep(0.05, 0.0, starD) * twinkle * 0.6;
   }
 
-  // ---------- Clawd transform: bounce + tilt + breathing ----------
   float bounce = abs(sin(t * 2.6)) * 0.045;
   float tilt   = sin(t * 1.2) * 0.06;
   float breath = 1.0 + 0.025 * sin(t * 2.6 - 0.6);
 
+  // Lift Clawd a bit above the canvas centre so the antenna has room.
   vec2 cuv = uv;
   cuv.y -= bounce - 0.02;
-  float ca = cos(tilt), sa = sin(tilt);
-  cuv = mat2(ca, -sa, sa, ca) * cuv;
+  cuv = rot2(tilt) * cuv;
   cuv /= breath;
 
-  // ---------- soft contact shadow under clawd ----------
   float shadow = smoothstep(0.20, 0.0, length((uv - vec2(0.0, -0.27)) * vec2(1.0, 4.5)));
   col = mix(col, vec3(0.0), shadow * (0.55 - bounce * 4.0));
 
-  // ---------- body silhouette ----------
-  // Lower body: slightly wider rounded box
-  float dLower = sdRoundBox(cuv - vec2(0.0,  -0.05), vec2(0.225, 0.07), 0.05);
-  // Upper body: slightly narrower rounded box, blended into lower
-  float dUpper = sdRoundBox(cuv - vec2(0.0,   0.05), vec2(0.18,  0.07), 0.05);
+  float dLower = sdRoundBox(cuv - vec2(0.0, -0.05), vec2(0.225, 0.07), 0.05);
+  float dUpper = sdRoundBox(cuv - vec2(0.0,  0.05), vec2(0.18,  0.07), 0.05);
   float dBody  = opSmoothUnion(dLower, dUpper, 0.04);
 
-  // Peak / "head" on top (▟█▙) — small rounded cap
   float dCap   = sdRoundBox(cuv - vec2(0.0, 0.16), vec2(0.07, 0.035), 0.025);
   dBody        = opSmoothUnion(dBody, dCap, 0.04);
 
-  // Feet (▘▘ ▝▝): four little nubs poking out of the bottom
-  vec2 footUV = cuv - vec2(0.0, -0.135);
-  float footR = 0.025;
-  float dFeet = 1e9;
-  for (int i = 0; i < 4; i++) {
-    float fi = float(i);
-    float xo = (-0.11) + fi * 0.075;
-    if (i >= 2) xo += 0.02; // gap in the middle (▘▘ ▝▝)
-    vec2 fp = footUV - vec2(xo, 0.0);
-    float df = sdRoundBox(fp, vec2(0.018, 0.022), 0.012);
-    dFeet = min(dFeet, df);
-  }
+  // Four feet (▘▘ ▝▝) mirrored around x=0 with a gap in the middle.
+  vec2 footUV = vec2(abs(cuv.x), cuv.y + 0.135);
+  float dFeet = min(
+    sdRoundBox(footUV - vec2(0.04, 0.0), vec2(0.018, 0.022), 0.012),
+    sdRoundBox(footUV - vec2(0.11, 0.0), vec2(0.018, 0.022), 0.012)
+  );
   dBody = opSmoothUnion(dBody, dFeet, 0.012);
 
-  // ---------- body fill with subtle vertical shading ----------
   float bodyMask  = smoothstep(0.005, -0.001, dBody);
   vec3  bodyShade = BODY * (0.85 + 0.25 * smoothstep(-0.18, 0.18, cuv.y));
-  // soft inner highlight near the top-left
   float hl = smoothstep(0.12, 0.0, length(cuv - vec2(-0.06, 0.10)));
   bodyShade += vec3(0.18, 0.10, 0.06) * hl;
   col = mix(col, bodyShade, bodyMask);
 
-  // outline / rim glow
   float rim = smoothstep(0.012, 0.0, abs(dBody));
   col += BODY * rim * 0.35;
 
-  // ---------- "inner" black region (matches ▛███▜ / █████ inset) ----------
-  float dInner = sdRoundBox(cuv - vec2(0.0, 0.0), vec2(0.165, 0.10), 0.04);
+  // Hollow inset matching ▛███▜ / █████ in the terminal art.
+  float dInner = sdRoundBox(cuv, vec2(0.165, 0.10), 0.04);
   float innerMask = smoothstep(0.003, -0.003, dInner) * bodyMask;
   col = mix(col, INSIDE, innerMask * 0.92);
 
-  // ---------- eyes (a tiny extra: two friendly dots) ----------
-  float blinkPhase = fract(t * 0.28);
-  float blink = smoothstep(0.0, 0.04, blinkPhase) *
-                (1.0 - smoothstep(0.94, 1.0, blinkPhase));
-  vec2 eyeL = cuv - vec2(-0.055, 0.015);
-  vec2 eyeR = cuv - vec2( 0.055, 0.015);
-  // subtle look-around motion
-  vec2 look = vec2(sin(t * 0.7) * 0.008, cos(t * 0.9) * 0.004);
-  float dEyeL = sdCircle(eyeL, 0.018);
-  float dEyeR = sdCircle(eyeR, 0.018);
-  float eyeMask = smoothstep(0.003, 0.0, min(dEyeL, dEyeR));
-  col = mix(col, vec3(1.0, 0.96, 0.92), eyeMask * blink * innerMask);
+  // Eyes only contribute inside the hollow inset; gate the whole block on
+  // innerMask to skip blink + look + two SDFs on the rest of the screen.
+  if (innerMask > 0.0) {
+    float blinkPhase = fract(t * 0.28);
+    float blink = smoothstep(0.0, 0.04, blinkPhase) *
+                  (1.0 - smoothstep(0.94, 1.0, blinkPhase));
+    vec2 eyeL = cuv - vec2(-0.055, 0.015);
+    vec2 eyeR = cuv - vec2( 0.055, 0.015);
+    vec2 look = vec2(sin(t * 0.7) * 0.008, cos(t * 0.9) * 0.004);
+    float eyeMask = smoothstep(0.003, 0.0, min(sdCircle(eyeL, 0.018), sdCircle(eyeR, 0.018)));
+    col = mix(col, vec3(1.0, 0.96, 0.92), eyeMask * blink * innerMask);
 
-  float dPupL = sdCircle(eyeL - look, 0.009);
-  float dPupR = sdCircle(eyeR - look, 0.009);
-  float pupMask = smoothstep(0.002, 0.0, min(dPupL, dPupR));
-  col = mix(col, vec3(0.04, 0.02, 0.0), pupMask * blink * innerMask);
+    float pupMask = smoothstep(0.002, 0.0,
+      min(sdCircle(eyeL - look, 0.009), sdCircle(eyeR - look, 0.009)));
+    col = mix(col, vec3(0.04, 0.02, 0.0), pupMask * blink * innerMask);
+  }
 
-  // ---------- antenna: │ line + ✻ sparkle on top ----------
-  // Line below the sparkle
-  vec2 lineA = vec2(0.0, 0.205);
-  vec2 lineB = vec2(0.0, 0.255);
-  float dLine = sdSegment(cuv, lineA, lineB) - 0.006;
-  float lineMask = smoothstep(0.004, 0.0, dLine);
-  col = mix(col, WARN * 0.55, lineMask);
+  float dLine = sdSegment(cuv, vec2(0.0, 0.205), vec2(0.0, 0.255)) - 0.006;
+  col = mix(col, WARN * 0.55, smoothstep(0.004, 0.0, dLine));
 
-  // Sparkle (rotates + pulses)
-  vec2 sp = cuv - vec2(0.0, 0.295);
-  float ang = t * 0.9;
-  float cs = cos(ang), ss = sin(ang);
-  sp = mat2(cs, -ss, ss, cs) * sp;
+  vec2 sp = rot2(t * 0.9) * (cuv - vec2(0.0, 0.295));
   float pulse = 0.025 + 0.005 * sin(t * 4.0);
   float dSp = sdSparkle(sp, pulse);
-  float spMask = smoothstep(0.006, 0.0, dSp);
-  col = mix(col, WARN, spMask);
-  // sparkle glow
+  col = mix(col, WARN, smoothstep(0.006, 0.0, dSp));
   col += WARN * smoothstep(0.06, 0.0, dSp) * 0.45;
 
-  // ---------- orbiting dust around clawd ----------
   for (int i = 0; i < 14; i++) {
     float fi = float(i);
     float a  = fi * 0.4488 + t * (0.35 + 0.05 * fi);
     float rr = 0.36 + 0.04 * sin(t * 0.8 + fi * 1.7);
     vec2 pp  = vec2(cos(a), sin(a) * 0.55) * rr;
-    float dd = length(uv - pp) - 0.0035;
-    float mm = smoothstep(0.005, 0.0, dd);
+    float mm = smoothstep(0.005, 0.0, length(uv - pp) - 0.0035);
     vec3 c   = mix(BODY, WARN, 0.5 + 0.5 * sin(fi));
     col += c * mm * (0.5 + 0.5 * sin(t * 2.5 + fi));
   }
 
-  // ---------- final tone ----------
-  // mild filmic-ish curve
   col = col / (1.0 + col * 0.6);
   col = pow(col, vec3(0.95));
 
@@ -281,21 +251,18 @@ void main() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = Math.floor(window.innerWidth  * dpr);
     const h = Math.floor(window.innerHeight * dpr);
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
-    }
+    if (canvas.width === w && canvas.height === h) return;
+    canvas.width = w;
+    canvas.height = h;
     gl.viewport(0, 0, w, h);
+    gl.uniform2f(uRes, w, h);
   }
   window.addEventListener('resize', resize);
   resize();
 
   const start = performance.now();
   function frame() {
-    resize();
-    const t = (performance.now() - start) / 1000;
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, t);
+    gl.uniform1f(uTime, (performance.now() - start) / 1000);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(frame);
   }
