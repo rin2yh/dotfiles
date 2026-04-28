@@ -1,13 +1,14 @@
 BREW_PREFIX  := /opt/homebrew
 BREW         := $(BREW_PREFIX)/bin/brew
 MISE         := $(HOME)/.local/bin/mise
+NIX          := /nix/var/nix/profiles/default/bin/nix
 DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy mise-install tools clean help
+.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy mise-install nix-install tools clean help
 
-setup: submodule-init brew-install home-deploy brew-bundle config-deploy mise-install tools ## Run full setup
+setup: submodule-init brew-install home-deploy brew-bundle config-deploy mise-install nix-install tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -50,6 +51,13 @@ mise-install: ## Install mise via curl (if not installed)
 	@if [ ! -f "$(MISE)" ]; then \
 		echo "Installing mise..."; \
 		curl https://mise.run | sh; \
+	fi
+
+nix-install: ## Install Nix via official installer (if not installed)
+	@if [ ! -e "$(NIX)" ]; then \
+		echo "Installing Nix..."; \
+		curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install; \
+		. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh; \
 	fi
 
 tools: ## Install development tools (mise install, gopls)
