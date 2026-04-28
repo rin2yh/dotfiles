@@ -104,7 +104,8 @@
     "example-skills@anthropic-agent-skills": true,
     "slack@claude-plugins-official": true,
     "notion@claude-plugins-official": true,
-    "chrome-devtools-mcp@claude-plugins-official": true
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
@@ -184,6 +185,6 @@
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": false,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": false
 }
