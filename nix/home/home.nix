@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/nix/home";
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -24,11 +27,11 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    ".gitconfig".source = ./git/.gitconfig;
+    ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/.gitconfig";
   };
 
   xdg.configFile = {
-    "git/ignore".source = ./git/ignore;
+    "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
   };
 
   # Home Manager can also manage your environment variables through
