@@ -10,7 +10,7 @@
     enable = true;
     user = username;
     autoMigrate = true;
-    mutableTaps = false;
+    mutableTaps = true;
     taps = {
       "homebrew/homebrew-core" = homebrew-core;
       "homebrew/homebrew-cask" = homebrew-cask;
@@ -22,7 +22,7 @@
     onActivation = {
       upgrade = true;
       autoUpdate = false;
-      cleanup = "zap";
+      cleanup = "none";
     };
     global.autoUpdate = false;
     casks = [
