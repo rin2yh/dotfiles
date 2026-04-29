@@ -34,6 +34,7 @@ in
 
   xdg.configFile = {
     "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
+    "fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
   };
 
   # Home Manager can also manage your environment variables through
