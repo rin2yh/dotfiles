@@ -38,6 +38,7 @@ in
     "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
     "mise".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise";
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
+    "ghostty".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/ghostty";
   };
 
   # Home Manager can also manage your environment variables through
