@@ -36,6 +36,7 @@ in
     "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
     "fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
     "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
+    "mise".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise";
   };
 
   # Home Manager can also manage your environment variables through
