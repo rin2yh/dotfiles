@@ -38,9 +38,9 @@ nix-install: ## Install Nix via official installer (if not installed)
 
 darwin-switch: ## Apply nix-darwin + home-manager configuration (flake)
 	@if command -v darwin-rebuild >/dev/null 2>&1; then \
-		sudo darwin-rebuild switch --flake $(DOTFILES_DIR)/nix#$(DARWIN_HOST); \
+		sudo darwin-rebuild switch --flake $(DOTFILES_DIR)#$(DARWIN_HOST); \
 	else \
-		sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake $(DOTFILES_DIR)/nix#$(DARWIN_HOST); \
+		sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake $(DOTFILES_DIR)#$(DARWIN_HOST); \
 	fi
 	@echo ""
 	@echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."

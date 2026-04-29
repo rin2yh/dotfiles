@@ -1,7 +1,7 @@
 # for macOS
 /**/.DS_store
 
-# Claude Code (managed by nix/home/claude/)
+# Claude Code (managed by home/claude/)
 **/.claude/
 
 # Copilot

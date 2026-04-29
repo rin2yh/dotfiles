@@ -11,7 +11,7 @@ This will:
 2. Install Homebrew (if not installed)
 3. Install mise (if not installed)
 4. Install Nix (if not installed)
-5. Apply nix-darwin + home-manager configuration (`darwin-rebuild switch --flake ./nix#<hostname>`)
+5. Apply nix-darwin + home-manager configuration (`darwin-rebuild switch --flake .#<hostname>`)
 6. Install packages via Homebrew (`brew bundle --global`)
 7. Install development tools (`mise install`, `gopls`)
 
@@ -32,9 +32,8 @@ make help             # Show available targets
 
 ```
 .
-├── nix/
-│   ├── flake.nix
-│   ├── darwin/         # nix-darwin システム設定 + home-manager 統合
-│   └── home/           # home-manager 配下の各ツール設定
+├── flake.nix
+├── darwin/         # nix-darwin システム設定 + home-manager 統合
+├── home/           # home-manager 配下の各ツール設定
 └── Makefile
 ```

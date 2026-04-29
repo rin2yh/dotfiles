@@ -1,7 +1,7 @@
 { config, pkgs, username, ... }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/nix/home";
+  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/home";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
