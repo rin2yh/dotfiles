@@ -37,7 +37,12 @@
     {
       darwinConfigurations."hayashiyuuseis-MacBook-Air" = nix-darwin.lib.darwinSystem {
         specialArgs = {
-          inherit self nix-homebrew homebrew-core homebrew-cask;
+          inherit
+            self
+            nix-homebrew
+            homebrew-core
+            homebrew-cask
+            ;
           username = "yuuki";
         };
         modules = [
