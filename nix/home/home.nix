@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/nix/home";
+  repoRoot = "${config.home.homeDirectory}/workspace/dotfiles";
+  dotfiles = "${repoRoot}/nix/home";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -34,6 +35,7 @@ in
     ".zprofile".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zprofile";
     ".claude".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.claude";
     ".copilot".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.copilot";
+    ".Brewfile".source = config.lib.file.mkOutOfStoreSymlink "${repoRoot}/home/.Brewfile";
   };
 
   xdg.configFile = {
