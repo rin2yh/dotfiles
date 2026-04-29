@@ -19,30 +19,16 @@
       self,
       nixpkgs,
       home-manager,
-      nix-darwin
+      nix-darwin,
     }:
-    let
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
-      mkHome = username: home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ ./home/home.nix ];
-        extraSpecialArgs = { inherit username; };
-      };
-      mkDarwin = hostname: username: nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit self username; };
+    {
+      darwinConfigurations."hayashiyuuseis-MacBook-Air" = nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit self; username = "yuuki"; };
         modules = [
           ./darwin/configuration.nix
-          { networking.hostName = hostname; }
+          home-manager.darwinModules.home-manager
+          { networking.hostName = "hayashiyuuseis-MacBook-Air"; }
         ];
-      };
-    in
-    {
-      homeConfigurations = {
-        "yuuki" = mkHome "yuuki";
-      };
-      darwinConfigurations = {
-        "hayashiyuuseis-MacBook-Air" = mkDarwin "hayashiyuuseis-MacBook-Air" "yuuki";
       };
     };
 }

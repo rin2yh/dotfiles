@@ -2,16 +2,14 @@ BREW_PREFIX  := /opt/homebrew
 BREW         := $(BREW_PREFIX)/bin/brew
 MISE         := $(HOME)/.local/bin/mise
 NIX          := /nix/var/nix/profiles/default/bin/nix
-HM           := $(HOME)/.nix-profile/bin/home-manager
-HM_USER      ?= $(USER)
 DARWIN_HOST  ?= $(shell scutil --get LocalHostName)
 DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install brew-bundle mise-install nix-install darwin-switch home-manager-switch tools help
+.PHONY: setup submodule-init brew-install brew-bundle mise-install nix-install darwin-switch tools help
 
-setup: submodule-init brew-install mise-install nix-install darwin-switch home-manager-switch brew-bundle tools ## Run full setup
+setup: submodule-init brew-install mise-install nix-install darwin-switch brew-bundle tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -22,7 +20,7 @@ brew-install: ## Install Homebrew (if not installed)
 		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 	fi
 
-brew-bundle: ## Install packages via Homebrew (~/.Brewfile is symlinked by home-manager-switch)
+brew-bundle: ## Install packages via Homebrew (~/.Brewfile is symlinked by darwin-switch)
 	brew bundle --global
 
 mise-install: ## Install mise via curl (if not installed)
@@ -38,18 +36,11 @@ nix-install: ## Install Nix via official installer (if not installed)
 		. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh; \
 	fi
 
-darwin-switch: ## Apply nix-darwin configuration (flake)
+darwin-switch: ## Apply nix-darwin + home-manager configuration (flake)
 	@if command -v darwin-rebuild >/dev/null 2>&1; then \
 		sudo darwin-rebuild switch --flake $(DOTFILES_DIR)/nix#$(DARWIN_HOST); \
 	else \
 		sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake $(DOTFILES_DIR)/nix#$(DARWIN_HOST); \
-	fi
-
-home-manager-switch: ## Apply home-manager configuration (flake)
-	@if [ -x "$(HM)" ]; then \
-		"$(HM)" switch --flake $(DOTFILES_DIR)/nix#$(HM_USER); \
-	else \
-		nix run home-manager/master -- switch --flake $(DOTFILES_DIR)/nix#$(HM_USER); \
 	fi
 	@echo ""
 	@echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."
