@@ -1,4 +1,9 @@
+cask "claude"
+cask "discord"
 cask "fuwari"
 cask "ghostty"
+cask "homerow"
+cask "notion"
+cask "orbstack"
 cask "raycast"
-
+cask "slack"
