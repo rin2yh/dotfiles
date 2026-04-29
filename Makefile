@@ -6,9 +6,9 @@ DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install home-deploy brew-bundle config-deploy mise-install nix-install tools clean help
+.PHONY: setup submodule-init brew-install home-deploy brew-bundle mise-install nix-install tools clean help
 
-setup: submodule-init brew-install home-deploy brew-bundle config-deploy mise-install nix-install tools ## Run full setup
+setup: submodule-init brew-install home-deploy brew-bundle mise-install nix-install tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -34,19 +34,6 @@ home-deploy: ## Deploy home dotfiles (./home/* -> ~/ via symlink)
 brew-bundle: ## Install packages via Homebrew (brew bundle --global)
 	brew bundle --global
 
-config-deploy: ## Deploy config dotfiles (./config/* -> ~/.config/ via symlink)
-	@mkdir -p "$$HOME/.config"
-	@find ./config -maxdepth 1 -mindepth 1 | while read -r src; do \
-	    name=$$(basename "$$src"); \
-	    target="$$HOME/.config/$$name"; \
-	    if [ -e "$$target" ] && [ ! -L "$$target" ]; then \
-	        echo "Error: $$target exists as real file/dir."; \
-	        exit 1; \
-	    fi; \
-	    ln -sfn "$(DOTFILES_DIR)/config/$$name" "$$target"; \
-	    echo "Linked: $$name"; \
-	done
-
 mise-install: ## Install mise via curl (if not installed)
 	@if [ ! -f "$(MISE)" ]; then \
 		echo "Installing mise..."; \
@@ -64,13 +51,9 @@ tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
 
-clean: ## Remove created symlinks from ~/ and ~/.config/
+clean: ## Remove created symlinks from ~/
 	@find ./home -maxdepth 1 -mindepth 1 | while read -r src; do \
 	    name=$$(basename "$$src"); target="$$HOME/$$name"; \
-	    if [ -L "$$target" ]; then rm "$$target" && echo "Removed: $$target"; fi; \
-	done
-	@find ./config -maxdepth 1 -mindepth 1 | while read -r src; do \
-	    name=$$(basename "$$src"); target="$$HOME/.config/$$name"; \
 	    if [ -L "$$target" ]; then rm "$$target" && echo "Removed: $$target"; fi; \
 	done
 
