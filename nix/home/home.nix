@@ -37,6 +37,7 @@ in
     "fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
     "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
     "mise".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise";
+    "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
   };
 
   # Home Manager can also manage your environment variables through
