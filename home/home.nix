@@ -1,4 +1,9 @@
-{ config, pkgs, username, ... }:
+{
+  config,
+  pkgs,
+  username,
+  ...
+}:
 
 let
   dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/home";
@@ -52,23 +57,25 @@ in
   home.file = {
     ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/.gitconfig";
 
-    ".zshrc".source    = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zshrc";
+    ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zshrc";
     ".zprofile".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zprofile";
 
-    ".claude/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
-    ".claude/CLAUDE.md".source     = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/CLAUDE.md";
-    ".claude/statusline.js".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/statusline.js";
-    ".claude/rules".source         = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/rules";
-    ".claude/skills".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/skills";
+    ".claude/settings.json".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
+    ".claude/CLAUDE.md".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/CLAUDE.md";
+    ".claude/statusline.js".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/statusline.js";
+    ".claude/rules".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/rules";
+    ".claude/skills".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/skills";
   };
 
   xdg.configFile = {
-    "git/ignore".source       = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
+    "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
     "mise/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise/config.toml";
-    "nvim".source             = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
-    "starship.toml".source    = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
-    "fastfetch".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
-    "ghostty".source          = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/ghostty";
+    "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
+    "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
+    "fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
+    "ghostty".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/ghostty";
   };
 
   # Home Manager can also manage your environment variables through
