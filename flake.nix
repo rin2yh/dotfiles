@@ -12,6 +12,15 @@
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
   outputs =
@@ -20,14 +29,22 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      nix-homebrew,
+      homebrew-core,
+      homebrew-cask,
+      ...
     }:
     {
       darwinConfigurations."hayashiyuuseis-MacBook-Air" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit self; username = "yuuki"; };
+        specialArgs = {
+          inherit self nix-homebrew homebrew-core homebrew-cask;
+          username = "yuuki";
+        };
         modules = [
           ./darwin/configuration.nix
           home-manager.darwinModules.home-manager
           { networking.hostName = "hayashiyuuseis-MacBook-Air"; }
+          nix-homebrew.darwinModules.nix-homebrew
         ];
       };
     };

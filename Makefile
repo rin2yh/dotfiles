@@ -1,27 +1,16 @@
-BREW_PREFIX  := /opt/homebrew
-BREW         := $(BREW_PREFIX)/bin/brew
 MISE         := $(HOME)/.local/bin/mise
 NIX          := /nix/var/nix/profiles/default/bin/nix
 DARWIN_HOST  ?= $(shell scutil --get LocalHostName)
 DOTFILES_DIR := $(CURDIR)
 
-export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
+export PATH := $(HOME)/.local/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install brew-bundle mise-install nix-install darwin-switch tools help
+.PHONY: setup submodule-init mise-install nix-install darwin-switch tools help
 
-setup: submodule-init brew-install mise-install nix-install darwin-switch brew-bundle tools ## Run full setup
+setup: submodule-init mise-install nix-install darwin-switch tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
-
-brew-install: ## Install Homebrew (if not installed)
-	@if [ ! -f "$(BREW)" ]; then \
-		echo "Installing Homebrew..."; \
-		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
-	fi
-
-brew-bundle: ## Install packages via Homebrew (~/.Brewfile is symlinked by darwin-switch)
-	brew bundle --global
 
 mise-install: ## Install mise via curl (if not installed)
 	@if [ ! -f "$(MISE)" ]; then \

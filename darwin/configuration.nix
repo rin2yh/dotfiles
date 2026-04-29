@@ -4,7 +4,10 @@
   ...
 }:
 {
-  imports = [ ./home-manager.nix ];
+  imports = [
+    ./home-manager.nix
+    ./homebrew.nix
+  ];
 
   system = {
     stateVersion = 6;
@@ -90,7 +93,10 @@
 
       CustomUserPreferences = {
         NSGlobalDomain = {
-          AppleLanguages = [ "en-JP" "ja-JP" ];
+          AppleLanguages = [
+            "en-JP"
+            "ja-JP"
+          ];
           AppleLocale = "en_JP";
           AppleMiniaturizeOnDoubleClick = false;
           "com.apple.sound.beep.flash" = false;
