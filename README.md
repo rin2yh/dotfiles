@@ -9,30 +9,32 @@ make
 This will:
 1. Initialize git submodules
 2. Install Homebrew (if not installed)
-3. Deploy home dotfiles (symlink `./home/*` -> `~/`)
-4. Install packages via Homebrew (`brew bundle --global`)
-5. Deploy config dotfiles (symlink `./config/*` -> `~/.config/`)
+3. Install Nix (if not installed)
+4. Apply Home Manager configuration (symlinks `./nix/home/*` into `~/` and `~/.config/`)
+5. Install packages via Homebrew (`brew bundle --global`)
 6. Install development tools (mise install, gopls)
 
-Entries are deployed as directory-level symlinks, so edits on either side (repo or `$HOME`) are reflected immediately without re-running `make`.
+Home Manager uses `mkOutOfStoreSymlink`, so edits in the repo are reflected
+immediately in `$HOME` without re-running `make`.
 
 ### Individual Targets
 
 ```bash
 make submodule-init # initialize git submodules
 make brew-install   # Install Homebrew
-make home-deploy    # home dotfiles only (symlink)
+make nix-install    # Install Nix
+make hm-switch      # Apply Home Manager configuration
 make brew-bundle    # brew bundle only
-make config-deploy  # config dotfiles only (symlink)
 make tools          # tool installation only
-make clean          # remove created symlinks
 ```
 
 ## Structure
 
 ```
 .
-├── config/   # -> ~/.config/
-├── home/     # -> ~/
-└── Makefile  # Setup tasks
+├── home/.Brewfile  # -> ~/.Brewfile (managed via HM)
+├── nix/
+│   ├── flake.nix   # Home Manager flake
+│   └── home/       # Source for ~/ and ~/.config/ entries
+└── Makefile        # Setup tasks
 ```
