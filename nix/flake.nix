@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of yuuki";
+  description = "Home Manager configuration";
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
@@ -15,17 +15,15 @@
     let
       system = "aarch64-darwin";
       pkgs = nixpkgs.legacyPackages.${system};
+      mkHome = username: home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [ ./home/home.nix ];
+        extraSpecialArgs = { inherit username; };
+      };
     in
     {
-      homeConfigurations."yuuki" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ ./home/home.nix ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
+      homeConfigurations = {
+        "yuuki" = mkHome "yuuki";
       };
     };
 }
