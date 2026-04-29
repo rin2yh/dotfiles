@@ -34,7 +34,6 @@ in
     ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zshrc";
     ".zprofile".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zprofile";
     ".claude".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.claude";
-    ".copilot".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.copilot";
     ".Brewfile".source = config.lib.file.mkOutOfStoreSymlink "${repoRoot}/home/.Brewfile";
   };
 
