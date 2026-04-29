@@ -16,10 +16,10 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
-      nix-darwin,
-      ...
+      nix-darwin
     }:
     let
       system = "aarch64-darwin";
@@ -30,6 +30,7 @@
         extraSpecialArgs = { inherit username; };
       };
       mkDarwin = hostname: nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit self; };
         modules = [
           ./darwin/configuration.nix
           { networking.hostName = hostname; }
