@@ -9,34 +9,32 @@ make
 This will:
 1. Initialize git submodules
 2. Install Homebrew (if not installed)
-3. Deploy home dotfiles (symlink `./home/*` -> `~/`)
-4. Install packages via Homebrew (`brew bundle --global`)
-5. Install mise (if not installed)
-6. Install Nix (if not installed)
-7. Apply home-manager configuration (`home-manager switch --flake ./nix#yuuki`)
-8. Install development tools (mise install, gopls)
-
-Entries are deployed as directory-level symlinks, so edits on either side (repo or `$HOME`) are reflected immediately without re-running `make`.
+3. Install mise (if not installed)
+4. Install Nix (if not installed)
+5. Apply nix-darwin + home-manager configuration (`darwin-rebuild switch --flake ./nix#<hostname>`)
+6. Install packages via Homebrew (`brew bundle --global`)
+7. Install development tools (`mise install`, `gopls`)
 
 ### Individual Targets
 
 ```bash
-make submodule-init       # initialize git submodules
-make brew-install         # Install Homebrew
-make home-deploy          # home dotfiles only (symlink)
-make brew-bundle          # brew bundle only
-make mise-install         # Install mise
-make nix-install          # Install Nix
-make home-manager-switch  # Apply home-manager configuration
-make tools                # tool installation only
-make clean                # remove created symlinks
+make submodule-init   # Initialize and update git submodules
+make brew-install     # Install Homebrew (if not installed)
+make brew-bundle      # Install packages via Homebrew
+make mise-install     # Install mise via curl (if not installed)
+make nix-install      # Install Nix via official installer (if not installed)
+make darwin-switch    # Apply nix-darwin + home-manager configuration (flake)
+make tools            # Install development tools (mise install, gopls)
+make help             # Show available targets
 ```
 
 ## Structure
 
 ```
 .
-├── config/   # -> ~/.config/
-├── home/     # -> ~/
-└── Makefile  # Setup tasks
+├── nix/
+│   ├── flake.nix
+│   ├── darwin/         # nix-darwin システム設定 + home-manager 統合
+│   └── home/           # home-manager 配下の各ツール設定
+└── Makefile
 ```
