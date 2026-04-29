@@ -73,5 +73,11 @@ if command -v fastfetch &>/dev/null; then
   esac
 fi
 
+# zsh-autosuggestions
+for f in "/etc/profiles/per-user/$USER/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" \
+         "$HOME/.nix-profile/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"; do
+  [ -r "$f" ] && . "$f" && break
+done
+
 # Path重複解除
 typeset -U PATH
