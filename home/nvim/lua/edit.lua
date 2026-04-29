@@ -86,7 +86,7 @@ now(function()
     'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
     'tsx', 'typescript', 'html',
     'go', 'rust',
-    'terraform', 'dockerfile'
+    'terraform', 'dockerfile', 'nix'
   })
   -- tree-sitterとfiletypeが違う罠
   -- tsx:typescriptreact, bash:sh
@@ -96,7 +96,7 @@ now(function()
       'lua', 'vim', 'markdown', 'sh', 'yaml', 'zsh',
       'typescriptreact', 'typescript', 'html',
       'go', 'rust',
-      'terraform', 'dockerfile'
+      'terraform', 'dockerfile', 'nix'
     },
     callback = function(ev)
       if pcall(vim.treesitter.start, ev.buf) then return end

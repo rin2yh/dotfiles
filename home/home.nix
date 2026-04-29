@@ -31,6 +31,8 @@ in
     lazygit
     lua-language-server
     neovim
+    nixd
+    nixfmt-rfc-style
     ripgrep
     shfmt
     starship
@@ -52,7 +54,6 @@ in
 
     ".zshrc".source    = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zshrc";
     ".zprofile".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zprofile";
-    ".Brewfile".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/brew/.Brewfile";
 
     ".claude/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
     ".claude/CLAUDE.md".source     = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/CLAUDE.md";
