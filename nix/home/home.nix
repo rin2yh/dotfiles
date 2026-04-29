@@ -30,6 +30,12 @@ in
   # plain files is through 'home.file'.
   home.file = {
     ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/.gitconfig";
+
+    ".claude/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/settings.json";
+    ".claude/CLAUDE.md".source     = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/CLAUDE.md";
+    ".claude/statusline.js".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/statusline.js";
+    ".claude/rules".source         = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/rules";
+    ".claude/skills".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/skills";
   };
 
   xdg.configFile = {
