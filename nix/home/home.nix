@@ -39,7 +39,12 @@ in
   };
 
   xdg.configFile = {
-    "git/ignore".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
+    "git/ignore".source       = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/ignore";
+    "mise/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise/config.toml";
+    "nvim".source             = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
+    "starship.toml".source    = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
+    "fastfetch".source        = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
+    "ghostty".source          = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/ghostty";
   };
 
   # Home Manager can also manage your environment variables through
