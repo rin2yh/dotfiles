@@ -2,13 +2,15 @@ BREW_PREFIX  := /opt/homebrew
 BREW         := $(BREW_PREFIX)/bin/brew
 MISE         := $(HOME)/.local/bin/mise
 NIX          := /nix/var/nix/profiles/default/bin/nix
+HM           := $(HOME)/.nix-profile/bin/home-manager
+HM_USER      ?= yuuki
 DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(BREW_PREFIX)/bin:$(PATH)
 
-.PHONY: setup submodule-init brew-install home-deploy brew-bundle mise-install nix-install tools clean help
+.PHONY: setup submodule-init brew-install home-deploy brew-bundle mise-install nix-install home-manager-switch tools clean help
 
-setup: submodule-init brew-install home-deploy brew-bundle mise-install nix-install tools ## Run full setup
+setup: submodule-init brew-install home-deploy brew-bundle mise-install nix-install home-manager-switch tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -45,6 +47,13 @@ nix-install: ## Install Nix via official installer (if not installed)
 		echo "Installing Nix..."; \
 		curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install; \
 		. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh; \
+	fi
+
+home-manager-switch: ## Apply home-manager configuration (flake)
+	@if [ -x "$(HM)" ]; then \
+		"$(HM)" switch --flake $(DOTFILES_DIR)/nix#$(HM_USER); \
+	else \
+		nix run home-manager/master -- switch --flake $(DOTFILES_DIR)/nix#$(HM_USER); \
 	fi
 
 tools: ## Install development tools (mise install, gopls)
