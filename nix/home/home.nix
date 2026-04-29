@@ -21,8 +21,27 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    emmet-language-server
+    fastfetch
+    fzf
     git
+    go
+    google-cloud-sdk
+    lazydocker
+    lazygit
+    lua-language-server
+    neovim
+    ripgrep
+    shfmt
+    starship
+    terraform-ls
     tree
+    tree-sitter
+    typescript
+    typescript-language-server
+    vscode-langservers-extracted
+    zenn-cli
+    zoxide
     zsh-autosuggestions
   ];
 

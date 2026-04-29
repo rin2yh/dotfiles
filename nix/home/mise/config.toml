@@ -1,28 +1,9 @@
 [tools]
-"aqua:BurntSushi/ripgrep" = "latest"
-"aqua:LuaLS/lua-language-server" = "latest"
 "aqua:anthropics/claude-code" = "latest"
 "aqua:cli/cli" = "2.87.3"
-"aqua:hashicorp/terraform-ls" = "latest"
-"aqua:jesseduffield/lazydocker" = "latest"
-"aqua:tree-sitter/tree-sitter" = "latest"
-fastfetch = "latest"
-fzf = "latest"
-gcloud = "latest"
 "github:k1LoW/mo" = "v0.23.2"
-go = "latest"
-lazygit = "latest"
-neovim = "latest"
 node = "latest"
-"npm:@olrtg/emmet-language-server" = "latest"
 "npm:ccusage" = "latest"
-"npm:typescript" = "latest"
-"npm:typescript-language-server" = "latest"
-"npm:vscode-langservers-extracted" = "latest"
-"npm:zenn-cli" = "latest"
-shfmt = "latest"
-starship = "latest"
-zoxide = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
