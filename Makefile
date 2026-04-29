@@ -3,7 +3,7 @@ BREW         := $(BREW_PREFIX)/bin/brew
 MISE         := $(HOME)/.local/bin/mise
 NIX          := /nix/var/nix/profiles/default/bin/nix
 HM           := $(HOME)/.nix-profile/bin/home-manager
-HM_USER      ?= yuuki
+HM_USER      ?= $(USER)
 DARWIN_HOST  ?= $(shell scutil --get LocalHostName)
 DOTFILES_DIR := $(CURDIR)
 

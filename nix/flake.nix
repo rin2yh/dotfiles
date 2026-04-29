@@ -29,8 +29,8 @@
         modules = [ ./home/home.nix ];
         extraSpecialArgs = { inherit username; };
       };
-      mkDarwin = hostname: nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit self; };
+      mkDarwin = hostname: username: nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit self username; };
         modules = [
           ./darwin/configuration.nix
           { networking.hostName = hostname; }
@@ -42,7 +42,7 @@
         "yuuki" = mkHome "yuuki";
       };
       darwinConfigurations = {
-        "hayashiyuuseis-MacBook-Air" = mkDarwin "hayashiyuuseis-MacBook-Air";
+        "hayashiyuuseis-MacBook-Air" = mkDarwin "hayashiyuuseis-MacBook-Air" "yuuki";
       };
     };
 }
