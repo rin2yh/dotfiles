@@ -1,13 +1,8 @@
 # for macOS
 /**/.DS_store
 
-# Claude Code
-**/.claude/*
-!**/.claude/settings.json
-!**/.claude/CLAUDE.md
-!**/.claude/skills
-!**/.claude/rules
-!**/.claude/statusline.js
+# Claude Code (managed by nix/home/claude/)
+**/.claude/
 
 # Copilot
 /**/ide
