@@ -1,0 +1,16 @@
+[tools]
+"aqua:anthropics/claude-code" = "latest"
+"aqua:cli/cli" = "2.87.3"
+"github:k1LoW/mo" = "v0.23.2"
+jj = "latest"
+node = "latest"
+"npm:ccusage" = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]
+
+[env]
+DISABLE_AUTOUPDATER = "1"
+
+[tool_alias]
+terraform = "tf"
