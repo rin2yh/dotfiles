@@ -31,6 +31,8 @@ in
     lazygit
     lua-language-server
     neovim
+    nixd
+    nixfmt-rfc-style
     ripgrep
     shfmt
     starship
