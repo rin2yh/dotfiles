@@ -8,22 +8,27 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { nixpkgs, home-manager, ... }:
-    let
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
-      mkHome = username: home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ ./home/home.nix ];
-        extraSpecialArgs = { inherit username; };
-      };
-    in
     {
-      homeConfigurations = {
-        "yuuki" = mkHome "yuuki";
+      self,
+      nixpkgs,
+      home-manager,
+      nix-darwin,
+    }:
+    {
+      darwinConfigurations."hayashiyuuseis-MacBook-Air" = nix-darwin.lib.darwinSystem {
+        specialArgs = { inherit self; username = "yuuki"; };
+        modules = [
+          ./darwin/configuration.nix
+          home-manager.darwinModules.home-manager
+          { networking.hostName = "hayashiyuuseis-MacBook-Air"; }
+        ];
       };
     };
 }
