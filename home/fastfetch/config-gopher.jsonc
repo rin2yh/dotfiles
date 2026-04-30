@@ -1,12 +1,10 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
   "logo": {
-    "source": "~/.config/fastfetch/gopher.txt",
-    "type": "file",
-    "color": {
-      // Go brand cyan: rgb(0,173,216)
-      "1": "38;2;0;173;216"
-    },
+    // Renée French's Go gopher (https://github.com/golang-samples/gopher-vector, CC BY 3.0)
+    "source": "~/.config/fastfetch/gopher.png",
+    "type": "kitty",
+    "width": 30,
     "padding": {
       "top": 1,
       "right": 3
