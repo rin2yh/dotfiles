@@ -67,9 +67,10 @@ fi
 
 # fastfetch
 if command -v fastfetch &>/dev/null; then
-  case $((RANDOM % 2)) in
+  case $((RANDOM % 3)) in
     0) fastfetch ;;
     1) fastfetch --logo auto ;;
+    2) fastfetch --config config-gopher ;;
   esac
 fi
 
