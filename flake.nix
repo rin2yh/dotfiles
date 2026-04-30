@@ -35,7 +35,7 @@
       ...
     }:
     {
-      darwinConfigurations."hayashiyuuseis-MacBook-Air" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations."default" = nix-darwin.lib.darwinSystem {
         specialArgs = {
           inherit
             self
@@ -43,12 +43,12 @@
             homebrew-core
             homebrew-cask
             ;
-          username = "yuuki";
+          username = "yukihayashi";
         };
         modules = [
           ./darwin/configuration.nix
           home-manager.darwinModules.home-manager
-          { networking.hostName = "hayashiyuuseis-MacBook-Air"; }
+          { networking.hostName = "default"; }
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
