@@ -1,12 +1,8 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
   "logo": {
-    "source": "~/.config/fastfetch/clawd.txt",
-    "type": "file",
-    "color": {
-      // Claude Code's clawd_body: rgb(215,119,87)
-      "1": "38;2;215;119;87"
-    },
+    "source": "nixos_small",
+    "type": "builtin",
     "padding": {
       "top": 1,
       "right": 3
