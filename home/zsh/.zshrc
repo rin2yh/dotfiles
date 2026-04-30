@@ -69,7 +69,7 @@ fi
 if command -v fastfetch &>/dev/null; then
   case $((RANDOM % 3)) in
     0) fastfetch ;;
-    1) fastfetch --logo auto ;;
+    1) fastfetch --logo apple ;;
     2) fastfetch --logo nixos_small ;;
   esac
 fi
