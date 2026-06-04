@@ -1,6 +1,5 @@
 MISE         := $(HOME)/.local/bin/mise
 NIX          := /nix/var/nix/profiles/default/bin/nix
-DARWIN_HOST  ?= $(shell scutil --get LocalHostName)
 DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(PATH)
@@ -27,9 +26,9 @@ nix-install: ## Install Nix via official installer (if not installed)
 
 darwin-switch: ## Apply nix-darwin + home-manager configuration (flake)
 	@if command -v darwin-rebuild >/dev/null 2>&1; then \
-		sudo darwin-rebuild switch --flake $(DOTFILES_DIR)#$(DARWIN_HOST); \
+		sudo darwin-rebuild switch --flake $(DOTFILES_DIR)#default; \
 	else \
-		sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake $(DOTFILES_DIR)#$(DARWIN_HOST); \
+		sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake $(DOTFILES_DIR)#default; \
 	fi
 	@echo ""
 	@echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."
