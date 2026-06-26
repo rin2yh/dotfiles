@@ -29,6 +29,7 @@
       "claude"
       "discord"
       "fuwari"
+      "ghostty"
       "homerow"
       "notion"
       "orbstack"

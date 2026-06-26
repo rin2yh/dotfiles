@@ -1,0 +1,34 @@
+macos-option-as-alt = true
+
+background-opacity = 0.85
+background-blur-radius = 20
+unfocused-split-opacity = 0.85
+
+shell-integration = zsh
+
+# cmd+rで設定を再度読み込み
+keybind = super+r=reload_config
+
+# ブラウザライクにウィンドウをcmd+opt+矢印で移動
+keybind = super+alt+right=next_tab
+keybind = super+alt+left=previous_tab
+
+# resize split tab
+keybind = super+shift+up=resize_split:up,10
+keybind = super+shift+down=resize_split:down,10
+keybind = super+shift+left=resize_split:left,10
+keybind = super+shift+right=resize_split:right,10
+
+keybind = super+l=clear_screen
+
+# Custom shader
+# custom-shader = shaders/mnoise.glsl
+# custom-shader = shaders/starfield.glsl
+custom-shader = shaders/in-game-crt-cursor.glsl
+# custom-shader = shaders/cursor_blaze.glsl
+# custom-shader = shaders/matrix-hallway.glsl
+# custom-shader = shaders/inside-the-matrix.glsl
+# custom-shader = shaders/in-game-crt.glsl
+# custom-shader = shaders/tft.glsl
+# custom-shader = shaders/cubes.glsl
+# custom-shader = shaders/spotlight.glsl
