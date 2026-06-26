@@ -29,12 +29,12 @@
       "claude"
       "discord"
       "fuwari"
-      "ghostty"
       "homerow"
       "notion"
       "orbstack"
       "raycast"
       "slack"
+      "wezterm"
     ];
   };
 }
