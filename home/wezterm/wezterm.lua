@@ -3,6 +3,10 @@ local act = wezterm.action
 
 local config = wezterm.config_builder()
 
+-- フォント (ghostty: JetBrainsMono Nerd Font 13pt に合わせる)
+config.font = wezterm.font("JetBrainsMono Nerd Font")
+config.font_size = 13.0
+
 -- macOSのoptionキーをAlt(Meta)として扱う (ghostty: macos-option-as-alt = true)
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
