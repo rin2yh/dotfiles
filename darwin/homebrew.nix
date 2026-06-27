@@ -35,6 +35,7 @@
       "orbstack"
       "raycast"
       "slack"
+      "wezterm"
     ];
   };
 }
