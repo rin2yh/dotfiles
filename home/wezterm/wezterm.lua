@@ -3,8 +3,10 @@ local act = wezterm.action
 
 local config = wezterm.config_builder()
 
--- フォント (ghostty: JetBrainsMono Nerd Font 13pt に合わせる)
-config.font = wezterm.font("JetBrainsMono Nerd Font")
+-- フォント (ghostty: JetBrainsMono Nerd Font 13pt)
+-- フォント未インストールを避けるため、wezterm内蔵の "JetBrains Mono" を使う。
+-- 字形はghosttyと同じで、Nerd Fontアイコンもwezterm内蔵のシンボルで補完される。
+config.font = wezterm.font("JetBrains Mono")
 config.font_size = 13.0
 
 -- macOSのoptionキーをAlt(Meta)として扱う (ghostty: macos-option-as-alt = true)
