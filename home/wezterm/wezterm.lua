@@ -24,15 +24,10 @@ config.keys = {
 	-- cmd+rで設定を再読み込み (ghostty: super+r=reload_config)
 	{ key = "r", mods = "CMD", action = act.ReloadConfiguration },
 
-	-- ブラウザライクにcmd+opt+矢印でタブ移動
-	{ key = "RightArrow", mods = "CMD|ALT", action = act.ActivateTabRelative(1) },
-	{ key = "LeftArrow", mods = "CMD|ALT", action = act.ActivateTabRelative(-1) },
-
-	-- splitのリサイズ (ghostty: super+shift+矢印=resize_split:...,10)
-	{ key = "UpArrow", mods = "CMD|SHIFT", action = act.AdjustPaneSize({ "Up", 10 }) },
-	{ key = "DownArrow", mods = "CMD|SHIFT", action = act.AdjustPaneSize({ "Down", 10 }) },
-	{ key = "LeftArrow", mods = "CMD|SHIFT", action = act.AdjustPaneSize({ "Left", 10 }) },
-	{ key = "RightArrow", mods = "CMD|SHIFT", action = act.AdjustPaneSize({ "Right", 10 }) },
+	-- cmd+opt+矢印でタブ移動 / cmd+shift+矢印でsplitリサイズ は
+	-- weztermのデフォルトと同一のため定義不要:
+	--   ALT|SUPER 矢印  -> ActivateTabRelative
+	--   SHIFT|SUPER 矢印 -> AdjustPaneSize(..., 10)
 
 	-- 画面とスクロールバックをクリア (ghostty: super+l=clear_screen)
 	{ key = "l", mods = "CMD", action = act.ClearScrollback("ScrollbackAndViewport") },
