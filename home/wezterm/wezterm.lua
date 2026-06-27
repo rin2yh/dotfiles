@@ -18,6 +18,10 @@ config.inactive_pane_hsb = {
 	brightness = 0.85,
 }
 
+-- タイトルバーを消し、信号機ボタンをタブバーに統合する
+-- ("zsh" などのウィンドウタイトル表示をなくす)
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+
 -- shell integration はweztermに組み込みのため設定不要 (ghostty: shell-integration = zsh)
 
 config.keys = {
