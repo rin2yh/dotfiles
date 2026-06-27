@@ -11,6 +11,10 @@ config.send_composed_key_when_right_alt_is_pressed = false
 config.window_background_opacity = 0.85
 config.macos_window_background_blur = 20
 
+-- WebGpuだとDock(launchd)起動時にGPUコンテキスト初期化に失敗して
+-- 透過が効かないことがあるため、描画をOpenGLに固定する
+config.front_end = "OpenGL"
+
 -- 非アクティブなsplitを少し暗くする (ghostty: unfocused-split-opacity = 0.85)
 -- weztermに透過指定はないため明度で近似する
 config.inactive_pane_hsb = {
