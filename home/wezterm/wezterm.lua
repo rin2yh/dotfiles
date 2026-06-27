@@ -18,12 +18,12 @@ config.inactive_pane_hsb = {
 	brightness = 0.85,
 }
 
--- タイトルバーを消し、信号機ボタンをタブバーに統合する
--- ("zsh" などのウィンドウタイトル表示をなくす)
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+-- タイトルバーを消す ("zsh" などのウィンドウタイトル表示をなくす)
+-- INTEGRATED_BUTTONS は本体の透過を壊すため (wezterm#5239)、RESIZE のみにする。
+-- これで「タイトルバーなし + 透過」が両立する (信号機ボタンは非表示)。
+config.window_decorations = "RESIZE"
 
--- INTEGRATED_BUTTONS にすると統合先のタブバー背景が不透明になり
--- 透過が効かなくなる (wezterm#5239)。フレーム背景を透明にして回避する
+-- タブバー(フレーム)の背景も透明にして本体の透過と揃える
 config.window_frame = {
 	active_titlebar_bg = "none",
 	inactive_titlebar_bg = "none",
