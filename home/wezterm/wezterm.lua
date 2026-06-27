@@ -22,6 +22,9 @@ config.inactive_pane_hsb = {
 -- ("zsh" などのウィンドウタイトル表示をなくす)
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 
+-- 終了/タブを閉じるときの確認ダイアログを出さない
+config.window_close_confirmation = "NeverPrompt"
+
 -- shell integration はweztermに組み込みのため設定不要 (ghostty: shell-integration = zsh)
 
 config.keys = {
