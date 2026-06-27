@@ -22,6 +22,13 @@ config.inactive_pane_hsb = {
 -- ("zsh" などのウィンドウタイトル表示をなくす)
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 
+-- INTEGRATED_BUTTONS にすると統合先のタブバー背景が不透明になり
+-- 透過が効かなくなる (wezterm#5239)。フレーム背景を透明にして回避する
+config.window_frame = {
+	active_titlebar_bg = "none",
+	inactive_titlebar_bg = "none",
+}
+
 -- 終了/タブを閉じるときの確認ダイアログを出さない
 config.window_close_confirmation = "NeverPrompt"
 
