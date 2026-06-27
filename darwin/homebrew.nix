@@ -28,6 +28,7 @@
     casks = [
       "claude"
       "discord"
+      "font-jetbrains-mono-nerd-font"
       "fuwari"
       "ghostty"
       "homerow"
