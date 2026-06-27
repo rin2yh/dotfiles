@@ -17,11 +17,40 @@ config.send_composed_key_when_right_alt_is_pressed = false
 config.window_background_opacity = 0.85
 config.macos_window_background_blur = 20
 
--- weztermのデフォルト背景は真っ黒(#000000)でghosttyより暗く沈むため、
--- ghosttyのデフォルト背景色(#292c33)に合わせる
+-- weztermのデフォルトはANSI greenが鮮やか(緑寄りの印象)になるため、
+-- ghosttyの内蔵デフォルトpalette (Tomorrow系/One Darkの混合, 既存builtinに一致なし) を直接移植
+-- 値は `ghostty +show-config --default` から取得
 config.colors = {
-	background = "#292c33",
+	foreground = "#ffffff",
+	background = "#282c34",
+	cursor_bg = "#ffffff",
+	cursor_fg = "#000000",
+	cursor_border = "#ffffff",
+	ansi = {
+		"#1d1f21",
+		"#cc6666",
+		"#b5bd68",
+		"#f0c674",
+		"#81a2be",
+		"#b294bb",
+		"#8abeb7",
+		"#c5c8c6",
+	},
+	brights = {
+		"#666666",
+		"#d54e53",
+		"#b9ca4a",
+		"#e7c547",
+		"#7aa6da",
+		"#c397d8",
+		"#70c0b1",
+		"#eaeaea",
+	},
 }
+
+-- claude codeなどが出力する素のURL文字列をSUPER+クリックで開けるようにする
+-- (weztermはデフォルトでhyperlink_rulesが空 = URLを認識しない)
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
 -- WebGpuだとDock(launchd)起動時にGPUコンテキスト初期化に失敗して
 -- 透過が効かないことがあるため、描画をOpenGLに固定する
@@ -41,6 +70,26 @@ config.inactive_pane_hsb = {
 -- ・タブが1つのときはタブバーごと隠す (ghosttyと同じ挙動)
 config.use_fancy_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
+
+-- タブバー/タイトルバーの色を ghostty palette に揃える
+-- (デフォルトのteal/purple系を消し、palette black / bg / 8 / 7 / foreground の無彩色寄りで構成)
+local tab_idle = { bg_color = "#1d1f21", fg_color = "#666666" }
+local tab_hover = { bg_color = "#282c34", fg_color = "#c5c8c6" }
+config.window_frame = {
+	active_titlebar_bg = "#1d1f21",
+	inactive_titlebar_bg = "#1d1f21",
+}
+config.colors.tab_bar = {
+	background = "#1d1f21",
+	active_tab = {
+		bg_color = "#282c34",
+		fg_color = "#ffffff",
+	},
+	inactive_tab = tab_idle,
+	inactive_tab_hover = tab_hover,
+	new_tab = tab_idle,
+	new_tab_hover = tab_hover,
+}
 
 -- "1:" のインデックスを消して、タブ名(無ければプログラム名)だけ表示する
 wezterm.on("format-tab-title", function(tab)
