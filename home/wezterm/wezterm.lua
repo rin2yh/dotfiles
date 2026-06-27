@@ -18,20 +18,6 @@ config.inactive_pane_hsb = {
 	brightness = 0.85,
 }
 
--- タイトルバーを消す ("zsh" などのウィンドウタイトル表示をなくす)
--- INTEGRATED_BUTTONS は本体の透過を壊すため (wezterm#5239)、RESIZE のみにする。
--- これで「タイトルバーなし + 透過」が両立する (信号機ボタンは非表示)。
-config.window_decorations = "RESIZE"
-
--- タブバー(フレーム)の背景も透明にして本体の透過と揃える
-config.window_frame = {
-	active_titlebar_bg = "none",
-	inactive_titlebar_bg = "none",
-}
-
--- 終了/タブを閉じるときの確認ダイアログを出さない
-config.window_close_confirmation = "NeverPrompt"
-
 -- shell integration はweztermに組み込みのため設定不要 (ghostty: shell-integration = zsh)
 
 config.keys = {
