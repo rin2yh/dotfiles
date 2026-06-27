@@ -36,6 +36,21 @@ config.inactive_pane_hsb = {
 
 -- shell integration はweztermに組み込みのため設定不要 (ghostty: shell-integration = zsh)
 
+-- タブバーをghostty風に寄せる
+-- ・ファンシータブ(角丸)はデフォルトのまま
+-- ・タブが1つのときはタブバーごと隠す (ghosttyと同じ挙動)
+config.use_fancy_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = true
+
+-- "1:" のインデックスを消して、タブ名(無ければプログラム名)だけ表示する
+wezterm.on("format-tab-title", function(tab)
+	local title = tab.tab_title
+	if not title or #title == 0 then
+		title = tab.active_pane.title
+	end
+	return " " .. title .. " "
+end)
+
 config.keys = {
 	-- cmd+rで設定を再読み込み (ghostty: super+r=reload_config)
 	{ key = "r", mods = "CMD", action = act.ReloadConfiguration },
