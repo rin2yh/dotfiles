@@ -8,7 +8,7 @@ config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
 -- 背景の透過とブラー (ghostty: background-opacity / background-blur-radius)
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.65
 config.macos_window_background_blur = 20
 
 -- WebGpuだとDock(launchd)起動時にGPUコンテキスト初期化に失敗して
