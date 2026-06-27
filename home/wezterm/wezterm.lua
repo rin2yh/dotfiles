@@ -8,8 +8,14 @@ config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
 -- 背景の透過とブラー (ghostty: background-opacity / background-blur-radius)
-config.window_background_opacity = 0.65
+config.window_background_opacity = 0.85
 config.macos_window_background_blur = 20
+
+-- weztermのデフォルト背景は真っ黒(#000000)でghosttyより暗く沈むため、
+-- ghosttyのデフォルト背景色(#292c33)に合わせる
+config.colors = {
+	background = "#292c33",
+}
 
 -- WebGpuだとDock(launchd)起動時にGPUコンテキスト初期化に失敗して
 -- 透過が効かないことがあるため、描画をOpenGLに固定する
