@@ -1,21 +1,13 @@
 vim.loader.enable()
 
--- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
-local path_package = vim.fn.stdpath('data') .. '/site/'
-local mini_path = path_package .. 'pack/deps/start/mini.nvim'
-if vim.uv.fs_stat(mini_path) == nil then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
-  local clone_cmd = {
-    'git', 'clone', '--filter=blob:none',
-    'https://github.com/echasnovski/mini.nvim', mini_path
-  }
-  vim.fn.system(clone_cmd)
-  vim.cmd('packadd mini.nvim | helptags ALL')
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
+-- mini.deps は最新の mini.nvim で開発が凍結されたため、プラグイン管理は
+-- Neovim 組み込みの vim.pack に移行。mini.nvim 本体も vim.pack で入れる。
+vim.pack.add({ 'https://github.com/echasnovski/mini.nvim' })
 
--- Set up 'mini.deps' (customize to your liking)
-require('mini.deps').setup({ path = { package = path_package } })
+-- 各モジュールは MiniDeps.now/later の代わりに MiniMisc.safely を使う。
+-- MiniMisc グローバルは require('mini.misc').setup() で生成されるため、
+-- 他モジュールを読み込む前にここでセットアップしておく。
+require('mini.misc').setup()
 
 -- keymaps
 -- jkで抜ける系

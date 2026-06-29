@@ -1,8 +1,8 @@
 -- config of lsp
 
-local now = MiniDeps.now
+local safely = MiniMisc.safely
 
-now(function()
+safely('now', function()
   vim.pack.add({ 'https://github.com/pcolladosoto/tinygo.nvim' })
   local tinygo = require("tinygo")
   tinygo.setup({})

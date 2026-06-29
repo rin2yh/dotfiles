@@ -3,7 +3,6 @@
   "runtime.version": "LuaJIT",
   "diagnostics.globals": [
     "vim",
-    "MiniDeps",
     "MiniIcons",
     "MiniTrailspace",
     "MiniGit",

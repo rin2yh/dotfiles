@@ -2,10 +2,10 @@
 
 vim.o.winbar = " %m %f "
 
-local now, later = MiniDeps.now, MiniDeps.later
+local safely = MiniMisc.safely
 
 -- colorscheme
-now(function()
+safely('now', function()
   vim.pack.add({ 'https://github.com/folke/tokyonight.nvim' })
   require("tokyonight").setup({
     style = "storm",
@@ -25,33 +25,33 @@ now(function()
   vim.cmd.colorscheme('tokyonight')
 end)
 
-later(function()
+safely('later', function()
   vim.pack.add({ 'https://github.com/vim-jp/vimdoc-ja' })
   vim.opt.helplang:prepend('ja')
 end)
 
 -- Simple plugins
-now(function()
+safely('now', function()
   require('mini.icons').setup()
   MiniIcons.mock_nvim_web_devicons()
 end)
-later(require('mini.indentscope').setup)
+safely('later', require('mini.indentscope').setup)
 
 -- statusline
-now(function()
+safely('now', function()
   require('mini.statusline').setup()
   vim.opt.laststatus = 3
   vim.opt.cmdheight = 0
 end)
 
 -- notify
-now(function()
+safely('now', function()
   require('mini.notify').setup()
   vim.notify = require('mini.notify').make_notify({})
 end)
 
 -- hipatterns
-later(function()
+safely('later', function()
   local hipatterns = require('mini.hipatterns')
   local hi_words = require('mini.extra').gen_highlighter.words
   hipatterns.setup({
@@ -65,7 +65,7 @@ later(function()
 end)
 
 -- trailspace
-later(function()
+safely('later', function()
   require('mini.trailspace').setup()
   vim.api.nvim_create_user_command(
     'Trim',
@@ -78,7 +78,7 @@ later(function()
 end)
 
 -- clue (全体のキーバインドヒント)
-later(function()
+safely('later', function()
   local function mode_nx(keys)
     return { mode = 'n', keys = keys }, { mode = 'x', keys = keys }
   end
