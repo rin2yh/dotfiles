@@ -70,18 +70,20 @@ vim.api.nvim_create_user_command('CopyPath', function()
   print("Copied: " .. path)
 end, {})
 
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local safely = MiniMisc.safely
 
 -- treesitter
-now(function()
-  add({
-    source = 'https://github.com/nvim-treesitter/nvim-treesitter',
-    hooks = {
-      post_checkout = function()
+safely('now', function()
+  -- mini.deps の hooks.post_checkout 相当: install/update 時に parser を更新
+  vim.api.nvim_create_autocmd('PackChanged', {
+    callback = function(ev)
+      if ev.data.spec.name == 'nvim-treesitter'
+          and (ev.data.kind == 'install' or ev.data.kind == 'update') then
         vim.cmd.TSUpdate()
       end
-    },
+    end,
   })
+  vim.pack.add({ 'https://github.com/nvim-treesitter/nvim-treesitter' })
   require('nvim-treesitter').install({
     'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
     'tsx', 'typescript', 'html',
@@ -112,11 +114,9 @@ now(function()
   })
 end)
 
-later(function()
-  add({
-    source = 'https://github.com/folke/ts-comments.nvim',
-    depends = { 'nvim-treesitter/nvim-treesitter' },
-  })
+safely('later', function()
+  -- nvim-treesitter は treesitter ブロックで既に追加済み (depends 相当)
+  vim.pack.add({ 'https://github.com/folke/ts-comments.nvim' })
   require('ts-comments').setup()
 end)
 
@@ -126,8 +126,8 @@ vim.opt.foldlevel = 99
 
 -- Simple plugins
 for _, name in ipairs({ 'pairs', 'surround', 'move', 'bracketed', 'jump2d' }) do
-  later(require('mini.' .. name).setup)
+  safely('later', require('mini.' .. name).setup)
 end
 
 -- basics
-now(require('mini.basics').setup)
+safely('now', require('mini.basics').setup)

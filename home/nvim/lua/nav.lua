@@ -1,14 +1,12 @@
 -- 探索系
 
-local now, later = MiniDeps.now, MiniDeps.later
+local safely = MiniMisc.safely
 
 -- starter
-now(require('mini.starter').setup)
+safely('now', require('mini.starter').setup)
 
--- misc
-now(function()
-  require('mini.misc').setup()
-
+-- misc (mini.misc.setup() は init.lua で実行済み)
+safely('now', function()
   MiniMisc.setup_restore_cursor()
   vim.api.nvim_create_user_command('Zoom', function()
     MiniMisc.zoom(0, {})
@@ -17,7 +15,7 @@ now(function()
 end)
 
 -- files
-now(function()
+safely('now', function()
   require('mini.files').setup()
 
   -- mini.files.setup() がハイライトを上書きするため、setup() 後に再設定
@@ -43,7 +41,7 @@ now(function()
 end)
 
 -- pick
-later(function()
+safely('later', function()
   local prev_paste = vim.paste
   require('mini.pick').setup()
 

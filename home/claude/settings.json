@@ -91,6 +91,7 @@
     ],
     "defaultMode": "plan"
   },
+  "model": "claude-opus-4-7[1m]",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.js"
@@ -184,7 +185,11 @@
   "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": false
 }
