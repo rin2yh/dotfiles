@@ -24,7 +24,7 @@ payload=$(cat)
           | if type=="string" then . else (map(select(.type=="text") | .text) | join(" ")) end
           | gsub("^\\s+|\\s+$"; "")
           | select(length > 0)
-        ' 2>/dev/null | head -n 1 | tr '\n\r\t' '   ' | head -c 200)
+        ' 2>/dev/null | head -n 1 | tr '\n\r\t' '   ' | head -c 200 | { iconv -c -f UTF-8 -t UTF-8 2>/dev/null || true; })
       fi
       body=${body:-応答完了}
       ;;
