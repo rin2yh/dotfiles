@@ -1,5 +1,9 @@
 on run
-  if (system attribute "CC_INVOCATION") is "" then return
+  try
+    do shell script "test -n \"${CC_INVOCATION-}\""
+  on error
+    return
+  end try
   try
     set b to do shell script "printf %s \"${CC_BODY-}\""
   on error

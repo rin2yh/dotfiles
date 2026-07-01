@@ -33,6 +33,12 @@ payload=$(cat)
     *) body=${message:-$event} ;;
   esac
 
+  LOG=~/.cache/claude-notify.log
+  [ -f "$LOG" ] && [ "$(stat -f%z "$LOG" 2>/dev/null || echo 0)" -gt 1048576 ] && rm -f "$LOG"
+  printf '[%s] ppid=%s event=%s title=%s\n' \
+    "$(date +%Y-%m-%dT%H:%M:%S)" "$PPID" "${event:-<empty>}" "$title" \
+    >> "$LOG" 2>/dev/null || true
+
   APP=$HOME/Applications/ClaudeCodeNotifier.app
   if [ -x "$APP/Contents/MacOS/applet" ]; then
     CC_INVOCATION=1 CC_BODY=$body CC_TITLE=$title "$APP/Contents/MacOS/applet" >/dev/null 2>&1
