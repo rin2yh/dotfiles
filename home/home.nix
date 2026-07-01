@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   username,
   ...
@@ -67,6 +68,7 @@ in
       config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/statusline.js";
     ".claude/rules".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/rules";
     ".claude/skills".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/skills";
+    ".claude/hooks".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/claude/hooks";
   };
 
   xdg.configFile = {
@@ -99,6 +101,34 @@ in
   home.sessionVariables = {
     # EDITOR = "emacs";
   };
+
+  home.activation.claudeCodeNotifier = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    APP="$HOME/Applications/ClaudeCodeNotifier.app"
+    ICON="/Applications/Claude.app/Contents/Resources/electron.icns"
+    SRC="${dotfiles}/claude/hooks/notify.applescript"
+
+    if [ ! -f "$ICON" ] || [ ! -f "$SRC" ]; then
+      exit 0
+    fi
+
+    if [ -x "$APP/Contents/MacOS/applet" ] \
+       && [ ! "$SRC" -nt "$APP/Contents/MacOS/applet" ] \
+       && [ ! "$ICON" -nt "$APP/Contents/Resources/applet.icns" ]; then
+      exit 0
+    fi
+
+    mkdir -p "$HOME/Applications"
+    rm -rf "$APP"
+    /usr/bin/osacompile -o "$APP" "$SRC"
+    rm -f "$APP/Contents/Resources/Assets.car"
+    cp "$ICON" "$APP/Contents/Resources/applet.icns"
+    /usr/bin/plutil -replace CFBundleIdentifier -string "dev.yuuki.claude-code-notifier" "$APP/Contents/Info.plist"
+    /usr/bin/plutil -replace CFBundleName -string "Claude Code" "$APP/Contents/Info.plist"
+    /usr/bin/plutil -remove CFBundleIconName "$APP/Contents/Info.plist" 2>/dev/null || true
+    /usr/bin/codesign --sign - --force --deep "$APP" >/dev/null 2>&1 || true
+    /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -f "$APP" >/dev/null 2>&1 || true
+    /usr/bin/touch "$APP"
+  '';
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
