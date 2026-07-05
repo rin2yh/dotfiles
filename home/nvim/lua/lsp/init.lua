@@ -1,41 +1,5 @@
 -- config of lsp
 
-local safely = MiniMisc.safely
-
-safely('now', function()
-  vim.pack.add({ 'https://github.com/pcolladosoto/tinygo.nvim' })
-  local tinygo = require("tinygo")
-  tinygo.setup({})
-
-  -- tinygo.nvim の applyConfigFile は .tinygo.json を相対パスで開くため、
-  -- nvim の cwd がプロジェクト外だと検出漏れする。バッファから上向き探索し
-  -- 絶対パスで読み取って TinyGoSetTarget を直接呼ぶ。
-  tinygo.applyConfigFile = function()
-    local bufname = vim.api.nvim_buf_get_name(0)
-    local search_path = nil
-    if bufname ~= "" then
-      search_path = vim.fs.dirname(bufname)
-    end
-    local found = vim.fs.find(tinygo.config_file, {
-      upward = true,
-      path = search_path,
-    })
-    if vim.tbl_isempty(found) then return end
-    local f = io.open(found[1], "r")
-    if f == nil then return end
-    local raw = f:read("a")
-    f:close()
-    local ok, cfg = pcall(vim.json.decode, raw)
-    if not ok or type(cfg) ~= "table" or cfg.target == nil then return end
-    vim.cmd.TinyGoSetTarget(cfg.target)
-  end
-
-  -- applyConfigFile は vim.lsp.enable(lsp_names) より後に走らせる必要がある。
-  -- tinygo.setup() で登録される LspAttach autocmd が gopls attach 時に拾って
-  -- くれるが、取りこぼし保険として main 完了後にも明示実行する。
-  vim.schedule(function() pcall(tinygo.applyConfigFile) end)
-end)
-
 vim.diagnostic.config({
   virtual_text = true,
 })
