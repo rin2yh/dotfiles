@@ -33,3 +33,13 @@ make help             # Show available targets
 ├── home/           # home-manager 配下の各ツール設定
 └── Makefile
 ```
+
+## Notes
+
+- `home/` 配下のファイルは `mkOutOfStoreSymlink` でリポジトリ実体への symlink として配置されている。既存ファイル（`.zshrc` / `nvim/` / `claude/CLAUDE.md` など）の内容だけを編集する場合、`darwin-rebuild switch` は不要で保存すれば即反映される。
+- 以下のケースでは `make darwin-switch` が必要:
+  - `home/home.nix` の `home.packages` にパッケージを追加/削除
+  - `home.file` / `xdg.configFile` に新しい symlink エントリを追加
+  - `darwin/` 配下 (`configuration.nix` / `homebrew.nix` など) の変更
+  - `flake.nix` / `flake.lock` の更新
+- `flake.lock` を更新する場合は `nix flake update` 後に `make darwin-switch`。
