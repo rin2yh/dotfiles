@@ -12,10 +12,6 @@
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
-    "tinygo.nvim": {
-      "rev": "0f38894d50ad5a02aae8f3df14a24576acc304f1",
-      "src": "https://github.com/pcolladosoto/tinygo.nvim"
-    },
     "tinygo.vim": {
       "rev": "b95273ec07487cd59deed241b77d40e520fa08e7",
       "src": "https://github.com/sago35/tinygo.vim"
