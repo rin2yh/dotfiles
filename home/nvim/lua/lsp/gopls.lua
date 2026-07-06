@@ -29,24 +29,13 @@ M.settings = {
   }
 }
 
--- TinyGo 用の target 切替。sago35 さんの tinygo.vim が `:TinygoTarget <target>`
--- で GOROOT/GOOS/GOARCH/GOFLAGS を LSP config に流し込むが、Neovim native LSP
--- 分岐で edit を叩かないため、FileType 再発火で gopls を再 attach させる
--- ラッパー `:Tinygo` を用意する。
+-- sago35/tinygo.vim の `:TinygoTarget` が GOROOT/GOOS/GOARCH/GOFLAGS を LSP config
+-- に流し込む。Neovim 0.11.2 以降は `vim.lsp.enable('gopls', true)` が
+-- `doautoall('nvim.lsp.enable FileType')` を発火して gopls を再 attach するため、
+-- 追加のラッパーは不要。
 vim.pack.add({ 'https://github.com/sago35/tinygo.vim' })
 
-vim.api.nvim_create_user_command('Tinygo', function(opts)
-  vim.cmd.TinygoTarget(opts.args)
-  local buf = vim.api.nvim_get_current_buf()
-  vim.schedule(function()
-    vim.api.nvim_exec_autocmds('FileType', { buffer = buf })
-  end)
-end, {
-  nargs = 1,
-  complete = function(arglead) return vim.fn['tinygo#TinygoTargets'](arglead, '', 0) end,
-})
-
--- Go バッファを開いた時、上位に .tinygo.json があれば自動で :Tinygo を叩く。
+-- Go バッファを開いた時、上位に .tinygo.json があれば自動で :TinygoTarget を叩く。
 -- 同一ファイル + 同一 target は 1 セッション 1 回だけ。
 local tinygo_applied = {}
 vim.api.nvim_create_autocmd('FileType', {
@@ -64,7 +53,7 @@ vim.api.nvim_create_autocmd('FileType', {
     if not ok or type(cfg) ~= 'table' or cfg.target == nil then return end
     if tinygo_applied[found[1]] == cfg.target then return end
     tinygo_applied[found[1]] = cfg.target
-    vim.cmd({ cmd = 'Tinygo', args = { cfg.target } })
+    vim.cmd({ cmd = 'TinygoTarget', args = { cfg.target } })
   end,
 })
 
