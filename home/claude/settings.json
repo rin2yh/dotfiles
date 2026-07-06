@@ -121,7 +121,8 @@
     "command": "~/.claude/statusline.js"
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": false,
+    "gopls-lazy-lsp@skills-dir": true,
     "lua-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "example-skills@anthropic-agent-skills": true,
