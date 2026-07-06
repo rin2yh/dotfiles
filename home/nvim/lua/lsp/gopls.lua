@@ -42,10 +42,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local root = vim.fs.root(args.buf, '.tinygo.json')
     if not root then return end
-    local config_path = vim.fs.joinpath(root, '.tinygo.json')
-    local ok, cfg = pcall(function()
-      return vim.json.decode(table.concat(vim.fn.readfile(config_path), '\n'))
-    end)
+    local ok, cfg = pcall(vim.json.decode,
+      table.concat(vim.fn.readfile(vim.fs.joinpath(root, '.tinygo.json')), '\n'))
     if not ok or type(cfg) ~= 'table' or not cfg.target then return end
     if applied[root] == cfg.target then return end
     applied[root] = cfg.target
