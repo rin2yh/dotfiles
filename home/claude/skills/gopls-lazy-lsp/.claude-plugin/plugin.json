@@ -1,6 +1,9 @@
 {
   "name": "gopls-lazy-lsp",
   "version": "0.1.0",
+  "author": {
+    "name": "rin2yh"
+  },
   "description": "sivchari/gopls-lazy を Claude Code の Go LSP として使う。gopls への drop-in プロキシで、大規模 Go モノレポの型チェックを動的にスコープし CPU/メモリを削減する。skills-dir プラグインとして in-place ロードされる（marketplace 不要）。",
   "lspServers": {
     "go": {
