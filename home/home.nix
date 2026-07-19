@@ -128,6 +128,16 @@ in
     /usr/bin/touch "$APP"
   '';
 
+  programs.nh = {
+    enable = true;
+    flake = "${config.home.homeDirectory}/workspace/dotfiles";
+    clean = {
+      enable = true;
+      dates = "weekly";
+      extraArgs = "--keep-since 30d --keep-one";
+    };
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
