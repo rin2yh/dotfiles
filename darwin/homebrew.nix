@@ -30,7 +30,6 @@
       "discord"
       "fuwari"
       "ghostty"
-      "homerow"
       "notion"
       "orbstack"
       "raycast"
