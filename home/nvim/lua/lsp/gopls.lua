@@ -3,7 +3,10 @@ local M = {}
 -- mise の go shim は GOROOT env を無視するため、直接の go binary を PATH 先頭に
 -- 置いてから gopls を起動する（gopls 内部の `go env` に TinyGo overlay を反映）。
 local go_dir = vim.fs.dirname(vim.trim(vim.fn.system('mise which go')))
-M.cmd = { 'env', 'PATH=' .. go_dir .. ':' .. vim.env.PATH, 'gopls-lazy' }
+local prefix = { 'env', 'PATH=' .. go_dir .. ':' .. vim.env.PATH }
+local cmd_lazy = vim.list_extend(vim.deepcopy(prefix), { 'gopls-lazy' })
+local cmd_plain = vim.list_extend(vim.deepcopy(prefix), { 'gopls' })
+M.cmd = cmd_lazy
 M.filetypes = { 'go', 'gomod' }
 M.root_markers = { 'go.mod' }
 
@@ -46,6 +49,9 @@ vim.api.nvim_create_autocmd('FileType', {
       table.concat(vim.fn.readfile(vim.fs.joinpath(root, '.tinygo.json')), '\n'))
     if not ok or type(cfg) ~= 'table' or not cfg.target then return end
     if applied[root] == cfg.target then return end
+    -- tinygo プロジェクトは gopls-lazy 経由だと TinygoTarget の env が反映されないため、
+    -- .tinygo.json を検出したタイミングで cmd を素の gopls に差し替えてから restart させる。
+    vim.lsp.config('gopls', { cmd = cmd_plain })
     applied[root] = cfg.target
     vim.cmd({ cmd = 'TinygoTarget', args = { cfg.target } })
   end,
