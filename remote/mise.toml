@@ -3,16 +3,13 @@
 
 [tools]
 node = "latest"
-go   = "latest"
 
-"go:golang.org/x/tools/gopls"      = "latest"
 "npm:typescript-language-server"   = "latest"
 "npm:typescript"                   = "latest"
 "npm:vscode-langservers-extracted" = "latest"
 "npm:@olrtg/emmet-language-server" = "latest"   # [要確認]
 "aqua:LuaLS/lua-language-server"   = "latest"   # [要確認]
 "aqua:hashicorp/terraform-ls"      = "latest"
-"aqua:rust-lang/rust-analyzer"     = "latest"   # [要確認]
 
 "aqua:BurntSushi/ripgrep"       = "latest"
 "aqua:jesseduffield/lazygit"    = "latest"

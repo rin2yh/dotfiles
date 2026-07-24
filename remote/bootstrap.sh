@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # リモートで一度実行。mise で LSP/CLI を導入し、前提(Cコンパイラ)も自動解決する。README.md 参照。
 #   ssh <host> 'bash -s' < remote/bootstrap.sh   # mise.toml も転送しておくこと
-#   WITH_RUST=1 を付けると rustup(+rust-src) も導入し rust-analyzer を完全化する。
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -35,13 +34,6 @@ cp "${manifest}" "${HOME}/.config/mise/conf.d/remote-nvim.toml"
 mise install || true
 mise reshim || true
 
-# --- 前提: Rust (WITH_RUST=1 のときだけ。user-local, root 不要) ---
-if [[ "${WITH_RUST:-}" == "1" ]] && ! command -v rustup >/dev/null 2>&1; then
-  echo "==> rustup + rust-src を導入"
-  curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal
-  "${HOME}/.cargo/bin/rustup" component add rust-src || true
-fi
-
 # --- 非対話シェル(ssh 実行)でも nvim が shims を見つけられるよう PATH を通す ---
 shims='export PATH="$HOME/.local/share/mise/shims:$PATH"'
 for rc in "${HOME}/.profile" "${HOME}/.bashrc"; do
@@ -51,8 +43,8 @@ done
 
 # --- 検証: 期待バイナリが PATH に載ったか。未導入(=spec 要修正)を名指しで報告 ---
 missing=()
-for bin in gopls typescript-language-server vscode-css-language-server \
-           emmet-language-server lua-language-server terraform-ls rust-analyzer \
+for bin in typescript-language-server vscode-css-language-server \
+           emmet-language-server lua-language-server terraform-ls \
            rg lazygit lazydocker tree-sitter; do
   command -v "${bin}" >/dev/null 2>&1 || missing+=("${bin}")
 done
