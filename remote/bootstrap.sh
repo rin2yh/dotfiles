@@ -7,7 +7,7 @@
 # 使い方(リモート側で):
 #   ./bootstrap.sh
 # 手元から流し込むなら:
-#   ssh <host> 'bash -s' < remote-nvim/bootstrap.sh
+#   ssh <host> 'bash -s' < remote/bootstrap.sh
 #   （その場合は同ディレクトリの mise.toml も転送しておくこと）
 #
 set -euo pipefail

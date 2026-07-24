@@ -66,8 +66,8 @@ Neovim 本体のインストールと `home/nvim` のコピー、`vim.pack` に�
 
 ```sh
 # 手元から流し込む例（mise.toml も一緒に転送）
-scp remote-nvim/mise.toml <host>:/tmp/mise.toml
-scp remote-nvim/bootstrap.sh <host>:/tmp/bootstrap.sh
+scp remote/mise.toml <host>:/tmp/mise.toml
+scp remote/bootstrap.sh <host>:/tmp/bootstrap.sh
 ssh <host> 'cd /tmp && bash bootstrap.sh'
 ```
 
