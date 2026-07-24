@@ -19,10 +19,12 @@ nvim も LSP もリモートで動くので LSP サーバ等はリモートに�
 
 入るツールと mise spec の一覧は `mise.toml` のコメント参照。`nixd` は除外。
 
-## ハマりどころ
+## bootstrap が自動でやること
 
-- **C コンパイラ**が無いと treesitter parser ビルドが落ちる → `build-essential` 等を入れる。
-- **Rust** は rust-analyzer に加え `rustup`(cargo/rustc/rust-src) が別途必要。
-- `mise.toml` の `[要確認]` spec が入らなければ `mise registry | grep <tool>` で差し替え。
-- SSH 越しで使うなら手元 `home/nvim` 側で `im-select`(macOS専用) の OS ガードと
-  OSC52 クリップボードを入れると快適（必要になったら対応）。
+- LSP/CLI ツール導入（`mise.toml` 記載分）。
+- **C コンパイラ**が無ければ導入（treesitter parser ビルド用。sudo があれば system pkg mgr を使用）。
+- 導入後に**各バイナリを検証**。`[要確認]` spec が解決できなければ、どれが失敗したかと
+  直し方（`mise registry | grep <name>`）を名指しで表示して停止するので、手探りにならない。
+- `WITH_RUST=1` を付ければ **rustup + rust-src** も導入し rust-analyzer を完全化（既定は省略）。
+
+SSH 越しで使うなら手元 `home/nvim` 側で `im-select`(macOS専用) の OS ガードと OSC52 を入れると快適。
