@@ -12,20 +12,18 @@ command -v mise >/dev/null 2>&1 || curl -fsSL https://mise.run | sh
 export PATH="${HOME}/.local/bin:${HOME}/.local/share/mise/shims:${PATH}"
 command -v mise >/dev/null 2>&1 || { echo "error: mise 導入失敗" >&2; exit 1; }
 
-# --- 前提: C コンパイラ (nvim-treesitter の parser ビルド用。失敗しても非致命) ---
-install_cc() {
-  local sudo=""; [[ ${EUID:-$(id -u)} -ne 0 ]] && command -v sudo >/dev/null 2>&1 && sudo="sudo"
-  if   command -v apt-get >/dev/null 2>&1; then $sudo apt-get update && $sudo apt-get install -y build-essential
-  elif command -v dnf     >/dev/null 2>&1; then $sudo dnf -y install gcc
-  elif command -v yum     >/dev/null 2>&1; then $sudo yum -y install gcc
-  elif command -v pacman  >/dev/null 2>&1; then $sudo pacman -Sy --noconfirm base-devel
-  elif command -v apk     >/dev/null 2>&1; then $sudo apk add build-base
-  elif command -v zypper  >/dev/null 2>&1; then $sudo zypper -n install gcc
-  else return 2; fi
-}
+# --- 前提: C コンパイラ (treesitter parser ビルド用) ---
+# 共有ホスト/root 無しでも完結するよう、system に無ければ zig を user-local に入れて
+# ~/.local/bin/cc (= zig cc) を用意する（sudo 不要・システムを汚さない）。
 if ! command -v cc >/dev/null 2>&1 && ! command -v gcc >/dev/null 2>&1 && ! command -v clang >/dev/null 2>&1; then
-  echo "==> C コンパイラが無いので導入を試みます"
-  install_cc || echo "!! C コンパイラを自動導入できず。gcc/clang を手動で（treesitter parser ビルドに影響）" >&2
+  echo "==> C コンパイラが無いので zig を user-local に入れて cc として使う"
+  if mise use -g zig@latest && mise reshim; then
+    mkdir -p "${HOME}/.local/bin"
+    printf '#!/bin/sh\nexec zig cc "$@"\n' > "${HOME}/.local/bin/cc"
+    chmod +x "${HOME}/.local/bin/cc"
+  else
+    echo "!! zig 導入に失敗。gcc/clang を用意してください（treesitter parser ビルドに影響）" >&2
+  fi
 fi
 
 # --- LSP/CLI ツール ---
@@ -34,11 +32,11 @@ cp "${manifest}" "${HOME}/.config/mise/conf.d/remote-nvim.toml"
 mise install || true
 mise reshim || true
 
-# --- 非対話シェル(ssh 実行)でも nvim が shims を見つけられるよう PATH を通す ---
-shims='export PATH="$HOME/.local/share/mise/shims:$PATH"'
+# --- 非対話シェル(ssh 実行)でも nvim が shims / cc を見つけられるよう PATH を通す ---
+paths='export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"'
 for rc in "${HOME}/.profile" "${HOME}/.bashrc"; do
-  [[ -f "${rc}" ]] && ! grep -qF "mise/shims" "${rc}" \
-    && printf '\n# remote-nvim: mise shims\n%s\n' "${shims}" >> "${rc}" || true
+  [[ -f "${rc}" ]] && ! grep -qF "remote-nvim: PATH" "${rc}" \
+    && printf '\n# remote-nvim: PATH\n%s\n' "${paths}" >> "${rc}" || true
 done
 
 # --- 検証: 期待バイナリが PATH に載ったか。未導入(=spec 要修正)を名指しで報告 ---

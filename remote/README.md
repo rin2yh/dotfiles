@@ -22,7 +22,8 @@ nvim も LSP もリモートで動くので LSP サーバ等はリモートに�
 ## bootstrap が自動でやること
 
 - LSP/CLI ツール導入（`mise.toml` 記載分）。
-- **C コンパイラ**が無ければ導入（treesitter parser ビルド用。sudo があれば system pkg mgr を使用）。
+- **C コンパイラ**が無ければ **zig を user-local に入れて `cc` として使う**（treesitter
+  parser ビルド用。**sudo 不要・共有ホストでもシステムを汚さない**）。既に gcc 等があれば何もしない。
 - 導入後に**各バイナリを検証**。`[要確認]` spec が解決できなければ、どれが失敗したかと
   直し方（`mise registry | grep <name>`）を名指しで表示して停止するので、手探りにならない。
 
