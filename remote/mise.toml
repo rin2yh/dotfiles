@@ -1,47 +1,23 @@
-# remote-nvim.nvim 用: リモート(Linux)側に必要な LSP サーバ / CLI ツールを
-# mise でユーザローカルに揃えるためのマニフェスト。
-#
-# remote-nvim は「Neovim 本体・設定コピー・プラグイン(vim.pack)」までは自動で
-# やってくれるが、LSP サーバや rg/lazygit 等の外部バイナリは入れてくれない。
-# ここに列挙したものが、この Neovim 設定が PATH から呼ぶバイナリと 1:1 で対応する。
-#
-# 導入は同ディレクトリの bootstrap.sh を参照（~/.local/share/mise 配下に隔離、
-# 消せば消える。VSCode Remote SSH の ~/.vscode-server と同じ発想）。
-#
-# 注意: バックエンド識別子はこのリポジトリからは mise レジストリに到達できず
-# 実物照合できていない箇所がある(下の [要確認] コメント)。初回 `mise install`
-# で失敗したら `mise registry | grep <tool>` で正しい spec を確認して差し替える。
+# remote-nvim のリモート側に home/nvim が呼ぶ LSP サーバ/CLI を揃える。導入は bootstrap.sh。
+# [要確認] は未照合。入らなければ `mise registry | grep <tool>` で差し替え。
 
 [tools]
-# --- ランタイム（下の npm:/go: 系が依存する）---
-node = "latest"   # typescript-language-server / emmet / vscode-langservers が依存
-go   = "latest"   # gopls(go: バックエンド) と Go 開発が依存
+node = "latest"
+go   = "latest"
 
-# --- LSP サーバ（home/nvim/lua/lsp/*.lua の M.cmd と対応）---
-# gopls: canonical import path。go install 相当なので go が必要。
-"go:golang.org/x/tools/gopls" = "latest"
-# typescript-language-server + tsserver 本体
-"npm:typescript-language-server" = "latest"
-"npm:typescript" = "latest"
-# css/html/json/eslint 一式（vscode-css-language-server 等を提供）
+"go:golang.org/x/tools/gopls"      = "latest"
+"npm:typescript-language-server"   = "latest"
+"npm:typescript"                   = "latest"
 "npm:vscode-langservers-extracted" = "latest"
-# emmet-language-server（バイナリ名 emmet-language-server）
-"npm:@olrtg/emmet-language-server" = "latest"   # [要確認] npm パッケージのスコープ名
-# lua-language-server
-"aqua:LuaLS/lua-language-server" = "latest"       # [要確認] aqua パッケージ名
-# terraform-ls
-"aqua:hashicorp/terraform-ls" = "latest"
-# rust-analyzer（Rust プロジェクトでは別途 rustup で cargo/rustc/rust-src が必要）
-"aqua:rust-lang/rust-analyzer" = "latest"         # [要確認] aqua パッケージ名
-#
-# nixd は nix 専用のため、リモートで nix ファイルを編集しないなら不要（意図的に除外）。
+"npm:@olrtg/emmet-language-server" = "latest"   # [要確認]
+"aqua:LuaLS/lua-language-server"   = "latest"   # [要確認]
+"aqua:hashicorp/terraform-ls"      = "latest"
+"aqua:rust-lang/rust-analyzer"     = "latest"   # [要確認]
 
-# --- CLI ツール（設定が前提にしている外部コマンド）---
-"aqua:BurntSushi/ripgrep"        = "latest"  # grepprg=rg / :Grep / mini.pick
-"aqua:jesseduffield/lazygit"     = "latest"  # <leader>lg
-"aqua:jesseduffield/lazydocker"  = "latest"  # <leader>ld
-"aqua:tree-sitter/tree-sitter"   = "latest"  # nvim-treesitter(main) の parser ビルド
+"aqua:BurntSushi/ripgrep"       = "latest"
+"aqua:jesseduffield/lazygit"    = "latest"
+"aqua:jesseduffield/lazydocker" = "latest"
+"aqua:tree-sitter/tree-sitter"  = "latest"
 
 [settings]
-# node は .nvmrc / package.json の version 表記を尊重
 idiomatic_version_file_enable_tools = ["node"]
