@@ -3,6 +3,10 @@
 SSH 先の Linux ホストで、この Neovim 設定を **VSCode Remote SSH と同じ体験**で
 使うための手順。`amitds1997/remote-nvim.nvim` を前提にする。
 
+> このディレクトリはリモート専用のプロビジョニング資材。`home.nix` が
+> `~/.config/nvim` に symlink する `home/nvim/` の**外**（リポジトリ直下）に
+> 意図的に置いてある。ローカル(Mac)の nvim 設定ディレクトリには配置されない。
+
 ## 仕組み（ここだけ先に理解する）
 
 remote-nvim は「Neovim 本体をリモートで動かし、手元は画面(TUI)に徹する」ツール。
@@ -62,8 +66,8 @@ Neovim 本体のインストールと `home/nvim` のコピー、`vim.pack` に�
 
 ```sh
 # 手元から流し込む例（mise.toml も一緒に転送）
-scp home/nvim/remote/mise.toml <host>:/tmp/mise.toml
-scp home/nvim/remote/bootstrap.sh <host>:/tmp/bootstrap.sh
+scp remote-nvim/mise.toml <host>:/tmp/mise.toml
+scp remote-nvim/bootstrap.sh <host>:/tmp/bootstrap.sh
 ssh <host> 'cd /tmp && bash bootstrap.sh'
 ```
 
