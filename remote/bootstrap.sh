@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# リモートで一度実行。mise で LSP/CLI を導入し、前提(Cコンパイラ)も自動解決する。README.md 参照。
+# リモートで一度実行。mise で LSP/CLI を導入する（コンパイラ等は入れない）。README.md 参照。
 #   ssh <host> 'bash -s' < remote/bootstrap.sh   # mise.toml も転送しておくこと
 set -euo pipefail
 
@@ -12,19 +12,9 @@ command -v mise >/dev/null 2>&1 || curl -fsSL https://mise.run | sh
 export PATH="${HOME}/.local/bin:${HOME}/.local/share/mise/shims:${PATH}"
 command -v mise >/dev/null 2>&1 || { echo "error: mise 導入失敗" >&2; exit 1; }
 
-# --- 前提: C コンパイラ (treesitter parser ビルド用) ---
-# 共有ホスト/root 無しでも完結するよう、system に無ければ zig を user-local に入れて
-# ~/.local/bin/cc (= zig cc) を用意する（sudo 不要・システムを汚さない）。
-if ! command -v cc >/dev/null 2>&1 && ! command -v gcc >/dev/null 2>&1 && ! command -v clang >/dev/null 2>&1; then
-  echo "==> C コンパイラが無いので zig を user-local に入れて cc として使う"
-  if mise use -g zig@latest && mise reshim; then
-    mkdir -p "${HOME}/.local/bin"
-    printf '#!/bin/sh\nexec zig cc "$@"\n' > "${HOME}/.local/bin/cc"
-    chmod +x "${HOME}/.local/bin/cc"
-  else
-    echo "!! zig 導入に失敗。gcc/clang を用意してください（treesitter parser ビルドに影響）" >&2
-  fi
-fi
+# treesitter parser のビルドには C コンパイラが要るが、ここでは何も入れない方針。
+# リモートに既に cc/gcc/clang があればそれで parser がビルドされる。無い場合は
+# Neovim 同梱 parser + 組み込み regex syntax にフォールバックする（README 参照）。
 
 # --- LSP/CLI ツール ---
 mkdir -p "${HOME}/.config/mise/conf.d"

@@ -22,9 +22,22 @@ nvim も LSP もリモートで動くので LSP サーバ等はリモートに�
 ## bootstrap が自動でやること
 
 - LSP/CLI ツール導入（`mise.toml` 記載分）。
-- **C コンパイラ**が無ければ **zig を user-local に入れて `cc` として使う**（treesitter
-  parser ビルド用。**sudo 不要・共有ホストでもシステムを汚さない**）。既に gcc 等があれば何もしない。
+- コンパイラ等は**入れない**。treesitter parser のビルドには C コンパイラが要るが、
+  リモートに無ければ下記の方針でフォールバックする。
 - 導入後に**各バイナリを検証**。`[要確認]` spec が解決できなければ、どれが失敗したかと
   直し方（`mise registry | grep <name>`）を名指しで表示して停止するので、手探りにならない。
+
+## treesitter (コンパイラを入れない場合)
+
+nvim-treesitter(main) は parser をリモートでコンパイルするため C コンパイラが要る。
+リモートに入れたくない/入れられない場合の扱い:
+
+- **既に cc/gcc/clang があるリモート**なら、そのまま普通に parser がビルドされる（何もしない）。
+- **無い場合**は parser コンパイルは行われず、以下にフォールバック:
+  - lua/vim/markdown 等 **Neovim 同梱 parser** はコンパイル不要でそのまま treesitter が効く。
+  - それ以外(bash/yaml/ts/tsx/html/terraform/dockerfile/nix 等)は **組み込み regex syntax**
+    (`syntax enable`) で色付け。折り畳み(treesitter foldexpr)は当該言語で効かなくなる。
+- フル treesitter を維持したいなら、**x86_64-linux 向けにビルド済みの `parser/*.so` を用意**して
+  リモートの runtimepath に置く手もある（nix の grammar を linux 向けにビルドして scp 等）。設定は要相談。
 
 SSH 越しで使うなら手元 `home/nvim` 側で `im-select`(macOS専用) の OS ガードと OSC52 を入れると快適。
