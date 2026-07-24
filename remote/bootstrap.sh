@@ -22,7 +22,7 @@ cp "${manifest}" "${HOME}/.config/mise/conf.d/remote-nvim.toml"
 mise install || true
 mise reshim || true
 
-# --- 非対話シェル(ssh 実行)でも nvim が shims / cc を見つけられるよう PATH を通す ---
+# --- 非対話シェル(ssh 実行)でも nvim が mise shims を見つけられるよう PATH を通す ---
 paths='export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"'
 for rc in "${HOME}/.profile" "${HOME}/.bashrc"; do
   [[ -f "${rc}" ]] && ! grep -qF "remote-nvim: PATH" "${rc}" \
