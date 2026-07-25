@@ -6,7 +6,9 @@ local safely = MiniMisc.safely
 safely('later', function()
   vim.pack.add({ 'https://github.com/nwiizo/marp.nvim' })
   require('marp').setup({
-    marp_command = 'marp',
+    -- jobstart は stdin をパイプで開いたままにするため、--no-stdin を付けないと
+    -- marp が標準入力待ちでハングして変換もプレビューも始まらない
+    marp_command = 'marp --no-stdin',
     server_mode = false,
     suggest_gitignore = false,
   })
