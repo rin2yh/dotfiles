@@ -5,7 +5,7 @@
       "src": "https://github.com/kdheepak/lazygit.nvim"
     },
     "marp.nvim": {
-      "rev": "13ab6c0e4420d99e956a76deb741e0c77ae829ac",
+      "rev": "f5751b5323bfdb21129383475e52ccf85567fc27",
       "src": "https://github.com/nwiizo/marp.nvim"
     },
     "mini.nvim": {

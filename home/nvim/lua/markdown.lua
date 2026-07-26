@@ -8,7 +8,7 @@ safely('later', function()
   require('marp').setup({
     -- jobstart は stdin をパイプで開いたままにするため、--no-stdin を付けないと
     -- marp が標準入力待ちでハングして変換もプレビューも始まらない
-    marp_command = 'marp --no-stdin',
+    marp_command = 'marp',
     server_mode = false,
     suggest_gitignore = false,
   })
