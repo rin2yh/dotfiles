@@ -44,6 +44,12 @@ safely('now', function()
   vim.opt.cmdheight = 0
 end)
 
+-- tabline (開いているバッファ一覧を上部に表示)
+-- アイコンを出すため mini.icons のセットアップ後に読み込む
+safely('now', function()
+  require('mini.tabline').setup()
+end)
+
 -- notify
 safely('now', function()
   require('mini.notify').setup()
