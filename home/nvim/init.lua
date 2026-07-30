@@ -30,5 +30,24 @@ require('edit')
 require('completion')
 require('nav')
 require('git')
+require('markdown')
 require('terminal')
 require('lsp')
+
+vim.api.nvim_create_user_command('PackUpdate', function(ctx)
+  vim.pack.update(#ctx.fargs > 0 and ctx.fargs or nil)
+end, {
+  nargs = '*',
+  -- info = false で git のブランチ・タグ取得を省く（有効にすると補完が 70ms 遅くなる）
+  complete = function(arg)
+    return vim.iter(vim.pack.get(nil, { info = false }))
+      :map(function(plugin)
+        return plugin.spec.name
+      end)
+      :filter(function(name)
+        return vim.startswith(name, arg)
+      end)
+      :totable()
+  end,
+  desc = 'Update vim.pack plugins (no args = all)',
+})
