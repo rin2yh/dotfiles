@@ -26,8 +26,14 @@ jobs:
         run: nix run nixpkgs#nixfmt-rfc-style -- --check $(git ls-files '*.nix')
 
   build:
-    name: build darwinConfiguration
+    name: build darwinConfiguration (${{ matrix.profile }})
     runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        profile:
+          - default
+          - work
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -35,4 +41,4 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       - name: Build darwin system
-        run: nix build --print-build-logs '.#darwinConfigurations.default.system'
+        run: nix build --print-build-logs '.#darwinConfigurations.${{ matrix.profile }}.system'

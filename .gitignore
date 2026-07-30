@@ -1,6 +1,9 @@
 # for macOS
 /**/.DS_store
 
+# Selected profile (per-machine, written by `make darwin-switch`)
+/.current-profile
+
 # Claude Code (managed by home/claude/)
 **/.claude/
 

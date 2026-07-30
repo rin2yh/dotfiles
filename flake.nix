@@ -34,23 +34,44 @@
       homebrew-cask,
       ...
     }:
-    {
-      darwinConfigurations."default" = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit
-            self
-            nix-homebrew
-            homebrew-core
-            homebrew-cask
-            ;
-          username = "yuuki";
+    let
+      # プロファイル 1 つ = マシン 1 台分の設定。
+      # 全マシン共通の設定は darwin/ と home/ に置き、マシン固有の差分だけを
+      # profiles/<name>/{darwin,home}.nix に書く。
+      #
+      # networking.hostName は移植性のため全プロファイル "default" 固定。
+      # プロファイルの選択はホスト名に依存させず `--flake .#<profile>` で明示する。
+      mkDarwin =
+        {
+          profile,
+          username ? "yuuki",
+          dotfilesDir ? "/Users/${username}/workspace/dotfiles",
+        }:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit
+              self
+              nix-homebrew
+              homebrew-core
+              homebrew-cask
+              username
+              dotfilesDir
+              profile
+              ;
+          };
+          modules = [
+            ./darwin/configuration.nix
+            home-manager.darwinModules.home-manager
+            { networking.hostName = "default"; }
+            nix-homebrew.darwinModules.nix-homebrew
+            ./profiles/${profile}/darwin.nix
+          ];
         };
-        modules = [
-          ./darwin/configuration.nix
-          home-manager.darwinModules.home-manager
-          { networking.hostName = "default"; }
-          nix-homebrew.darwinModules.nix-homebrew
-        ];
+    in
+    {
+      darwinConfigurations = {
+        default = mkDarwin { profile = "default"; };
+        work = mkDarwin { profile = "work"; };
       };
     };
 }

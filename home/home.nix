@@ -3,11 +3,12 @@
   lib,
   pkgs,
   username,
+  dotfilesDir,
   ...
 }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/home";
+  dotfiles = "${dotfilesDir}/home";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -130,7 +131,7 @@ in
 
   programs.nh = {
     enable = true;
-    flake = "${config.home.homeDirectory}/workspace/dotfiles";
+    flake = dotfilesDir;
     clean = {
       enable = true;
       dates = "weekly";
