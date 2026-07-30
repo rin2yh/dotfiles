@@ -1,7 +1,6 @@
 {
   username,
   dotfilesDir,
-  profile,
   ...
 }:
 {
@@ -9,9 +8,6 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit username dotfilesDir; };
-    users.${username}.imports = [
-      ../home/home.nix
-      ../profiles/${profile}/home.nix
-    ];
+    users.${username} = import ../home/home.nix;
   };
 }

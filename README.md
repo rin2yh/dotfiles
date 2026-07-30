@@ -6,17 +6,17 @@
 make
 ```
 
-別のプロファイル（マシン）を適用する場合:
+別のマシンの設定を適用する場合:
 
 ```bash
-make PROFILE=work
+make MACHINE=work
 ```
 
 This will:
 1. Initialize git submodules
 2. Install mise (if not installed)
 3. Install Nix (if not installed)
-4. Apply nix-darwin + home-manager configuration (`darwin-rebuild switch --flake .#<profile>`)
+4. Apply nix-darwin + home-manager configuration (`darwin-rebuild switch --flake .#<machine>`)
 5. Install development tools (`mise install`, `gopls`)
 
 ### Individual Targets
@@ -25,9 +25,8 @@ This will:
 make submodule-init   # Initialize and update git submodules
 make mise-install     # Install mise via curl (if not installed)
 make nix-install      # Install Nix via official installer (if not installed)
-make darwin-switch    # Apply nix-darwin + home-manager configuration (flake, PROFILE=<name>)
+make darwin-switch    # Apply nix-darwin + home-manager configuration (flake, MACHINE=<name>)
 make tools            # Install development tools (mise install, gopls)
-make profile          # Show the profile that darwin-switch will apply
 make help             # Show available targets
 ```
 
@@ -35,41 +34,37 @@ make help             # Show available targets
 
 ```
 .
-├── flake.nix
-├── darwin/         # 全マシン共通の nix-darwin システム設定 + home-manager 統合
-├── home/           # 全マシン共通の home-manager 設定と各ツール設定
-├── profiles/       # マシンごとの差分
-│   ├── default/
-│   │   ├── darwin.nix
-│   │   └── home.nix
-│   └── work/
-│       ├── darwin.nix
-│       └── home.nix
+├── flake.nix       # マシンごとの darwinConfigurations を定義
+├── darwin/         # nix-darwin システム設定 + home-manager 統合
+├── home/           # home-manager 配下の各ツール設定
 └── Makefile
 ```
 
-## Profiles
+## Machines
 
-マシンごとの差分はブランチではなく `profiles/<name>/` で管理する。`flake.lock` や共通設定が
-1 本の `main` に集約されるので、Dependabot の更新やマシン間のコンフリクト対応が 1 回で済む。
+複数マシンをブランチで分けず、1 本の `main` で扱う。`flake.lock` と設定が集約されるので、
+Dependabot の更新やマシン間のコンフリクト対応が 1 回で済む。
 
-- 共通の設定 → `darwin/`, `home/`
-- そのマシンだけの設定 → `profiles/<name>/darwin.nix`（システム / Homebrew）、
-  `profiles/<name>/home.nix`（home-manager）
-- プロファイルの選択は `--flake .#<profile>` の明示指定。`networking.hostName` は
-  移植性のため全プロファイル `default` 固定で、ホスト名には依存しない。
-- 適用したプロファイル名は `.current-profile`（gitignore 済み）に記録され、以降の
-  `make darwin-switch` は引数なしで同じプロファイルを使う。
+nix レベルでマシン間に差があるのは `username` だけなので、`flake.nix` の
+`darwinConfigurations` に 1 行足すだけでマシンを追加できる。
 
-### プロファイルを追加する
+```nix
+darwinConfigurations = {
+  default = mkDarwin { };
+  work = mkDarwin { username = "yukihayashi"; };
+};
+```
 
-1. `profiles/<name>/darwin.nix` と `profiles/<name>/home.nix` を作る（中身は空の `{ }` でよい）
-2. `flake.nix` の `darwinConfigurations` に `<name> = mkDarwin { profile = "<name>"; };` を追加
-3. `.github/workflows/ci.yml` の `matrix.profile` に `<name>` を追加
-
-`mkDarwin` は `username` と `dotfilesDir`（リポジトリのクローン先。既定は
-`/Users/<username>/workspace/dotfiles`）も受け取るので、ユーザー名やクローン先が違う
-マシンはここで上書きする。
+- `mkDarwin` は `username` と `dotfilesDir`（クローン先。既定は
+  `/Users/<username>/workspace/dotfiles`）を受け取る
+- 適用するマシンは `--flake .#<machine>`（= `make MACHINE=<name>`）で明示する。
+  `networking.hostName` は移植性のため全マシン `default` 固定で、ホスト名には依存しない
+- マシン固有のモジュールが必要になったら、その時点で `mkDarwin` に `extraModules` を
+  足す。差分が無いうちは作らない
+- nix で管理していないファイル（`home/` 配下の実体）にマシン差が出た場合は、各ツールの
+  仕組みで受ける。Claude Code は `~/.claude/settings.local.json`（user settings より
+  優先される）、mise は `~/.config/mise/conf.d/*.toml`、zsh は `.zshrc` からの
+  local ファイル読み込み
 
 ## Notes
 

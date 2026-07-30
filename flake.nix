@@ -35,15 +35,14 @@
       ...
     }:
     let
-      # プロファイル 1 つ = マシン 1 台分の設定。
-      # 全マシン共通の設定は darwin/ と home/ に置き、マシン固有の差分だけを
-      # profiles/<name>/{darwin,home}.nix に書く。
+      # マシンを増やすときは darwinConfigurations に 1 行足す。
+      # nix レベルでマシン間に差があるのは username 程度なので、マシンごとの
+      # モジュール分割は実際に差分が出てから入れる。
       #
-      # networking.hostName は移植性のため全プロファイル "default" 固定。
-      # プロファイルの選択はホスト名に依存させず `--flake .#<profile>` で明示する。
+      # networking.hostName は移植性のため全マシン "default" 固定。
+      # 適用するマシンはホスト名に依存させず `--flake .#<name>` で明示する。
       mkDarwin =
         {
-          profile,
           username ? "yuuki",
           dotfilesDir ? "/Users/${username}/workspace/dotfiles",
         }:
@@ -56,7 +55,6 @@
               homebrew-cask
               username
               dotfilesDir
-              profile
               ;
           };
           modules = [
@@ -64,14 +62,13 @@
             home-manager.darwinModules.home-manager
             { networking.hostName = "default"; }
             nix-homebrew.darwinModules.nix-homebrew
-            ./profiles/${profile}/darwin.nix
           ];
         };
     in
     {
       darwinConfigurations = {
-        default = mkDarwin { profile = "default"; };
-        work = mkDarwin { profile = "work"; };
+        default = mkDarwin { };
+        work = mkDarwin { username = "yukihayashi"; };
       };
     };
 }

@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
@@ -91,7 +91,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
@@ -144,10 +144,10 @@
         "~/.zprofile",
         "~/.bashrc",
         "~/.bash_profile",
-        "/Users/yuuki/workspace/dotfiles/home/.zshrc",
-        "/Users/yuuki/workspace/dotfiles/home/.zprofile",
-        "/Users/yuuki/workspace/dotfiles/home/.gitconfig",
-        "/Users/yuuki/workspace/dotfiles/home/.codex"
+        "~/workspace/dotfiles/home/.zshrc",
+        "~/workspace/dotfiles/home/.zprofile",
+        "~/workspace/dotfiles/home/.gitconfig",
+        "~/workspace/dotfiles/home/.codex"
       ],
       "denyRead": [
         "~/.ssh",
@@ -164,7 +164,7 @@
         "~/Library/Messages",
         "~/Library/Mail",
         "~/.codex",
-        "/Users/yuuki/workspace/dotfiles/home/.codex"
+        "~/workspace/dotfiles/home/.codex"
       ],
       "allowRead": []
     },
