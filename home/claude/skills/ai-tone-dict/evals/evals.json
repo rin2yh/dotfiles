@@ -1,18 +1,19 @@
 {
   "skill_name": "ai-tone-dict",
+  "note": "スキルを改訂したらこの評価を回す。合格率だけでなく、辞書に実際に --fix を当てて本文が壊れないかを見ること。iteration-2 では改訂版が add-adverb-fix-safety で旧版に負け、そこから本体の辞書のバグが 1 件見つかった。",
   "evals": [
     {
       "id": 0,
-      "name": "noisy-false-positive",
-      "prompt": "textlint が「幅広い」を毎回指摘してくるんだけど、「幅広い層に使われている」みたいに実際に範囲が広いことを言いたいときまで引っかかる。zenn の下書き見直してたら 5 箇所中 4 箇所は直す必要ないやつだった。どうにかして。",
-      "expected_output": "「幅広い」を段階的弱化のいずれか（scope: chat を外す / パターンを絞る / ai-tone-review へ移す / 削除）で調整し、specs を整合させ、npm run gen と npm test を通す。同じ規則にある他の語（様々な・多種多様な・数多くの）を巻き込まない。",
+      "name": "add-adverb-fix-safety",
+      "prompt": "「きちんと」も「しっかり」と同じで中身のない水増しだと思う。辞書に足しといて。",
+      "expected_output": "ai-tone.yml に規則を追加する。ただし「きちんとした」「きちんとする」「きちんとされている」「きちんとせずに」はサ変述語で、削ると本文が壊れる。除外は活用語幹（し・す・せ・さ）をすべて並べる。壊れる形を fix-safety.txt に追加し、npm run gen と npm test を通す。",
       "assertions": [
-        "[critical] 「幅広い」の扱いを実際に辞書で調整している（scope: chat を外す / パターンを絞る / 規則から削除 のいずれか）",
-        "[critical] 変更後に npm test が通る（辞書ロード・生成物の同期・ripgrep 構文チェック）",
-        "生成物 dict/generated/*.patterns が辞書と同期している（npm run gen 実行済み）",
-        "同じ規則にある他の語（様々な・さまざまな・多種多様な・数多くの）の扱いを変えていない",
-        "変更後のパターンと specs が整合している",
-        "なぜその弱め方を選んだかが summary に書かれている"
+        "[critical] 「きちんと」を検出する規則が辞書に追加されている",
+        "[critical] npm run fix を当てても「きちんと」の述語用法（した・している・する・される・せず）が壊れない",
+        "[critical] 変更後に npm test が通る",
+        "先読み (?!...) を使っていない（使うと ripgrep 用の生成物から黙って落ちる）",
+        "dict/fix-safety.txt に「きちんと」系の文を追加している",
+        "生成物 dict/generated/*.patterns が辞書と同期している"
       ],
       "files": []
     },
@@ -33,16 +34,16 @@
     },
     {
       "id": 2,
-      "name": "chat-warning-too-loud",
-      "prompt": "会話のたびに「AI っぽい語: しっかり」って出てうるさい。しっかりって普通に使うでしょ。「様々な」も毎回出るし。",
-      "expected_output": "辞書からいきなり削除するのではなく、まず CLAUDE_AI_TONE_CHAT による強度切り替えか scope: chat を外す選択肢を提示する。辞書を変えるなら scope: chat を外して文書側には残し、npm run gen と npm test を通す。",
+      "name": "remove-with-guard",
+      "prompt": "「数多くの」って普通に使うでしょ。毎回指摘されるの邪魔だから外しといて。",
+      "expected_output": "規則の patterns から外し、from と to を同じにした specs を見張りとして残す。同じ規則にある他の語は触らない。npm run gen と npm test を通す。",
       "assertions": [
-        "[critical] 規則を即削除するのではなく、段階的な弱化（scope: chat を外す）か環境変数による強度切り替えを選んでいる",
+        "[critical] 「数多くの」が辞書の patterns から外れている",
         "[critical] 変更後に npm test が通る",
-        "「しっかり」が chat.patterns から外れている（会話検査の対象外になった）",
-        "「しっかり」が all.patterns には残っている（文書側の検査は維持されている）",
-        "CLAUDE_AI_TONE_CHAT による強度切り替えに言及している",
-        "「様々な」についても同様に処理するか、扱わない理由を述べている"
+        "外した語を from と to を同じにした specs として残し、戻すとテストが落ちるようにしている",
+        "同じ規則にある他の語（様々な・さまざまな・多種多様な）を巻き込んでいない",
+        "生成物 dict/generated/*.patterns が辞書と同期している",
+        "なぜ外したか（削除テストの結果や誤検出の見積もり）が summary に書かれている"
       ],
       "files": []
     }
