@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
@@ -91,11 +91,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           },
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/ai-tone.sh"
+            "command": "~/.claude/hooks/ai-tone.sh"
           }
         ]
       }
@@ -106,7 +106,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/ai-tone.sh"
+            "command": "~/.claude/hooks/ai-tone.sh"
           }
         ]
       }

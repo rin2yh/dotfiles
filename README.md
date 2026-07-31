@@ -42,7 +42,7 @@ make help             # Show available targets
 `preset-ja-technical-writing` に加えて、LLM が書きがちな文体を検出する自作プリセット
 `preset-ja-no-ai-tone` を併用する。
 
-Claude Code からは 2 つの経路で効く。強度は環境変数で変えられ、設定ファイルの編集は要らない。
+Claude Code は 2 つの経路で検査する。強度は環境変数で変えられ、設定ファイルの編集は要らない。
 
 | 経路 | 対象 | 手段 | 既定 | 環境変数 |
 | --- | --- | --- | --- | --- |
