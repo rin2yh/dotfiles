@@ -1,0 +1,22 @@
+{
+  "name": "dotfiles-textlint",
+  "version": "0.0.0",
+  "private": true,
+  "description": "日本語の文章を AI っぽさの観点で校正するための textlint 環境",
+  "scripts": {
+    "lint": "textlint",
+    "fix": "textlint --fix --config .textlintrc.fix.json",
+    "test": "node preset-ja-no-ai-tone/scripts/selftest.mjs",
+    "gen": "node preset-ja-no-ai-tone/scripts/gen-patterns.mjs"
+  },
+  "dependencies": {
+    "textlint": "^15.2.2",
+    "textlint-rule-preset-ja-no-ai-tone": "file:./preset-ja-no-ai-tone",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "textlint-rule-prh": "^6.0.0"
+  },
+  "devDependencies": {
+    "js-yaml": "^5.2.2",
+    "prh": "^5.4.4"
+  }
+}

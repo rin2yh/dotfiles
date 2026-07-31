@@ -21,6 +21,7 @@ make mise-install     # Install mise via curl (if not installed)
 make nix-install      # Install Nix via official installer (if not installed)
 make darwin-switch    # Apply nix-darwin + home-manager configuration (flake)
 make tools            # Install development tools (mise install, gopls)
+make textlint         # Install the Japanese proofreading toolchain (home/textlint)
 make help             # Show available targets
 ```
 
@@ -31,8 +32,25 @@ make help             # Show available targets
 ├── flake.nix
 ├── darwin/         # nix-darwin システム設定 + home-manager 統合
 ├── home/           # home-manager 配下の各ツール設定
+│   └── textlint/   # 日本語の校正環境（AI 文体検出プリセットを含む）
 └── Makefile
 ```
+
+## 日本語の校正
+
+`home/textlint/` に textlint の環境を置いている。汎用の
+`preset-ja-technical-writing` に加えて、LLM が書きがちな文体を検出する自作プリセット
+`preset-ja-no-ai-tone` を併用する。
+
+Claude Code からは 2 つの経路で効く。強度は環境変数で変えられ、設定ファイルの編集は要らない。
+
+| 経路 | 対象 | 手段 | 既定 | 環境変数 |
+| --- | --- | --- | --- | --- |
+| `PostToolUse` フック | 書き込まれた Markdown | textlint 本体 | ブロック | `CLAUDE_AI_TONE_FILE` |
+| `Stop` フック | 直前の応答本文 | ripgrep（生成済みパターン） | 警告のみ | `CLAUDE_AI_TONE_CHAT` |
+
+会話の検査に textlint を使わないのは、起動に 1.5 〜 2 秒かかり毎ターン走らせるには重いため。
+辞書の更新手順は `home/claude/skills/ai-tone-dict/SKILL.md` にある。
 
 ## Notes
 

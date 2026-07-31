@@ -92,6 +92,21 @@
           {
             "type": "command",
             "command": "/Users/yuuki/.claude/hooks/notify.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/yuuki/.claude/hooks/ai-tone.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yuuki/.claude/hooks/ai-tone.sh"
           }
         ]
       }

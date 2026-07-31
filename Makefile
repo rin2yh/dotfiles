@@ -4,9 +4,9 @@ DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(PATH)
 
-.PHONY: setup submodule-init mise-install nix-install darwin-switch tools help
+.PHONY: setup submodule-init mise-install nix-install darwin-switch tools textlint help
 
-setup: submodule-init mise-install nix-install darwin-switch tools ## Run full setup
+setup: submodule-init mise-install nix-install darwin-switch tools textlint ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -36,6 +36,10 @@ darwin-switch: ## Apply nix-darwin + home-manager configuration (flake)
 tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
+
+textlint: ## Install the Japanese proofreading toolchain used by the ai-tone hook
+	mise exec -- npm --prefix $(DOTFILES_DIR)/home/textlint install
+	mise exec -- npm --prefix $(DOTFILES_DIR)/home/textlint test
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'
