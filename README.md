@@ -46,8 +46,13 @@ Claude Code からは 2 つの経路で効く。強度は環境変数で変え�
 
 | 経路 | 対象 | 手段 | 既定 | 環境変数 |
 | --- | --- | --- | --- | --- |
-| `PostToolUse` フック | 書き込まれた Markdown | textlint 本体 | ブロック | `CLAUDE_AI_TONE_FILE` |
+| `PostToolUse` フック | 書き込まれた Markdown の本文 | textlint 本体 | ブロック | `CLAUDE_AI_TONE_FILE` |
+| `PostToolUse` フック | YAML / シェル / JS などのコメント | `lint-comments.mjs` | ブロック | `CLAUDE_AI_TONE_FILE` |
 | `Stop` フック | 直前の応答本文 | ripgrep（生成済みパターン） | 警告のみ | `CLAUDE_AI_TONE_CHAT` |
+
+textlint が見るのは Markdown の本文だけなので、コメントは別経路で検査する。
+この構成では日本語の大半がコメント側にあり、プリセットを入れただけでは大部分が素通りになる
+（このプリセットを追加した変更自体、22 ファイル中 17 ファイルが検査対象外だった）。
 
 会話の検査に textlint を使わないのは、起動に 1.5 〜 2 秒かかり毎ターン走らせるには重いため。
 辞書の更新手順は `home/claude/skills/ai-tone-dict/SKILL.md` にある。

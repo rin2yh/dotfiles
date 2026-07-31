@@ -7,7 +7,8 @@
     "lint": "textlint",
     "fix": "textlint --fix --config .textlintrc.fix.json",
     "test": "node preset-ja-no-ai-tone/scripts/selftest.mjs",
-    "gen": "node preset-ja-no-ai-tone/scripts/gen-patterns.mjs"
+    "gen": "node preset-ja-no-ai-tone/scripts/gen-patterns.mjs",
+    "lint:comments": "node preset-ja-no-ai-tone/scripts/lint-comments.mjs"
   },
   "dependencies": {
     "textlint": "^15.2.2",

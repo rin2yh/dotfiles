@@ -21,10 +21,18 @@ prh の報告は「マッチした文字列 => expected」の形で出るため�
 自動修正は `ai-tone` だけを有効にした `.textlintrc.fix.json` 経由で行う。
 
 ```bash
-npm run lint -- path/to/article.md   # 全部の指摘
-npm run fix  -- path/to/article.md   # 機械的に直せるものだけ自動修正
-npm test                             # 辞書の回帰テスト
+npm run lint -- path/to/article.md            # Markdown の本文
+npm run lint:comments -- path/to/config.yml   # YAML / シェル / JS などのコメント
+npm run fix  -- path/to/article.md            # 機械的に直せるものだけ自動修正
+npm test                                      # 辞書の回帰テスト
 ```
+
+`lint:comments` があるのは、textlint の検査対象が Markdown の本文に限られるため。
+設定リポジトリでは日本語の大半がコメント側にあり、プリセットを入れただけでは
+書いた文章の大部分が素通りする。コメント行を抜き出して疑似 Markdown に組み直し、
+文末の句点や文長のように断片には当てはまらない規則を外した設定
+(`.textlintrc.comments.json`) で検査する。「」で囲んだ語は Markdown の
+インラインコードと同じ扱いで検査対象から外れる。
 
 ## 辞書の書き方
 

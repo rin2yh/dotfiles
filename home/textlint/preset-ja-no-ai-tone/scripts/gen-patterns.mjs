@@ -30,7 +30,7 @@ const UNSUPPORTED = /\(\?[=!<]/;
 const REGEXP_META = /[.*+?^${}()|[\]\\]/g;
 
 // パターンファイルは `rg --file` に直接渡す。ripgrep は行を無条件にパターンとして読むため、
-// コメントも空行も書けない（空行は「すべてに一致する空パターン」になって検査が壊れる）。
+// コメント行と空行を書けない（空行は「すべてに一致する空パターン」になり検査が壊れる）。
 // 「自動生成物である」という注記は dict/generated/README.md 側に置いてある。
 
 function toRegexSource(pattern) {

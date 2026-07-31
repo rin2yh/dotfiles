@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # AI っぽい日本語表現を検出する Claude Code フック。Stop と PostToolUse の両方を受ける。
 #
-# 二つの発火点で手段を変えている理由:
+# 2 つの発火点で手段を変えている理由:
 #   Stop        … 毎ターン走るので速度が要る。生成済みパターンを ripgrep で当てる（数 ms）。
 #                 会話は短く砕けているため誤検出しやすく、既定は警告のみ。
 #   PostToolUse … Markdown を書いた直後だけ走る。頻度が低いので textlint 本体を使い、
@@ -11,7 +11,7 @@
 # といった切り替えを設定ファイルの編集なしで行えるようにしてある。
 #   CLAUDE_AI_TONE_CHAT=off|warn|block   （既定: warn）
 #   CLAUDE_AI_TONE_FILE=off|warn|block   （既定: block）
-#   CLAUDE_AI_TONE_DIR                   （既定: ~/workspace/dotfiles/home/textlint）
+#   CLAUDE_AI_TONE_DIR                   （既定は ~/workspace/dotfiles/home/textlint）
 
 set -uo pipefail
 
@@ -21,7 +21,7 @@ CHAT_MODE="${CLAUDE_AI_TONE_CHAT:-warn}"
 FILE_MODE="${CLAUDE_AI_TONE_FILE:-block}"
 
 # 依存が無い環境（別マシン、初回セットアップ前）では黙って通す。
-# フックが原因で会話が止まるのが一番困るため、疑わしいときは何もしない。
+# フックのせいで会話が止まるのは最悪なので、疑わしいときは何もしない。
 command -v jq >/dev/null 2>&1 || exit 0
 
 payload=$(cat)
@@ -87,19 +87,26 @@ check_file() {
   esac
 
   file=$(jq -r '.tool_input.file_path // .tool_input.notebook_path // ""' <<<"$payload")
-  case "$file" in
-    *.md | *.mdx | *.markdown) ;;
-    *) exit 0 ;;
-  esac
   [ -f "$file" ] || exit 0
 
   # 依存が入っていなければ何もしない。セットアップは `npm install` を一度実行するだけ。
   [ -x "$TEXTLINT_DIR/node_modules/.bin/textlint" ] || exit 0
 
+  # Markdown は本文を、それ以外はコメントだけを検査する。
+  # textlint が見るのは Markdown の本文だけなので、設定リポジトリのように
+  # 日本語の大半がコメント側にあると、入れただけでは大部分が素通りになる。
   local report
-  report=$("$TEXTLINT_DIR/node_modules/.bin/textlint" \
-    --config "$TEXTLINT_DIR/.textlintrc.json" \
-    --format compact "$file" 2>/dev/null)
+  case "$file" in
+    *.md | *.mdx | *.markdown)
+      report=$("$TEXTLINT_DIR/node_modules/.bin/textlint" \
+        --config "$TEXTLINT_DIR/.textlintrc.json" \
+        --format compact "$file" 2>/dev/null)
+      ;;
+    *.yml | *.yaml | *.sh | *.bash | *.nix | *.toml | *.js | *.mjs | *.cjs | *.ts | *.lua)
+      report=$(node "$TEXTLINT_DIR/preset-ja-no-ai-tone/scripts/lint-comments.mjs" "$file" 2>/dev/null)
+      ;;
+    *) exit 0 ;;
+  esac
   [ -z "$report" ] && exit 0
 
   # 出力が長いと後続の判断を圧迫するので、先頭 20 件だけ渡す。

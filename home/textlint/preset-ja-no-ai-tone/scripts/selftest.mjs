@@ -1,20 +1,26 @@
 #!/usr/bin/env node
 // 辞書の回帰テスト。辞書を更新したら必ずこれを通してからコミットする。
 //
-// 検証するのは三つ。
-//   1. prh が両方の辞書をロードできること。prh は specs が一つでも外れるとロードに失敗するので、
+// 検証するのは 4 点。
+//   1. prh が両方の辞書をロードできること。prh は specs が 1 件でも外れるとロードに失敗するので、
 //      これだけで「書いたつもりのパターンが実際にマッチするか」が確かめられる。
 //   2. コミットされたパターンファイルが辞書と一致すること。ずれるとフックだけが古い規則で動く。
 //   3. パターンが ripgrep でも実際にコンパイルできること。JS の正規表現として妥当でも
 //      Rust の regex では通らない構文があるため、フックが黙って壊れるのを防ぐ。
 //   4. ai-tone.yml の規則を全部当てても、壊れてはいけない文が変わらないこと。
 //      specs はその規則の中でしか効かないので、規則をまたいだ事故はここでしか捕まえられない。
+//   5. このプリセット自身のコメントが、自分の規則に照らして問題ないこと。
+//      textlint が見るのは Markdown の本文だけで、コメントは検査されない。
+//      辞書を書く側の日本語が野放しになるのは筋が通らないので、自分にも当てる。
 
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 import { build, dictDir, outDir } from "./gen-patterns.mjs";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
 
 const require = createRequire(import.meta.url);
 
@@ -93,6 +99,29 @@ console.log("4. ai-tone.yml を当てても壊れてはいけない文が変わ�
     }
   }
   if (broken === 0) ok(`${lines.length} 文すべて無変化`);
+}
+
+console.log("5. このプリセット自身のコメントが自分の規則に照らして問題ないか");
+{
+  const targets = [
+    path.join(dictDir, "ai-tone.yml"),
+    path.join(dictDir, "ai-tone-review.yml"),
+    path.join(dictDir, "fix-safety.txt"),
+    path.join(dictDir, "..", "index.js"),
+    path.join(here, "gen-patterns.mjs"),
+    path.join(here, "lint-comments.mjs"),
+    path.join(here, "selftest.mjs"),
+  ];
+  const result = spawnSync(process.execPath, [path.join(here, "lint-comments.mjs"), ...targets], {
+    encoding: "utf8",
+  });
+  if (result.status === 0) {
+    ok(`${targets.length} ファイルのコメントに指摘なし`);
+  } else {
+    for (const line of result.stdout.trim().split("\n").filter(Boolean)) {
+      if (!/^\d+ problems$/.test(line)) fail(`コメントの指摘: ${line}`);
+    }
+  }
 }
 
 if (failures.length > 0) {
