@@ -7,6 +7,8 @@
 //   2. コミットされたパターンファイルが辞書と一致すること。ずれるとフックだけが古い規則で動く。
 //   3. パターンが ripgrep でも実際にコンパイルできること。JS の正規表現として妥当でも
 //      Rust の regex では通らない構文があるため、フックが黙って壊れるのを防ぐ。
+//   4. ai-tone.yml の規則を全部当てても、壊れてはいけない文が変わらないこと。
+//      specs はその規則の中でしか効かないので、規則をまたいだ事故はここでしか捕まえられない。
 
 import fs from "node:fs";
 import path from "node:path";
@@ -71,6 +73,26 @@ console.log("3. パターンが ripgrep でコンパイルできるか");
     }
     ok(`${patterns.length} 件すべてコンパイル可能`);
   }
+}
+
+console.log("4. ai-tone.yml を当てても壊れてはいけない文が変わらないか");
+{
+  const prh = require("prh");
+  const corpus = path.join(dictDir, "fix-safety.txt");
+  const config = prh.fromYAMLFilePath(path.join(dictDir, "ai-tone.yml"));
+  const lines = fs
+    .readFileSync(corpus, "utf8")
+    .split("\n")
+    .filter((line) => line.trim() && !line.startsWith("#"));
+  let broken = 0;
+  for (const line of lines) {
+    const after = config.replaceByRule("fix-safety.txt", line);
+    if (after !== line) {
+      fail(`--fix が本文を壊す: 「${line}」 → 「${after}」`);
+      broken += 1;
+    }
+  }
+  if (broken === 0) ok(`${lines.length} 文すべて無変化`);
 }
 
 if (failures.length > 0) {
