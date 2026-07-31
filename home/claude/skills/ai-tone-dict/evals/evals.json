@@ -1,0 +1,50 @@
+{
+  "skill_name": "ai-tone-dict",
+  "evals": [
+    {
+      "id": 0,
+      "name": "noisy-false-positive",
+      "prompt": "textlint が「幅広い」を毎回指摘してくるんだけど、「幅広い層に使われている」みたいに実際に範囲が広いことを言いたいときまで引っかかる。zenn の下書き見直してたら 5 箇所中 4 箇所は直す必要ないやつだった。どうにかして。",
+      "expected_output": "「幅広い」を段階的弱化のいずれか（scope: chat を外す / パターンを絞る / ai-tone-review へ移す / 削除）で調整し、specs を整合させ、npm run gen と npm test を通す。同じ規則にある他の語（様々な・多種多様な・数多くの）を巻き込まない。",
+      "assertions": [
+        "[critical] 「幅広い」の扱いを実際に辞書で調整している（scope: chat を外す / パターンを絞る / 規則から削除 のいずれか）",
+        "[critical] 変更後に npm test が通る（辞書ロード・生成物の同期・ripgrep 構文チェック）",
+        "生成物 dict/generated/*.patterns が辞書と同期している（npm run gen 実行済み）",
+        "同じ規則にある他の語（様々な・さまざまな・多種多様な・数多くの）の扱いを変えていない",
+        "変更後のパターンと specs が整合している",
+        "なぜその弱め方を選んだかが summary に書かれている"
+      ],
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "add-new-phrase",
+      "prompt": "記事書いてて気づいたけど「〜と言っても過言ではない」って明らかに AI っぽいよね。「まさに〜と言える」もそう。とりあえず前者を辞書に足しといて。",
+      "expected_output": "「〜と言っても過言ではない」だけを ai-tone-review.yml に追加し（機械的な置換候補が無いため ai-tone.yml ではない）、specs を付け、scope: chat の可否を判断し、npm run gen と npm test を通す。「まさに〜と言える」は今回のスコープ外として扱う。",
+      "assertions": [
+        "[critical] 「〜と言っても過言ではない」を検出する規則が辞書に追加されている",
+        "[critical] 追加先が ai-tone-review.yml である（機械的な置換候補が無いため ai-tone.yml ではない）",
+        "[critical] 変更後に npm test が通る",
+        "追加した規則に specs が付いている",
+        "生成物 dict/generated/*.patterns が辞書と同期している（npm run gen 実行済み）",
+        "「まさに〜と言える」は今回追加していない（1 回の更新は 1 語という原則を守っている）"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "chat-warning-too-loud",
+      "prompt": "会話のたびに「AI っぽい語: しっかり」って出てうるさい。しっかりって普通に使うでしょ。「様々な」も毎回出るし。",
+      "expected_output": "辞書からいきなり削除するのではなく、まず CLAUDE_AI_TONE_CHAT による強度切り替えか scope: chat を外す選択肢を提示する。辞書を変えるなら scope: chat を外して文書側には残し、npm run gen と npm test を通す。",
+      "assertions": [
+        "[critical] 規則を即削除するのではなく、段階的な弱化（scope: chat を外す）か環境変数による強度切り替えを選んでいる",
+        "[critical] 変更後に npm test が通る",
+        "「しっかり」が chat.patterns から外れている（会話検査の対象外になった）",
+        "「しっかり」が all.patterns には残っている（文書側の検査は維持されている）",
+        "CLAUDE_AI_TONE_CHAT による強度切り替えに言及している",
+        "「様々な」についても同様に処理するか、扱わない理由を述べている"
+      ],
+      "files": []
+    }
+  ]
+}
