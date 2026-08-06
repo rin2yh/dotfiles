@@ -110,6 +110,17 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__github__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ai-tone.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {

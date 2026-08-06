@@ -42,16 +42,17 @@ make help             # Show available targets
 `preset-ja-technical-writing` に加えて、LLM が書きがちな文体を検出する自作プリセット
 `preset-ja-no-ai-tone` を併用する。
 
-Claude Code は 2 つの経路で検査する。強度は環境変数で変えられ、設定ファイルの編集は要らない。
+Claude Code は 4 つの経路で検査する。強度は環境変数で変えられ、設定ファイルの編集は要らない。
 
 | 経路 | 対象 | 手段 | 既定 | 環境変数 |
 | --- | --- | --- | --- | --- |
 | `PostToolUse` フック | 書き込まれた Markdown の本文 | textlint 本体 | ブロック | `CLAUDE_AI_TONE_FILE` |
 | `PostToolUse` フック | YAML / シェル / JS などのコメント | `lint-comments.mjs` | ブロック | `CLAUDE_AI_TONE_FILE` |
 | `Stop` フック | 直前の応答本文 | ripgrep（生成済みパターン） | 警告のみ | `CLAUDE_AI_TONE_CHAT` |
+| `PreToolUse` フック | PR の本文・レビュー・コミットメッセージ | `lint-comments.mjs --prose` | ブロック | `CLAUDE_AI_TONE_POST` |
 
-PR の本文やコミットメッセージはリポジトリに残らないので、フックでは拾えない。
-`npm run lint:text -- <file>` に通してから投稿する。
+PR の本文やコミットメッセージはリポジトリに残らないので、書き込みの検査では拾えない。
+投稿とコミットの直前で止める。手で確かめたいときは `npm run lint:text -- <file>`。
 
 textlint が見るのは Markdown の本文だけなので、コメントは別経路で検査する。
 この構成では日本語の大半がコメント側にあり、プリセットを入れただけでは大部分が素通りになる

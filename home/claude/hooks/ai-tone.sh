@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
-# AI っぽい日本語表現を検出する Claude Code フック。Stop と PostToolUse の両方を受ける。
+# AI っぽい日本語表現を検出する Claude Code フック。Stop / PostToolUse / PreToolUse を受ける。
 #
-# 2 つの発火点で手段を変えている理由:
+# 発火点ごとに手段を変えている理由:
 #   Stop        … 毎ターン走るので速度が要る。生成済みパターンを ripgrep で当てる（数 ms）。
 #                 会話は短く砕けているため誤検出しやすく、既定は警告のみ。
-#   PostToolUse … Markdown を書いた直後だけ走る。頻度が低いので textlint 本体を使い、
+#   PostToolUse … Markdown やコメントを書いた直後だけ走る。頻度が低いので textlint 本体を使い、
 #                 preset-ja-technical-writing の検査も含めて既定でブロックする。
+#   PreToolUse  … PR の本文・レビュー・コミットメッセージのように、
+#                 リポジトリに残らないので他のどの経路でも拾えない文章を投稿の直前で止める。
+#                 「書いたら検査する」を人間の記憶に任せると必ず飛ばすため、送信口に置いた。
 #
 # 強度は環境変数で変えられる。記事を書くセッションだけ会話も止めたい、
 # といった切り替えを設定ファイルの編集なしで行えるようにしてある。
 #   CLAUDE_AI_TONE_CHAT=off|warn|block   （既定: warn）
 #   CLAUDE_AI_TONE_FILE=off|warn|block   （既定: block）
+#   CLAUDE_AI_TONE_POST=off|warn|block   （既定: block）
 #   CLAUDE_AI_TONE_DIR                   （既定は ~/workspace/dotfiles/home/textlint）
 
 set -uo pipefail
@@ -19,6 +23,7 @@ TEXTLINT_DIR="${CLAUDE_AI_TONE_DIR:-$HOME/workspace/dotfiles/home/textlint}"
 PATTERN_DIR="$TEXTLINT_DIR/preset-ja-no-ai-tone/dict/generated"
 CHAT_MODE="${CLAUDE_AI_TONE_CHAT:-warn}"
 FILE_MODE="${CLAUDE_AI_TONE_FILE:-block}"
+POST_MODE="${CLAUDE_AI_TONE_POST:-block}"
 
 # 依存が無い環境（別マシン、初回セットアップ前）では黙って通す。
 # フックのせいで会話が止まるのは最悪なので、疑わしいときは何もしない。
@@ -130,9 +135,97 @@ check_file() {
   }')"
 }
 
+# --------------------------------------------------------------------
+# PreToolUse: 投稿しようとしている文章を送信の直前で検査する
+# --------------------------------------------------------------------
+
+# 与えられた本文を lint:text と同じ扱いで検査し、指摘があれば標準出力に返す。
+lint_prose() {
+  local text=$1 tmp
+  # 日本語を含まない本文は対象外。英語の PR まで止める理由がない。
+  grep -q '[ぁ-んァ-ヶ一-龠]' <<<"$text" || return 0
+  tmp=$(mktemp -t ai-tone.XXXXXX) || return 0
+  printf '%s\n' "$text" >"$tmp"
+  node "$TEXTLINT_DIR/preset-ja-no-ai-tone/scripts/lint-comments.mjs" --prose "$tmp" 2>/dev/null \
+    | sed "s|$tmp|<本文>|"
+  rm -f "$tmp"
+}
+
+# git commit の実行コマンドからメッセージ本体を取り出す。
+# -F <file> / ヒアドキュメント / -m の 3 つの書き方に対応する。
+# 取り出せなければ何も返さず、フックは黙って通す。
+commit_message_of() {
+  local command=$1 file
+  file=$(sed -n 's/.*-F[[:space:]]\{1,\}\([^[:space:]]\{1,\}\).*/\1/p' <<<"$command" | head -n 1)
+  if [ -n "$file" ] && [ -f "$file" ]; then
+    cat "$file"
+    return
+  fi
+  # ヒアドキュメント（<<'MSG' ... MSG）の中身
+  awk '
+    /<<-?[[:space:]]*.?[A-Za-z_][A-Za-z0-9_]*.?$/ && !inside {
+      match($0, /[A-Za-z_][A-Za-z0-9_]*.?$/)
+      tag = substr($0, RSTART, RLENGTH)
+      gsub(/[^A-Za-z0-9_]/, "", tag)
+      inside = 1
+      next
+    }
+    inside && $0 == tag { inside = 0; next }
+    inside { print }
+  ' <<<"$command"
+  # -m "..." / -m '...'
+  sed -n "s/.*-m[[:space:]]\{1,\}[\"']\(.*\)[\"'].*/\1/p" <<<"$command"
+}
+
+check_post() {
+  [ "$POST_MODE" = "off" ] && exit 0
+  [ -x "$TEXTLINT_DIR/node_modules/.bin/textlint" ] || exit 0
+
+  local tool text label
+  tool=$(jq -r '.tool_name // ""' <<<"$payload")
+
+  case "$tool" in
+    # GitHub へ投稿する MCP ツール。PR の本文・タイトル、レビュー、コメントを含む。
+    mcp__github__*pull_request* | mcp__github__*issue* | mcp__github__*comment* | mcp__github__*review*)
+      text=$(jq -r '[.tool_input.title // "", .tool_input.body // ""] | join("\n\n")' <<<"$payload")
+      label="GitHub に投稿しようとしている本文"
+      ;;
+    Bash)
+      local command
+      command=$(jq -r '.tool_input.command // ""' <<<"$payload")
+      grep -q 'git commit' <<<"$command" || exit 0
+      text=$(commit_message_of "$command")
+      label="コミットメッセージ"
+      ;;
+    *) exit 0 ;;
+  esac
+
+  [ -z "${text// /}" ] && exit 0
+
+  local report
+  report=$(lint_prose "$text")
+  [ -z "$report" ] && exit 0
+  report=$(head -n 20 <<<"$report")
+
+  if [ "$POST_MODE" = "block" ]; then
+    emit_json "$(jq -nc --arg report "$report" --arg label "$label" '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: ($label + "に AI 文体の指摘がある。書き直してから投稿すること。\n" + $report)
+      }
+    }')"
+  fi
+
+  emit_json "$(jq -nc --arg report "$report" --arg label "$label" '{
+    systemMessage: ($label + "の指摘:\n" + $report)
+  }')"
+}
+
 case "$event" in
   Stop | SubagentStop) check_chat ;;
   PostToolUse) check_file ;;
+  PreToolUse) check_post ;;
 esac
 
 exit 0
