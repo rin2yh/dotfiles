@@ -23,6 +23,7 @@ prh の報告は「マッチした文字列 => expected」の形で出るため�
 ```bash
 npm run lint -- path/to/article.md            # Markdown の本文
 npm run lint:comments -- path/to/config.yml   # YAML / シェル / JS などのコメント
+npm run lint:text     -- path/to/pr-body.md   # PR 本文・コミットメッセージ
 npm run fix  -- path/to/article.md            # 機械的に直せるものだけ自動修正
 npm test                                      # 辞書の回帰テスト
 ```
@@ -33,6 +34,10 @@ npm test                                      # 辞書の回帰テスト
 文末の句点や文長のように断片には当てはまらない規則を外した設定
 (`.textlintrc.comments.json`) で検査する。「」で囲んだ語は Markdown の
 インラインコードと同じ扱いで検査対象から外れる。
+
+`lint:text` は同じ仕組みをファイル全体に当てる。PR の本文やコミットメッセージは
+リポジトリに残らないぶん検査から漏れやすく、実際この仕組みを入れた PR の本文自体に
+em dash が 2 箇所あった。
 
 ## 辞書の書き方
 

@@ -46,31 +46,40 @@ const LINE_COMMENT = {
 
 const HAS_JAPANESE = /[ぁ-んァ-ヶ一-龠]/;
 
-function commentsOf(file) {
-  const marker = LINE_COMMENT[path.extname(file)];
-  if (!marker) return [];
+// 引用された語は検査対象から外す（Markdown のインラインコードと同じ扱い）。
+const unquote = (text) => text.replace(/「([^」]{1,40})」/g, "`$1`");
+
+function commentsOf(file, prose) {
   const rows = [];
   const lines = fs.readFileSync(file, "utf8").split("\n");
+  // --prose はファイル全体を地の文として扱う。PR の本文やコミットメッセージのように、
+  // リポジトリに残らないぶん検査から漏れやすい文章を通すための入口。
+  const marker = prose ? null : LINE_COMMENT[path.extname(file)];
+  if (!prose && !marker) return [];
   lines.forEach((line, index) => {
     const trimmed = line.trim();
-    if (!trimmed.startsWith(marker)) return;
-    const text = trimmed.slice(marker.length).trim();
+    let text = trimmed;
+    if (marker) {
+      if (!trimmed.startsWith(marker)) return;
+      text = trimmed.slice(marker.length).trim();
+    }
     if (!text || !HAS_JAPANESE.test(text)) return;
-    // 引用された語は検査対象から外す（Markdown のインラインコードと同じ扱い）。
-    rows.push({ line: index + 1, text: text.replace(/「([^」]{1,40})」/g, "`$1`") });
+    rows.push({ line: index + 1, text: unquote(text) });
   });
   return rows;
 }
 
-const files = process.argv.slice(2);
+const args = process.argv.slice(2);
+const prose = args.includes("--prose");
+const files = args.filter((a) => a !== "--prose");
 if (files.length === 0) {
-  console.error("使い方: node scripts/lint-comments.mjs <file>...");
+  console.error("使い方: node scripts/lint-comments.mjs [--prose] <file>...");
   process.exit(2);
 }
 
 let problems = 0;
 for (const file of files) {
-  const rows = commentsOf(file);
+  const rows = commentsOf(file, prose);
   if (rows.length === 0) continue;
 
   // 1 コメント行 = 1 段落にする。連結すると textlint が別の行をつないで

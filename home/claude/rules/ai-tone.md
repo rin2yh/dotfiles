@@ -36,6 +36,12 @@ LLM が書いた文章は、内容ではなく体裁で「ちゃんと書いて�
 書き終えたら実行する。`Warning` は書き直しの方針が指摘文に入っている。
 
 ```bash
-npx --prefix ~/workspace/dotfiles/home/textlint textlint \
-  --config ~/workspace/dotfiles/home/textlint/.textlintrc.json --format compact <file>
+cd ~/workspace/dotfiles/home/textlint
+npm run lint          -- <file>   # Markdown の本文
+npm run lint:comments -- <file>   # YAML / シェル / JS などのコメント
+npm run lint:text     -- <file>   # PR 本文・コミットメッセージ
 ```
+
+**PR の本文とコミットメッセージも同じ検査を通す。** リポジトリに残らないぶん漏れやすく、
+実際この仕組みを入れた PR の本文自体に em dash が 2 箇所あった。
+投稿する前にファイルへ書き出し、`lint:text` にかけてから出す。
