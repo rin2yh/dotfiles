@@ -92,6 +92,32 @@
           {
             "type": "command",
             "command": "/Users/yuuki/.claude/hooks/notify.sh"
+          },
+          {
+            "type": "command",
+            "command": "ai-tone hook"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ai-tone hook"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__github__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ai-tone hook"
           }
         ]
       }
@@ -117,6 +143,65 @@
     }
   },
   "language": "日本語",
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "api.github.com"
+      ]
+    },
+    "filesystem": {
+      "allowWrite": [
+        "~/go/pkg/mod"
+      ],
+      "denyWrite": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.config/gcloud",
+        "~/.kube",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.authinfo",
+        "~/Library/Keychains",
+        "~/Library/LaunchAgents",
+        "~/.zshrc",
+        "~/.zprofile",
+        "~/.bashrc",
+        "~/.bash_profile",
+        "/Users/yuuki/workspace/dotfiles/home/.zshrc",
+        "/Users/yuuki/workspace/dotfiles/home/.zprofile",
+        "/Users/yuuki/workspace/dotfiles/home/.gitconfig",
+        "/Users/yuuki/workspace/dotfiles/home/.codex"
+      ],
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.config/gcloud",
+        "~/.kube",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.authinfo",
+        "~/.zsh_history",
+        "~/.bash_history",
+        "~/Library/Keychains",
+        "~/Library/Cookies",
+        "~/Library/Messages",
+        "~/Library/Mail",
+        "~/.codex",
+        "/Users/yuuki/workspace/dotfiles/home/.codex"
+      ],
+      "allowRead": []
+    },
+    "excludedCommands": [
+      "git",
+      "go",
+      "tinygo",
+      "mise",
+      "gh"
+    ]
+  },
   "effortLevel": "high",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",

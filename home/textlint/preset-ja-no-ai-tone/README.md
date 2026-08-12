@@ -25,13 +25,18 @@ prh の報告は「マッチした文字列 => expected」の形で出るため�
 
 ## 使い方
 
+実行の入口は `ai-tone` コマンド（`tools/ai-tone`）。
+
 ```bash
-npx textlint --config ../.textlintrc.json path/to/article.md
-npx textlint --fix --config ../.textlintrc.json path/to/article.md
+ai-tone scan path/to/config.yml    # 辞書だけを当てる。Markdown は本文、それ以外はコメント
+ai-tone lint path/to/article.md    # textlint を呼ぶ。汎用プリセットの検査も含む
+ai-tone fix  path/to/article.md    # 機械的に直せるものだけ自動修正
+ai-tone check                      # 辞書の回帰テスト
 ```
 
-辞書を更新したら、そのまま textlint を 1 回通す。prh は `specs` が 1 件でも外れると
-ロードに失敗するので、それだけで書いたパターンが実際に当たるかを確かめられる。
+フックが使うのは `scan` のほう。毎ターン走るので textlint（起動だけで 1.3 秒）は重すぎる。
+辞書を直接当てれば 6 ミリ秒で済む。代わりに文長や助詞の重複といった汎用の検査は
+フックでは当たらないので、そちらは `lint` を手か CI で実行する。
 
 辞書の書き方と prh の制約は `home/claude/skills/ai-tone-dict/references/writing-rules.md` にある。
 
