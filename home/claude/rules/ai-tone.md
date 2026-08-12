@@ -36,10 +36,8 @@ LLM が書いた文章は、内容ではなく体裁で「ちゃんと書いて�
 書き終えたら実行する。`Warning` は書き直しの方針が指摘文に入っている。
 
 ```bash
-cd ~/workspace/dotfiles/home/textlint
-npm run lint          -- <file>   # Markdown の本文
-npm run lint:comments -- <file>   # YAML / シェル / JS などのコメント
-npm run lint:text     -- <file>   # PR 本文・コミットメッセージ
+ai-tone lint <file>   # Markdown は本文を、それ以外はコメントを検査する
+ai-tone text <file>   # ファイル全体を地の文として検査する
 ```
 
 PR の本文とコミットメッセージは `PreToolUse` フックが投稿の直前で検査する。

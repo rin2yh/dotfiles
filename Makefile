@@ -37,9 +37,10 @@ tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
 
-textlint: ## Install the Japanese proofreading toolchain used by the ai-tone hook
+textlint: ## Install the Japanese proofreading toolchain and build the ai-tone command
 	mise exec -- npm --prefix $(DOTFILES_DIR)/home/textlint install
-	mise exec -- npm --prefix $(DOTFILES_DIR)/home/textlint test
+	go -C $(DOTFILES_DIR)/tools/ai-tone install .
+	ai-tone check
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'

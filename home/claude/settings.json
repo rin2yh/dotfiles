@@ -95,7 +95,7 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/ai-tone.sh"
+            "command": "ai-tone hook"
           }
         ]
       }
@@ -106,7 +106,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/ai-tone.sh"
+            "command": "ai-tone hook"
           }
         ]
       }
@@ -117,7 +117,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/ai-tone.sh"
+            "command": "ai-tone hook"
           }
         ]
       }

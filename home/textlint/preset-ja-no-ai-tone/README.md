@@ -20,22 +20,23 @@ prh の報告は「マッチした文字列 => expected」の形で出るため�
 その代わり `--fix` を当てると方針の文言が本文に埋め込まれるので、
 自動修正は `ai-tone` だけを有効にした `.textlintrc.fix.json` 経由で行う。
 
+実行の入口は `ai-tone` コマンド（`tools/ai-tone`）にまとめてある。
+
 ```bash
-npm run lint -- path/to/article.md            # Markdown の本文
-npm run lint:comments -- path/to/config.yml   # YAML / シェル / JS などのコメント
-npm run lint:text     -- path/to/pr-body.md   # PR 本文・コミットメッセージ
-npm run fix  -- path/to/article.md            # 機械的に直せるものだけ自動修正
-npm test                                      # 辞書の回帰テスト
+ai-tone lint path/to/article.md    # Markdown は本文を、それ以外はコメントを検査する
+ai-tone text path/to/pr-body.md    # ファイル全体を地の文として検査する
+ai-tone fix  path/to/article.md    # 機械的に直せるものだけ自動修正
+ai-tone check                      # 辞書の回帰テスト
 ```
 
-`lint:comments` があるのは、textlint の検査対象が Markdown の本文に限られるため。
+コメントを別扱いにするのは、textlint の検査対象が Markdown の本文に限られるため。
 設定リポジトリでは日本語の大半がコメント側にあり、プリセットを入れただけでは
 書いた文章の大部分が素通りする。コメント行を抜き出して疑似 Markdown に組み直し、
 文末の句点や文長のように断片には当てはまらない規則を外した設定
 (`.textlintrc.comments.json`) で検査する。「」で囲んだ語は Markdown の
 インラインコードと同じ扱いで検査対象から外れる。
 
-`lint:text` は同じ仕組みをファイル全体に当てる。PR の本文やコミットメッセージは
+`ai-tone text` は同じ仕組みをファイル全体に当てる。PR の本文やコミットメッセージは
 リポジトリに残らないぶん検査から漏れやすく、実際この仕組みを入れた PR の本文自体に
 em dash が 2 箇所あった。
 
@@ -49,7 +50,7 @@ em dash が 2 箇所あった。
 これがそのまま回帰テストになる。
 
 `from` と `to` を同じにした `specs` は「この規則にマッチしないこと」の表明として使える。
-辞書から外した語をうっかり戻すと `npm test` が落ちるので、判断の記録が見張りに変わる。
+辞書から外した語をうっかり戻すと `ai-tone check` が落ちるので、判断の記録が見張りに変わる。
 
 ```yaml
     specs:
@@ -74,20 +75,17 @@ em dash が 2 箇所あった。
 - prh が見るのは Markdown の記法を取り除いた本文。`^#` のような記法依存の判定はできない
 - 後方参照は `$1` 形式。prh は複数の `patterns` を 1 本の選択に畳むためグループ番号がずれる。
   後方参照を使う規則は 1 パターンずつ別の規則に分ける
-- ripgrep には先読みが無い。`(?!...)` を使うと生成物から黙って落ち、フック側の網だけが減る。
+- 会話検査は Go の regexp（RE2）で当てるので先読みが無い。`(?!...)` を使うと会話検査の網だけが減る。
   除外は「後続の 1 文字を捕まえて `$1` で書き戻す」形で表現する
 
-## 生成物
+## 会話の検査
 
-`dict/generated/*.patterns` は `npm run gen` が辞書から生成する ripgrep 用のパターンで、
-Claude Code の Stop フックが使う。textlint の起動には 1.5 〜 2 秒かかり、
-毎ターン走るフックには重すぎるため、会話の検査だけは ripgrep で済ませている。
-
-生成物はコミットする。フックが `npm install` 前でも動く必要があるため。
-辞書とのずれは `npm test` が検出する。
+Claude Code の Stop フックは毎ターン走るので、textlint（起動に 1.5 〜 2 秒）は重すぎる。
+`ai-tone` は辞書 YAML を直接読んで正規表現を組み立て、数 ms で当てる。
+Go の regexp は RE2 なので先読みが使えず、prh 側で `(?!...)` を書くと
+textlint では動くのに会話検査の網だけが減る。`ai-tone check` がこれを検出する。
 
 ## 切り出して公開する場合
 
 このディレクトリはそのまま npm パッケージとして成立する（`package.json` の `files` に
-`index.js` と `dict` を指定済み）。`scripts/` と `dict/generated/` は
-dotfiles のフック用なので、公開するなら含めなくてよい。
+`index.js` と `dict` を指定済み）。`fix-safety.txt` は dotfiles の検査用なので、公開するなら外してよい。
