@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -18,7 +17,6 @@ type HookInput struct {
 	ToolInput           struct {
 		FilePath     string `json:"file_path"`
 		NotebookPath string `json:"notebook_path"`
-		Command      string `json:"command"`
 		Title        string `json:"title"`
 		Body         string `json:"body"`
 	} `json:"tool_input"`
@@ -137,9 +135,6 @@ func postedText(input HookInput) (text, label string) {
 		}
 		return strings.Join(parts, "\n\n"), "GitHub に投稿しようとしている本文"
 	}
-	if input.ToolName == "Bash" && strings.Contains(input.ToolInput.Command, "git commit") {
-		return CommitMessageOf(input.ToolInput.Command), "コミットメッセージ"
-	}
 	return "", ""
 }
 
@@ -167,50 +162,4 @@ func joinReport(problems []string) string {
 		problems = problems[:maxReportLines]
 	}
 	return strings.Join(problems, "\n")
-}
-
-var (
-	commitFile     = regexp.MustCompile(`-F\s+(\S+)`)
-	commitHeredoc  = regexp.MustCompile(`<<-?\s*['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?\s*\n`)
-	commitInlineDQ = regexp.MustCompile(`-m\s+"([^"]*)"`)
-	commitInlineSQ = regexp.MustCompile(`-m\s+'([^']*)'`)
-)
-
-// CommitMessageOf は git commit の実行コマンドからメッセージ本体を取り出す。
-// -F <file> / ヒアドキュメント / -m の 3 通りに対応する。
-// 取り出せなければ空を返して黙って通す。
-// コミットできなくなるほうが、指摘 1 件の見逃しより困る。
-func CommitMessageOf(command string) string {
-	if match := commitFile.FindStringSubmatch(command); match != nil && match[1] != "-" {
-		if body, err := os.ReadFile(filepath.Clean(match[1])); err == nil {
-			return string(body)
-		}
-	}
-	if body := heredocBody(command); body != "" {
-		return body
-	}
-	var messages []string
-	for _, pattern := range []*regexp.Regexp{commitInlineDQ, commitInlineSQ} {
-		for _, match := range pattern.FindAllStringSubmatch(command, -1) {
-			messages = append(messages, match[1])
-		}
-	}
-	return strings.Join(messages, "\n\n")
-}
-
-// heredocBody は <<TAG から TAG だけの行までを返す。
-func heredocBody(command string) string {
-	found := commitHeredoc.FindStringSubmatchIndex(command)
-	if found == nil {
-		return ""
-	}
-	tag := command[found[2]:found[3]]
-	var body []string
-	for _, line := range strings.Split(command[found[1]:], "\n") {
-		if strings.TrimSpace(line) == tag {
-			return strings.Join(body, "\n")
-		}
-		body = append(body, line)
-	}
-	return ""
 }

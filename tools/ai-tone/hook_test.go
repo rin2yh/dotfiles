@@ -7,34 +7,6 @@ import (
 	"testing"
 )
 
-func TestCommitMessageOf(t *testing.T) {
-	dir := t.TempDir()
-	file := filepath.Join(dir, "msg.txt")
-	if err := os.WriteFile(file, []byte("fix: 修正\n\n本文\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-
-	tests := []struct {
-		name    string
-		command string
-		want    string
-	}{
-		{"-F でファイルを渡す", "git commit -F " + file, "fix: 修正\n\n本文\n"},
-		{"-m を二重引用符で渡す", `git commit -m "fix: 直す"`, "fix: 直す"},
-		{"-m を単一引用符で渡す", `git commit -m 'fix: 直す'`, "fix: 直す"},
-		{"-m を 2 つ渡す", `git commit -m "件名" -m "本文"`, "件名\n\n本文"},
-		{"ヒアドキュメントで渡す", "git commit -F - <<'MSG'\n件名\n\n本文\nMSG\n", "件名\n\n本文"},
-		{"取り出せない形", "git commit --amend --no-edit", ""},
-	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			if got := CommitMessageOf(test.command); got != test.want {
-				t.Errorf("got %q, want %q", got, test.want)
-			}
-		})
-	}
-}
-
 func TestStripCode(t *testing.T) {
 	message := "様々な要因。\n```\n不可欠\n```\n`掘り下げ` は残らない。"
 	got := stripCode(message)
@@ -142,8 +114,7 @@ func TestPostedText(t *testing.T) {
 
 	var other HookInput
 	other.ToolName = "Bash"
-	other.ToolInput.Command = "ls -la"
 	if text, _ := postedText(other); text != "" {
-		t.Errorf("git commit 以外を拾っている: %q", text)
+		t.Errorf("GitHub への投稿以外を拾っている: %q", text)
 	}
 }

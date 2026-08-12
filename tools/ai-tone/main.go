@@ -15,7 +15,6 @@ const usage = `ai-tone <command> [args]
 
   hook            標準入力のフック JSON を読んで応答を返す
   lint <file>...  Markdown は本文を、それ以外はコメントを検査する
-  text <file>...  ファイル全体を地の文として検査する（PR 本文・コミットメッセージ）
   fix <file>...   機械的に直せる指摘だけを自動修正する
   check           辞書の回帰テスト
 `
@@ -37,14 +36,6 @@ func main() {
 		}
 	case "lint":
 		os.Exit(report(lintAll(config, args, config.LintFile)))
-	case "text":
-		os.Exit(report(lintAll(config, args, func(path string) ([]string, error) {
-			body, err := os.ReadFile(path)
-			if err != nil {
-				return nil, err
-			}
-			return config.LintText(string(body), path)
-		})))
 	case "fix":
 		os.Exit(runFix(config, args))
 	case "check":

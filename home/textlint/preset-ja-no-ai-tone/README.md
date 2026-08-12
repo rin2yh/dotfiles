@@ -24,7 +24,6 @@ prh の報告は「マッチした文字列 => expected」の形で出るため�
 
 ```bash
 ai-tone lint path/to/article.md    # Markdown は本文を、それ以外はコメントを検査する
-ai-tone text path/to/pr-body.md    # ファイル全体を地の文として検査する
 ai-tone fix  path/to/article.md    # 機械的に直せるものだけ自動修正
 ai-tone check                      # 辞書の回帰テスト
 ```
@@ -36,9 +35,8 @@ ai-tone check                      # 辞書の回帰テスト
 (`.textlintrc.comments.json`) で検査する。「」で囲んだ語は Markdown の
 インラインコードと同じ扱いで検査対象から外れる。
 
-`ai-tone text` は同じ仕組みをファイル全体に当てる。PR の本文やコミットメッセージは
-リポジトリに残らないぶん検査から漏れやすく、実際この仕組みを入れた PR の本文自体に
-em dash が 2 箇所あった。
+PR の本文はリポジトリに残らないぶん検査から漏れやすく、実際この仕組みを入れた
+PR の本文自体に em dash が 2 箇所あった。フックが投稿の直前に同じ検査を当てる。
 
 ## 辞書の書き方
 
