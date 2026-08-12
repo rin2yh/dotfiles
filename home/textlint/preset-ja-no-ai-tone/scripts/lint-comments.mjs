@@ -69,20 +69,10 @@ function commentsOf(file, prose) {
   return rows;
 }
 
-const args = process.argv.slice(2);
-const prose = args.includes("--prose");
-const files = args.filter((a) => a !== "--prose");
-if (files.length === 0) {
-  console.error("使い方: node scripts/lint-comments.mjs [--prose] <file>...");
-  process.exit(2);
-}
-
-let problems = 0;
-for (const file of files) {
-  const rows = commentsOf(file, prose);
-  if (rows.length === 0) continue;
-
-  // 1 コメント行 = 1 段落にする。連結すると textlint が別の行をつないで
+// 抜き出した行を textlint にかけ、"<場所>:<行>  <指摘>  (<規則>)" の配列を返す。
+function lintRows(rows, label) {
+  if (rows.length === 0) return [];
+  // 1 行 = 1 段落にする。連結すると textlint が別の行をつないで
   // 文とみなし、助詞の重複などを誤検出する。
   const doc = rows.map((r) => r.text).join("\n\n");
   const result = spawnSync(
@@ -91,24 +81,50 @@ for (const file of files) {
      "--stdin-filename", "comments.md", "--format", "json"],
     { input: doc, encoding: "utf8" },
   );
-
   let messages = [];
   try {
     messages = JSON.parse(result.stdout)[0]?.messages ?? [];
   } catch {
-    continue;
+    return [];
   }
-  for (const message of messages) {
-    // 疑似 Markdown の段落番号から元ファイルの行番号へ戻す。
+  return messages.map((message) => {
+    // 疑似 Markdown の段落番号から元の行番号へ戻す。
     const paragraph = Math.floor((message.line - 1) / 2);
     const origin = rows[paragraph]?.line ?? message.line;
-    const text = message.message.split("\n")[0];
-    console.log(`${file}:${origin}  ${text}  (${message.ruleId})`);
-    problems += 1;
-  }
+    return `${label}:${origin}  ${message.message.split("\n")[0]}  (${message.ruleId})`;
+  });
 }
 
-if (problems > 0) {
-  console.log(`\n${problems} problems`);
-  process.exit(1);
+// ファイルを検査する。prose を立てると全行を地の文として扱う。
+export function lintFile(file, { prose = false } = {}) {
+  return lintRows(commentsOf(file, prose), file);
+}
+
+// 文字列を地の文として検査する。PR の本文やコミットメッセージのように、
+// ファイルになっていない文章をフックから渡すための入口。
+export function lintText(text, label = "<本文>") {
+  const rows = [];
+  text.split("\n").forEach((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed || !HAS_JAPANESE.test(trimmed)) return;
+    rows.push({ line: index + 1, text: unquote(trimmed) });
+  });
+  return lintRows(rows, label);
+}
+
+const isCli = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+if (isCli) {
+  const args = process.argv.slice(2);
+  const prose = args.includes("--prose");
+  const files = args.filter((a) => a !== "--prose");
+  if (files.length === 0) {
+    console.error("使い方: node scripts/lint-comments.mjs [--prose] <file>...");
+    process.exit(2);
+  }
+  const problems = files.flatMap((file) => lintFile(file, { prose }));
+  for (const line of problems) console.log(line);
+  if (problems.length > 0) {
+    console.log(`\n${problems.length} problems`);
+    process.exit(1);
+  }
 }
