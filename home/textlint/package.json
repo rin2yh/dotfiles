@@ -1,0 +1,15 @@
+{
+  "name": "dotfiles-textlint",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AI っぽい日本語表現を検出する textlint 環境。実行の入口は ai-tone コマンド",
+  "scripts": {
+    "lint": "textlint"
+  },
+  "dependencies": {
+    "textlint": "^15.2.2",
+    "textlint-rule-preset-ja-no-ai-tone": "file:./preset-ja-no-ai-tone",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "textlint-rule-prh": "^6.0.0"
+  }
+}

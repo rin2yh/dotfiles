@@ -21,6 +21,7 @@ make mise-install     # Install mise via curl (if not installed)
 make nix-install      # Install Nix via official installer (if not installed)
 make darwin-switch    # Apply nix-darwin + home-manager configuration (flake)
 make tools            # Install development tools (mise install, gopls)
+make textlint         # Install the Japanese proofreading toolchain (home/textlint)
 make help             # Show available targets
 ```
 
