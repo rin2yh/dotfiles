@@ -14,14 +14,15 @@ description: AI っぽい日本語表現を検出する textlint 辞書（home/t
 | ファイル | 役割 | `--fix` |
 | --- | --- | --- |
 | `dict/ai-tone.yml` | 機械的に置換して意味が変わらない規則 | 当てる |
-| `dict/ai-tone-review.yml` | 人間の判断が要る規則。`expected` は置換候補ではなく**書き直しの方針** | 当てない |
+| `dict/ai-tone-review.yml` | 人間の判断が要る規則。`expected` は置換候補ではなく**書き直しの方針** | 当たらない |
 | `dict/fix-safety.txt` | `ai-tone.yml` を当てても変わってはいけない文の一覧 | 対象外 |
 
 `scope: chat` は prh が無視する独自キーで、Claude の会話出力を検査する対象に含めるかを示す。
 会話は文章より短く砕けているため、文書向けの規則をそのまま当てると誤検出が増える。
 
 分け方を間違えると実害が出る。方針を書いた `expected` を `ai-tone.yml` に置くと、
-`--fix` がその方針の文言を本文に埋め込む。迷ったら `ai-tone-review.yml` に置く。
+`--fix` がその方針の文言を本文に埋め込む。迷ったら `ai-tone-review.yml` に置く
+（こちらは fixer を登録していないので `--fix` が構造的に届かない）。
 
 ## 更新の流れ
 

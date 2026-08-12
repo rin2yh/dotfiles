@@ -37,14 +37,18 @@ var lineComment = map[string]string{
 
 var markdownExt = map[string]bool{".md": true, ".mdx": true, ".markdown": true}
 
-// row は検査に回す 1 行と、元の文章での行番号。
+// row は検査に回す 1 段落と、その先頭の行番号。
 type row struct {
 	line int
 	text string
 }
 
-// extract は本文から検査対象の行を取り出す。
+// extract は本文から検査対象の段落を取り出す。
 // prose を立てると全行を地の文として扱う。立てなければコメント行だけを拾う。
+//
+// 連続する行はつないで 1 段落にする。コメントも PR の本文も、1 つの文を
+// 折り返して書くので、行ごとに切ると文末の句点や助詞の重複の判定が狂う。
+// 行が途切れたところが文の切れ目。
 func extract(body, extension string, prose bool) []row {
 	marker := ""
 	if !prose {
@@ -54,19 +58,33 @@ func extract(body, extension string, prose bool) []row {
 		}
 	}
 	var rows []row
+	var current []string
+	start := 0
+	flush := func() {
+		if len(current) > 0 {
+			rows = append(rows, row{line: start, text: strings.Join(current, "")})
+			current = nil
+		}
+	}
 	for index, line := range strings.Split(body, "\n") {
 		text := strings.TrimSpace(line)
 		if marker != "" {
 			if !strings.HasPrefix(text, marker) {
+				flush()
 				continue
 			}
 			text = strings.TrimSpace(strings.TrimPrefix(text, marker))
 		}
 		if text == "" || !hasJapanese.MatchString(text) {
+			flush()
 			continue
 		}
-		rows = append(rows, row{line: index + 1, text: quoted.ReplaceAllString(text, "`$1`")})
+		if len(current) == 0 {
+			start = index + 1
+		}
+		current = append(current, quoted.ReplaceAllString(text, "`$1`"))
 	}
+	flush()
 	return rows
 }
 
@@ -101,9 +119,8 @@ func firstLine(text string) string {
 	return text
 }
 
-// LintRows は抜き出した行を textlint にかける。
-// 1 行 = 1 段落にして渡す。連結すると textlint が別の行をつないで文とみなし、
-// 助詞の重複などを誤検出する。行番号は元の文章のものに戻して報告する。
+// LintRows は抜き出した段落を textlint にかける。
+// 段落は空行で区切って渡し、行番号は元の文章のものに戻して報告する。
 func (c Config) LintRows(rows []row, label string) ([]string, error) {
 	if len(rows) == 0 {
 		return nil, nil
@@ -112,9 +129,7 @@ func (c Config) LintRows(rows []row, label string) ([]string, error) {
 	for i, r := range rows {
 		texts[i] = r.text
 	}
-	// コメントや地の文は 1 行が文の断片になりがちで、文末の句点や文長といった
-	// 「文章としての体裁」を問う規則を当てると指摘が誤りだらけになる。
-	// 中身の薄さを見る規則だけを残した設定を使う。
+	// 節見出しのコメントは文ではないので、句点の規則だけを外した設定を使う。
 	problems, err := c.runTextlint([]string{
 		"--config", c.CommentsRC, "--stdin", "--stdin-filename", "comments.md", "--format", "json",
 	}, strings.Join(texts, "\n\n"))

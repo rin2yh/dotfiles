@@ -12,13 +12,13 @@ LLM が書きがちな日本語の文体を検出する textlint プリセット
 
 | ルール ID | 辞書 | severity | `--fix` |
 | --- | --- | --- | --- |
-| `ja-no-ai-tone/ai-tone` | `dict/ai-tone.yml` | error | 当ててよい |
-| `ja-no-ai-tone/ai-tone-review` | `dict/ai-tone-review.yml` | warning | 当ててはいけない |
+| `ja-no-ai-tone/ai-tone` | `dict/ai-tone.yml` | error | 当たる |
+| `ja-no-ai-tone/ai-tone-review` | `dict/ai-tone-review.yml` | warning | 当たらない（fixer を登録していない） |
 
 `ai-tone-review` の `expected` は置換候補ではなく**書き直しの方針**を書いてある。
 prh の報告は「マッチした文字列 => expected」の形で出るため、方針をそのまま指摘文として読ませられる。
-その代わり `--fix` を当てると方針の文言が本文に埋め込まれるので、
-自動修正は `ai-tone` だけを有効にした `.textlintrc.fix.json` 経由で行う。
+`--fix` を当てると方針の文言が本文に埋め込まれてしまうので、
+このルールは prh の linter だけを登録して fixer を渡していない。自動修正が構造的に届かない。
 
 実行の入口は `ai-tone` コマンド（`tools/ai-tone`）にまとめてある。
 

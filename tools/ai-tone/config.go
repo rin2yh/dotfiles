@@ -12,7 +12,6 @@ type Config struct {
 	TextlintBin string
 	TextlintRC  string
 	CommentsRC  string
-	FixRC       string
 	FixSafety   string
 }
 
@@ -33,7 +32,6 @@ func LoadConfig() Config {
 		TextlintBin: filepath.Join(dir, "node_modules", ".bin", "textlint"),
 		TextlintRC:  filepath.Join(dir, ".textlintrc.json"),
 		CommentsRC:  filepath.Join(dir, ".textlintrc.comments.json"),
-		FixRC:       filepath.Join(dir, ".textlintrc.fix.json"),
 		FixSafety:   filepath.Join(dict, "fix-safety.txt"),
 	}
 }

@@ -1,8 +1,0 @@
-{
-  "rules": {
-    "preset-ja-no-ai-tone": {
-      "ai-tone": true,
-      "ai-tone-review": false
-    }
-  }
-}

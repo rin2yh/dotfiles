@@ -137,7 +137,7 @@ func checkFixSafety(config Config) ([]string, error) {
 	if err := os.WriteFile(probe, []byte(before+"\n"), 0o600); err != nil {
 		return nil, err
 	}
-	exec.Command(config.TextlintBin, "--fix", "--config", config.FixRC, probe).Run()
+	exec.Command(config.TextlintBin, "--fix", "--config", config.TextlintRC, probe).Run()
 	after, err := os.ReadFile(probe)
 	if err != nil {
 		return nil, err
@@ -153,12 +153,13 @@ func checkFixSafety(config Config) ([]string, error) {
 }
 
 // runFix は機械的に直せる指摘だけを自動修正する。
-// 方針を書いた expected を持つ辞書は除いた設定を使う。当てると方針の文言が本文に埋め込まれる。
+// 方針を書いた expected を持つ ai-tone-review は linter だけで登録してあるので、
+// --fix は構造的に触れない。設定を分ける必要はない。
 func runFix(config Config, paths []string) int {
 	if !config.Ready() || len(paths) == 0 {
 		return 2
 	}
-	args := append([]string{"--fix", "--config", config.FixRC}, paths...)
+	args := append([]string{"--fix", "--config", config.TextlintRC}, paths...)
 	command := exec.Command(config.TextlintBin, args...)
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
