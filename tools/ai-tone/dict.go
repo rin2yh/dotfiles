@@ -25,9 +25,15 @@ type dictFile struct {
 // prh は /.../ の形を正規表現リテラルとして扱い、フラグは gimy しか受け付けない。
 var regexpLiteral = regexp.MustCompile(`^/(.*)/([gimy]*)$`)
 
-// Matcher は辞書から作った照合器。会話出力の検査に使う。
+// Matcher は辞書から作った照合器。
 type Matcher struct {
-	patterns []*regexp.Regexp
+	patterns []pattern
+}
+
+// pattern は 1 つの正規表現と、当たったときに出す書き直しの方針。
+type pattern struct {
+	re     *regexp.Regexp
+	advice string
 }
 
 // LoadMatcher は辞書 YAML を読んで照合器を組み立てる。
@@ -58,7 +64,7 @@ func LoadMatcher(paths []string, chatOnly bool) (*Matcher, []string, error) {
 					skipped = append(skipped, fmt.Sprintf("%s: %s（%v）", path, source, err))
 					continue
 				}
-				m.patterns = append(m.patterns, compiled)
+				m.patterns = append(m.patterns, pattern{re: compiled, advice: rule.advice()})
 			}
 		}
 	}
@@ -87,18 +93,32 @@ func (r Rule) sources() []string {
 	return sources
 }
 
-// FindAll は本文に当たった語を、重複を除いて出現順に返す。
-func (m *Matcher) FindAll(text string, limit int) []string {
-	var hits []string
+// advice は指摘文に出す文言。expected が空の規則は削る指示とみなす。
+func (r Rule) advice() string {
+	if strings.TrimSpace(r.Expected) == "" {
+		return "削る"
+	}
+	return r.Expected
+}
+
+// Hit は当たった語と、その書き直しの方針。
+type Hit struct {
+	Word   string
+	Advice string
+}
+
+// FindAll は本文に当たった語を、重複を除いて返す。
+func (m *Matcher) FindAll(text string, limit int) []Hit {
+	var hits []Hit
 	seen := map[string]bool{}
-	for _, pattern := range m.patterns {
-		for _, hit := range pattern.FindAllString(text, -1) {
-			hit = strings.TrimSpace(hit)
-			if hit == "" || seen[hit] {
+	for _, p := range m.patterns {
+		for _, word := range p.re.FindAllString(text, -1) {
+			word = strings.TrimSpace(word)
+			if word == "" || seen[word] {
 				continue
 			}
-			seen[hit] = true
-			hits = append(hits, hit)
+			seen[word] = true
+			hits = append(hits, Hit{Word: word, Advice: p.advice})
 			if len(hits) >= limit {
 				return hits
 			}

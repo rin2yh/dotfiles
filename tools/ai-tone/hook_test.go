@@ -7,42 +7,60 @@ import (
 	"testing"
 )
 
-func TestStripCode(t *testing.T) {
-	message := "様々な要因。\n```\n不可欠\n```\n`掘り下げ` は残らない。"
-	got := stripCode(message)
-	if strings.Contains(got, "不可欠") {
-		t.Errorf("フェンスドブロックの中が残っている: %q", got)
+func testMatcher(t *testing.T) *Matcher {
+	t.Helper()
+	dir := t.TempDir()
+	dict := filepath.Join(dir, "d.yml")
+	body := `version: 1
+rules:
+  - expected: ""
+    scope: chat
+    patterns:
+      - 非常に
+  - expected: 数を書くか列挙する
+    patterns:
+      - 様々な
+`
+	if err := os.WriteFile(dict, []byte(body), 0o600); err != nil {
+		t.Fatal(err)
 	}
-	if strings.Contains(got, "掘り下げ") {
-		t.Errorf("インラインコードの中が残っている: %q", got)
+	matcher, skipped, err := LoadMatcher([]string{dict}, false)
+	if err != nil || len(skipped) > 0 {
+		t.Fatalf("err=%v skipped=%v", err, skipped)
 	}
-	if !strings.Contains(got, "様々な") {
-		t.Errorf("地の文が消えている: %q", got)
+	return matcher
+}
+
+func TestScanSkipsCode(t *testing.T) {
+	matcher := testMatcher(t)
+	body := "様々な要因。\n```\n非常に\n```\n`様々な` は引用。\n「非常に」も引用。"
+	got := strings.Join(Scan(matcher, body, "x", false), "\n")
+	if strings.Contains(got, ":3") {
+		t.Errorf("フェンスドブロックの中を拾っている: %q", got)
+	}
+	if strings.Contains(got, ":5") || strings.Contains(got, ":6") {
+		t.Errorf("インラインコードか引用を拾っている: %q", got)
+	}
+	if !strings.Contains(got, "x:1  様々な => 数を書くか列挙する") {
+		t.Errorf("地の文を拾えていない: %q", got)
 	}
 }
 
-func TestExtract(t *testing.T) {
-	body := "# 様々な要因がある\nkey: value\n# ascii only\n"
-	rows := extract(body, ".yml", false)
-	if len(rows) != 1 {
-		t.Fatalf("コメント行だけを拾えていない: %+v", rows)
-	}
-	if rows[0].line != 1 {
-		t.Errorf("行番号が元ファイルのものになっていない: %d", rows[0].line)
-	}
-
-	prose := extract("様々な要因がある\n\nascii only\n", "", true)
-	if len(prose) != 1 {
-		t.Fatalf("地の文を拾えていない: %+v", prose)
+func TestScanCommentsOnly(t *testing.T) {
+	matcher := testMatcher(t)
+	body := "# 様々な要因がある\nkey: 様々な\n"
+	got := Scan(matcher, body, "x.yml", true)
+	if len(got) != 1 || !strings.Contains(got[0], "x.yml:1") {
+		t.Errorf("コメント行だけを拾えていない: %v", got)
 	}
 }
 
-func TestExtractUnquotesJapaneseQuotes(t *testing.T) {
-	// 辞書のコメントは検出対象の語を引用して説明するので、
-	// 「」で囲んだ語はインラインコード扱いにして検査から外す。
-	rows := extract("# 「不可欠」は避ける\n", ".yml", false)
-	if len(rows) != 1 || !strings.Contains(rows[0].text, "`不可欠`") {
-		t.Errorf("引用がインラインコードになっていない: %+v", rows)
+func TestAdviceForEmptyExpected(t *testing.T) {
+	// expected が空の規則は削る指示として読ませる。
+	matcher := testMatcher(t)
+	got := Scan(matcher, "非常に重い", "x", false)
+	if len(got) != 1 || !strings.HasSuffix(got[0], "非常に => 削る") {
+		t.Errorf("削る指示になっていない: %v", got)
 	}
 }
 
@@ -59,62 +77,26 @@ func TestRuleSources(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			got := test.rule.sources()
-			if strings.Join(got, "|") != strings.Join(test.want, "|") {
+			if got := strings.Join(test.rule.sources(), "|"); got != strings.Join(test.want, "|") {
 				t.Errorf("got %v, want %v", got, test.want)
 			}
 		})
 	}
 }
 
-func TestMatcherFindAll(t *testing.T) {
+func TestLoadMatcherChatScope(t *testing.T) {
 	dir := t.TempDir()
 	dict := filepath.Join(dir, "d.yml")
-	body := `version: 1
-rules:
-  - expected: ""
-    scope: chat
-    patterns:
-      - 非常に
-  - expected: ""
-    patterns:
-      - 極めて
-`
+	body := "version: 1\nrules:\n  - expected: \"\"\n    scope: chat\n    patterns:\n      - 非常に\n  - expected: \"\"\n    patterns:\n      - 極めて\n"
 	if err := os.WriteFile(dict, []byte(body), 0o600); err != nil {
 		t.Fatal(err)
 	}
-
-	all, skipped, err := LoadMatcher([]string{dict}, false)
-	if err != nil || len(skipped) > 0 {
-		t.Fatalf("err=%v skipped=%v", err, skipped)
-	}
-	if got := all.FindAll("非常に極めて", 10); len(got) != 2 {
-		t.Errorf("全規則を対象にできていない: %v", got)
-	}
-
 	chat, _, err := LoadMatcher([]string{dict}, true)
 	if err != nil {
 		t.Fatal(err)
 	}
-	got := chat.FindAll("非常に極めて", 10)
-	if len(got) != 1 || got[0] != "非常に" {
-		t.Errorf("scope: chat で絞れていない: %v", got)
-	}
-}
-
-func TestPostedText(t *testing.T) {
-	var input HookInput
-	input.ToolName = "mcp__github__create_pull_request"
-	input.ToolInput.Title = "件名"
-	input.ToolInput.Body = "本文"
-	text, label := postedText(input)
-	if text != "件名\n\n本文" || label == "" {
-		t.Errorf("PR の本文を取り出せていない: %q %q", text, label)
-	}
-
-	var other HookInput
-	other.ToolName = "Bash"
-	if text, _ := postedText(other); text != "" {
-		t.Errorf("GitHub への投稿以外を拾っている: %q", text)
+	hits := chat.FindAll("非常に極めて", 10)
+	if len(hits) != 1 || hits[0].Word != "非常に" {
+		t.Errorf("scope: chat で絞れていない: %v", hits)
 	}
 }

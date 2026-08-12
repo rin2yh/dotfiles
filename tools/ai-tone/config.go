@@ -11,7 +11,6 @@ type Config struct {
 	Dicts       []string
 	TextlintBin string
 	TextlintRC  string
-	CommentsRC  string
 	FixSafety   string
 }
 
@@ -31,7 +30,6 @@ func LoadConfig() Config {
 		Dicts:       []string{filepath.Join(dict, "ai-tone.yml"), filepath.Join(dict, "ai-tone-review.yml")},
 		TextlintBin: filepath.Join(dir, "node_modules", ".bin", "textlint"),
 		TextlintRC:  filepath.Join(dir, ".textlintrc.json"),
-		CommentsRC:  filepath.Join(dir, ".textlintrc.comments.json"),
 		FixSafety:   filepath.Join(dict, "fix-safety.txt"),
 	}
 }
