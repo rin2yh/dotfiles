@@ -30,8 +30,10 @@ func main() {
 
 	switch os.Args[1] {
 	case "hook":
-		if err := RunHook(config, os.Stdin, os.Stdout); err != nil {
-			os.Exit(0) // フックのせいで会話が止まるのは最悪なので、失敗しても通す
+		// 終了コード 2 は「stderr を理由として Claude に渡し、その操作を止める」の合図。
+		if reason := RunHook(config, os.Stdin); reason != "" {
+			fmt.Fprintln(os.Stderr, reason)
+			os.Exit(2)
 		}
 	case "lint":
 		os.Exit(report(lintAll(config, args, config.LintFile)))

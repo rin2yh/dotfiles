@@ -5,9 +5,7 @@ import (
 	"path/filepath"
 )
 
-// Config は辞書と textlint の場所、および各検査の強度。
-// 強度を環境変数で持つのは、記事を書くセッションだけ会話も止めたい、
-// といった切り替えを設定ファイルの編集なしで行えるようにするため。
+// Config は辞書と textlint の場所。
 type Config struct {
 	Dir         string
 	Dicts       []string
@@ -16,10 +14,6 @@ type Config struct {
 	CommentsRC  string
 	FixRC       string
 	FixSafety   string
-
-	ChatMode string // 会話出力（既定 warn）
-	FileMode string // ファイル書き込み（既定 block）
-	PostMode string // PR 本文・コミットメッセージ（既定 block）
 }
 
 func envOr(name, fallback string) string {
@@ -41,9 +35,6 @@ func LoadConfig() Config {
 		CommentsRC:  filepath.Join(dir, ".textlintrc.comments.json"),
 		FixRC:       filepath.Join(dir, ".textlintrc.fix.json"),
 		FixSafety:   filepath.Join(dict, "fix-safety.txt"),
-		ChatMode:    envOr("CLAUDE_AI_TONE_CHAT", "warn"),
-		FileMode:    envOr("CLAUDE_AI_TONE_FILE", "block"),
-		PostMode:    envOr("CLAUDE_AI_TONE_POST", "block"),
 	}
 }
 
