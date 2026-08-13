@@ -95,18 +95,18 @@
           },
           {
             "type": "command",
-            "command": "ai-tone hook"
+            "command": "~/.claude/hooks/ai-tone.sh"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "ai-tone hook"
+            "command": "~/.claude/hooks/ai-tone.sh"
           }
         ]
       }
@@ -117,7 +117,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "ai-tone hook"
+            "command": "~/.claude/hooks/ai-tone.sh"
           }
         ]
       }
