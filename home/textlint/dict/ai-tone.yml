@@ -3,9 +3,9 @@ version: 1
 # AI っぽい文体を検出する辞書。preset-ja-technical-writing が文の長さ・表記ゆれ・文法という
 # 形式を見るのに対して、こちらは情報を運んでいない語を見る。.textlintrc.json で両方を併用する。
 #
-#   npx --yes --package textlint --package textlint-rule-prh \
-#     --package textlint-rule-preset-ja-technical-writing \
-#     -- textlint --config .textlintrc.json <file>
+#   cd home/textlint && textlint --config .textlintrc.json <file>
+#
+# textlint と 2 つのルールの版は home/mise/config.toml で固定している。
 #
 # 各ルールには specs を必ず書く。prh は specs が通らないとロード自体を失敗させるため、
 # specs がそのままルールの回帰テストになる。辞書を更新するときはここを増やすこと。

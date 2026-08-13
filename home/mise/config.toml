@@ -7,6 +7,9 @@
 "github:sivchari/gopls-lazy" = "v0.3.0"
 node = "latest"
 "npm:ccusage" = "latest"
+"npm:textlint" = "15.8.0"
+"npm:textlint-rule-prh" = "6.1.0"
+"npm:textlint-rule-preset-ja-technical-writing" = "12.0.2"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
