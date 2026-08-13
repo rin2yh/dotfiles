@@ -9,3 +9,6 @@
 /**/logs
 /**/pkg
 /**/session-state
+
+# npx で都度取得するのでリポジトリには置かない
+node_modules/

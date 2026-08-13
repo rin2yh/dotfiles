@@ -1,12 +1,10 @@
 {
   "rules": {
     "preset-ja-technical-writing": {
-      "sentence-length": {
-        "max": 100
-      },
+      "sentence-length": { "max": 100 },
       "no-exclamation-question-mark": false,
       "ja-no-weak-phrase": false
     },
-    "preset-ja-no-ai-tone": true
+    "prh": { "rulePaths": ["./dict/ai-tone.yml", "./dict/ai-tone-review.yml"] }
   }
 }
