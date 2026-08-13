@@ -21,7 +21,6 @@ make mise-install     # Install mise via curl (if not installed)
 make nix-install      # Install Nix via official installer (if not installed)
 make darwin-switch    # Apply nix-darwin + home-manager configuration (flake)
 make tools            # Install development tools (mise install, gopls)
-make ai-tone          # Build the ai-tone command used by the Claude Code hooks
 make help             # Show available targets
 ```
 

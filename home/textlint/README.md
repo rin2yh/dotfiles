@@ -8,9 +8,10 @@
 インストールは要らない。`npx` が必要なパッケージをその場で取ってくる。
 
 ```bash
-ai-tone lint <file>    # textlint を呼ぶ。汎用プリセットの検査も含む
-ai-tone scan <file>    # 辞書だけを当てる。textlint を経由しないので速い
-ai-tone check          # 辞書の回帰テスト
+cd home/textlint
+npx --yes --package textlint --package textlint-rule-prh \
+  --package textlint-rule-preset-ja-technical-writing \
+  -- textlint --config .textlintrc.json <file>
 ```
 
 `package.json` と `node_modules` は置いていない。lock ファイルが差分の 76% を占めていたので、
