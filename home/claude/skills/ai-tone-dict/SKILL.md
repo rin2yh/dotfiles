@@ -76,9 +76,14 @@ prh の正規表現には固有の制約があり、知らずに書くと辞書�
 
 ```bash
 cd home/textlint
-npx --yes --package textlint --package textlint-rule-prh \
-  --package textlint-rule-preset-ja-technical-writing \
-  -- textlint --config .textlintrc.json <実在する記事の .md>
+textlint --config .textlintrc.json <実在する記事の .md>
+```
+
+`No rules found` と出たらルールが読めていない。指摘が 0 件なのではなく検査していない。
+`mise install` を通してから、ルールの場所を `NODE_PATH` に渡して実行する。
+
+```bash
+export NODE_PATH="$(mise where npm:textlint-rule-prh)/lib/node_modules:$(mise where npm:textlint-rule-preset-ja-technical-writing)/lib/node_modules"
 ```
 
 辞書を通すこと自体が prh のロードを兼ねる。`specs` が 1 件でも外れるとロードに失敗するので、
