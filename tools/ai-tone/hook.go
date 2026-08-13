@@ -51,7 +51,7 @@ func RunHook(config Config, stdin io.Reader) string {
 	// 会話は scope: chat の規則だけを当てる。
 	// 短く砕けた文に文書向けの規則をそのまま当てると誤検出が増える。
 	chatOnly := input.EventName == "Stop" || input.EventName == "SubagentStop"
-	matcher, _, err := LoadMatcher(config.Dicts, chatOnly)
+	matcher, _, err := LoadMatcher([]string{config.Dict}, chatOnly)
 	if err != nil {
 		return ""
 	}

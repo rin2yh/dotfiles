@@ -30,11 +30,15 @@ type Matcher struct {
 	patterns []pattern
 }
 
-// pattern は 1 つの正規表現と、当たったときに出す書き直しの方針。
+// pattern は 1 つの正規表現と、当たったときに出す置換先。
 type pattern struct {
-	re     *regexp.Regexp
-	advice string
+	re      *regexp.Regexp
+	replace string
 }
+
+// prh の後方参照は $1、Go は ${1}。Go は $1 の後ろの文字も名前の一部として読むので、
+// 「$1する」が「1する という名前のグループ」になって空文字に置換されてしまう。
+var backreference = regexp.MustCompile(`\$(\d+)`)
 
 // LoadMatcher は辞書 YAML を読んで照合器を組み立てる。
 // chatOnly を立てると scope: chat の規則だけを対象にする。
@@ -64,7 +68,10 @@ func LoadMatcher(paths []string, chatOnly bool) (*Matcher, []string, error) {
 					skipped = append(skipped, fmt.Sprintf("%s: %s（%v）", path, source, err))
 					continue
 				}
-				m.patterns = append(m.patterns, pattern{re: compiled, advice: rule.advice()})
+				m.patterns = append(m.patterns, pattern{
+					re:      compiled,
+					replace: backreference.ReplaceAllString(rule.Expected, "$${$1}"),
+				})
 			}
 		}
 	}
@@ -93,21 +100,14 @@ func (r Rule) sources() []string {
 	return sources
 }
 
-// advice は指摘文に出す文言。expected が空の規則は削る指示とみなす。
-func (r Rule) advice() string {
-	if strings.TrimSpace(r.Expected) == "" {
-		return "削る"
-	}
-	return r.Expected
-}
-
-// Hit は当たった語と、その書き直しの方針。
+// Hit は当たった語と、その書き直し先。
 type Hit struct {
 	Word   string
 	Advice string
 }
 
 // FindAll は本文に当たった語を、重複を除いて返す。
+// Advice は当たった語に置換を当てた結果。置換先が空なら削る指示として読ませる。
 func (m *Matcher) FindAll(text string, limit int) []Hit {
 	var hits []Hit
 	seen := map[string]bool{}
@@ -118,11 +118,23 @@ func (m *Matcher) FindAll(text string, limit int) []Hit {
 				continue
 			}
 			seen[word] = true
-			hits = append(hits, Hit{Word: word, Advice: p.advice})
+			advice := p.re.ReplaceAllString(word, p.replace)
+			if strings.TrimSpace(advice) == "" {
+				advice = "削る"
+			}
+			hits = append(hits, Hit{Word: word, Advice: advice})
 			if len(hits) >= limit {
 				return hits
 			}
 		}
 	}
 	return hits
+}
+
+// Replace は本文に置換を当てた結果を返す。ai-tone.yml だけを読ませて使う。
+func (m *Matcher) Replace(text string) string {
+	for _, p := range m.patterns {
+		text = p.re.ReplaceAllString(text, p.replace)
+	}
+	return text
 }

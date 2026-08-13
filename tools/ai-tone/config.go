@@ -9,10 +9,8 @@ import (
 // Config は辞書の場所と、textlint の呼び出し方。
 type Config struct {
 	Dir        string
-	Dicts      []string
+	Dict       string
 	TextlintRC string
-	FixRC      string
-	FixSafety  string
 }
 
 // textlint は npx がその場で解決する。リポジトリに package.json も node_modules も置かない。
@@ -35,13 +33,10 @@ func envOr(name, fallback string) string {
 func LoadConfig() Config {
 	home, _ := os.UserHomeDir()
 	dir := envOr("CLAUDE_AI_TONE_DIR", filepath.Join(home, "workspace/dotfiles/home/textlint"))
-	dict := filepath.Join(dir, "dict")
 	return Config{
 		Dir:        dir,
-		Dicts:      []string{filepath.Join(dict, "ai-tone.yml"), filepath.Join(dict, "ai-tone-review.yml")},
+		Dict:       filepath.Join(dir, "dict", "ai-tone.yml"),
 		TextlintRC: filepath.Join(dir, ".textlintrc.json"),
-		FixRC:      filepath.Join(dir, ".textlintrc.fix.json"),
-		FixSafety:  filepath.Join(dict, "fix-safety.txt"),
 	}
 }
 
