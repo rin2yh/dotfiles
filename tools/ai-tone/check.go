@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -15,7 +14,7 @@ import (
 // マッチするか」が確かめられる。
 func RunCheck(config Config) int {
 	if !config.Ready() {
-		fmt.Fprintln(os.Stderr, "textlint が入っていない。make textlint を実行すること")
+		fmt.Fprintln(os.Stderr, "npx が見つからない。node を入れること")
 		return 2
 	}
 	var failures []string
@@ -66,8 +65,7 @@ func RunCheck(config Config) int {
 // runProbe は辞書を読ませるためだけに textlint を空入力で走らせる。
 // specs が外れていれば prh がロードに失敗する。
 func runProbe(config Config) error {
-	command := exec.Command(config.TextlintBin,
-		"--config", config.TextlintRC, "--stdin", "--stdin-filename", "probe.md")
+	command := config.Textlint("--config", config.TextlintRC, "--stdin", "--stdin-filename", "probe.md")
 	command.Stdin = strings.NewReader("検査用の文である。\n")
 	var stderr strings.Builder
 	command.Stderr = &stderr
@@ -105,7 +103,7 @@ func checkFixSafety(config Config) ([]string, error) {
 	if err := os.WriteFile(probe, []byte(strings.Join(sentences, "\n\n")+"\n"), 0o600); err != nil {
 		return nil, err
 	}
-	exec.Command(config.TextlintBin, "--fix", "--config", config.TextlintRC, probe).Run()
+	config.Textlint("--fix", "--config", config.FixRC, probe).Run()
 	after, err := os.ReadFile(probe)
 	if err != nil {
 		return nil, err
