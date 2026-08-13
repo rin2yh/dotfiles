@@ -9,7 +9,6 @@
 
 ```bash
 ai-tone lint <file>    # textlint を呼ぶ。汎用プリセットの検査も含む
-ai-tone fix  <file>    # 機械的に直せる指摘だけを自動修正する
 ai-tone scan <file>    # 辞書だけを当てる。textlint を経由しないので速い
 ai-tone check          # 辞書の回帰テスト
 ```

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -21,7 +20,7 @@ func RunCheck(config Config) int {
 
 	// Go の regexp は RE2 なので先読みが無い。prh 側で書くと textlint では動くのに
 	// フックの網だけが黙って減るので、ここで気づけるようにする。
-	matcher, skipped, err := LoadMatcher(config.Dicts, false)
+	matcher, skipped, err := LoadMatcher([]string{config.Dict}, false)
 	if err != nil {
 		failures = append(failures, fmt.Sprintf("辞書を読めない: %v", err))
 	}
@@ -33,21 +32,10 @@ func RunCheck(config Config) int {
 		failures = append(failures, err.Error())
 	}
 
-	// specs はその規則の中しか検査しないので、
-	// 規則をまたいで --fix が本文を壊す事故はここでしか捕まえられない。
-	broken, err := checkFixSafety(config)
-	if err != nil {
-		failures = append(failures, err.Error())
-	}
-	failures = append(failures, broken...)
-
 	// 辞書自身のコメントも自分の規則に当てる。書く側の日本語が野放しなのは筋が通らない。
 	if matcher != nil {
-		for _, dict := range config.Dicts {
-			found, err := ScanFile(matcher, dict)
-			if err == nil {
-				failures = append(failures, found...)
-			}
+		if found, err := ScanFile(matcher, config.Dict); err == nil {
+			failures = append(failures, found...)
 		}
 	}
 
@@ -74,46 +62,4 @@ func runProbe(config Config) error {
 		return fmt.Errorf("辞書のロードに失敗: %s", strings.SplitN(stderr.String(), "\n", 2)[0])
 	}
 	return nil
-}
-
-// checkFixSafety は fix-safety.txt の各文に --fix を当て、変わったものを返す。
-func checkFixSafety(config Config) ([]string, error) {
-	body, err := os.ReadFile(config.FixSafety)
-	if err != nil {
-		return nil, err
-	}
-	var sentences []string
-	for _, line := range strings.Split(string(body), "\n") {
-		line = strings.TrimSpace(line)
-		if line != "" && !strings.HasPrefix(line, "#") {
-			sentences = append(sentences, line)
-		}
-	}
-	if len(sentences) == 0 {
-		return nil, nil
-	}
-
-	// --fix はファイルを書き換えるので、一時ファイルに写してから当てる。
-	dir, err := os.MkdirTemp("", "ai-tone")
-	if err != nil {
-		return nil, err
-	}
-	defer os.RemoveAll(dir)
-	probe := filepath.Join(dir, "fix-safety.md")
-	if err := os.WriteFile(probe, []byte(strings.Join(sentences, "\n\n")+"\n"), 0o600); err != nil {
-		return nil, err
-	}
-	config.Textlint("--fix", "--config", config.FixRC, probe).Run()
-	after, err := os.ReadFile(probe)
-	if err != nil {
-		return nil, err
-	}
-
-	var broken []string
-	for index, line := range strings.Split(strings.TrimRight(string(after), "\n"), "\n\n") {
-		if index < len(sentences) && line != sentences[index] {
-			broken = append(broken, fmt.Sprintf("--fix が本文を壊す: 「%s」 → 「%s」", sentences[index], line))
-		}
-	}
-	return broken, nil
 }

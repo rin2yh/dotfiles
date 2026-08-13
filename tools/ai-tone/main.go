@@ -17,7 +17,6 @@ const usage = `ai-tone <command> [args]
   hook            標準入力のフック JSON を読み、指摘があれば終了コード 2 で返す
   scan <file>...  辞書だけを当てる（Markdown は本文、それ以外はコメント）
   lint <file>...  textlint を呼ぶ。汎用プリセットの検査も含む
-  fix <file>...   機械的に直せる指摘だけを自動修正する
   check           辞書の回帰テスト
 `
 
@@ -39,9 +38,7 @@ func main() {
 	case "scan":
 		os.Exit(runScan(config, args))
 	case "lint":
-		os.Exit(runTextlint(config, args, false))
-	case "fix":
-		os.Exit(runTextlint(config, args, true))
+		os.Exit(runTextlint(config, args))
 	case "check":
 		os.Exit(RunCheck(config))
 	default:
@@ -51,7 +48,7 @@ func main() {
 }
 
 func runScan(config Config, paths []string) int {
-	matcher, _, err := LoadMatcher(config.Dicts, false)
+	matcher, _, err := LoadMatcher([]string{config.Dict}, false)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 2
@@ -76,18 +73,12 @@ func runScan(config Config, paths []string) int {
 }
 
 // runTextlint は textlint をそのまま呼ぶ。出力の加工はしない。
-func runTextlint(config Config, paths []string, fix bool) int {
+func runTextlint(config Config, paths []string) int {
 	if !config.Ready() {
 		fmt.Fprintln(os.Stderr, "npx が見つからない。node を入れること")
 		return 2
 	}
-	args := []string{"--config", config.TextlintRC}
-	if fix {
-		// 方針を書いた expected を持つ辞書を外した設定を使う。
-		// 当てると方針の文言が本文に埋め込まれる。
-		args = []string{"--fix", "--config", config.FixRC}
-	}
-	command := config.Textlint(append(args, paths...)...)
+	command := config.Textlint(append([]string{"--config", config.TextlintRC}, paths...)...)
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {
