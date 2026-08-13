@@ -5,6 +5,6 @@
       "no-exclamation-question-mark": false,
       "ja-no-weak-phrase": false
     },
-    "prh": { "rulePaths": ["./dict/ai-tone.yml", "./dict/ai-tone-review.yml"] }
+    "prh": { "rulePaths": ["./dict/ai-tone.yml"] }
   }
 }

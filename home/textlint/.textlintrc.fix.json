@@ -1,5 +1,0 @@
-{
-  "rules": {
-    "prh": { "rulePaths": ["./dict/ai-tone.yml"] }
-  }
-}
