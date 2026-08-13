@@ -4,9 +4,9 @@ DOTFILES_DIR := $(CURDIR)
 
 export PATH := $(HOME)/.local/bin:$(PATH)
 
-.PHONY: setup submodule-init mise-install nix-install darwin-switch tools textlint help
+.PHONY: setup submodule-init mise-install nix-install darwin-switch tools help
 
-setup: submodule-init mise-install nix-install darwin-switch tools textlint ## Run full setup
+setup: submodule-init mise-install nix-install darwin-switch tools ## Run full setup
 
 submodule-init: ## Initialize and update git submodules
 	git submodule update --init --recursive --force
@@ -37,8 +37,7 @@ tools: ## Install development tools (mise install, gopls)
 	mise install
 	mise exec -- go install golang.org/x/tools/gopls@latest
 
-textlint: ## Install the Japanese proofreading toolchain and build the ai-tone command
-	mise exec -- npm --prefix $(DOTFILES_DIR)/home/textlint install
+ai-tone: ## Build the ai-tone command used by the Claude Code hooks
 	go -C $(DOTFILES_DIR)/tools/ai-tone install .
 	ai-tone check
 

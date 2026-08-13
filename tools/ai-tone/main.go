@@ -10,7 +10,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 )
 
 const usage = `ai-tone <command> [args]
@@ -79,14 +78,16 @@ func runScan(config Config, paths []string) int {
 // runTextlint は textlint をそのまま呼ぶ。出力の加工はしない。
 func runTextlint(config Config, paths []string, fix bool) int {
 	if !config.Ready() {
-		fmt.Fprintln(os.Stderr, "textlint が入っていない。make textlint を実行すること")
+		fmt.Fprintln(os.Stderr, "npx が見つからない。node を入れること")
 		return 2
 	}
 	args := []string{"--config", config.TextlintRC}
 	if fix {
-		args = append(args, "--fix")
+		// 方針を書いた expected を持つ辞書を外した設定を使う。
+		// 当てると方針の文言が本文に埋め込まれる。
+		args = []string{"--fix", "--config", config.FixRC}
 	}
-	command := exec.Command(config.TextlintBin, append(args, paths...)...)
+	command := config.Textlint(append(args, paths...)...)
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {

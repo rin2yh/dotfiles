@@ -2,16 +2,27 @@ package main
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 )
 
-// Config は辞書と textlint の場所。
+// Config は辞書の場所と、textlint の呼び出し方。
 type Config struct {
-	Dir         string
-	Dicts       []string
-	TextlintBin string
-	TextlintRC  string
-	FixSafety   string
+	Dir        string
+	Dicts      []string
+	TextlintRC string
+	FixRC      string
+	FixSafety  string
+}
+
+// textlint は npx がその場で解決する。リポジトリに package.json も node_modules も置かない。
+// lock ファイルが差分の 76% を占めていたので、固定する代わりに毎回解決させている。
+var textlintPackages = []string{
+	"--yes",
+	"--package", "textlint",
+	"--package", "textlint-rule-prh",
+	"--package", "textlint-rule-preset-ja-technical-writing",
+	"--", "textlint",
 }
 
 func envOr(name, fallback string) string {
@@ -24,18 +35,26 @@ func envOr(name, fallback string) string {
 func LoadConfig() Config {
 	home, _ := os.UserHomeDir()
 	dir := envOr("CLAUDE_AI_TONE_DIR", filepath.Join(home, "workspace/dotfiles/home/textlint"))
-	dict := filepath.Join(dir, "preset-ja-no-ai-tone", "dict")
+	dict := filepath.Join(dir, "dict")
 	return Config{
-		Dir:         dir,
-		Dicts:       []string{filepath.Join(dict, "ai-tone.yml"), filepath.Join(dict, "ai-tone-review.yml")},
-		TextlintBin: filepath.Join(dir, "node_modules", ".bin", "textlint"),
-		TextlintRC:  filepath.Join(dir, ".textlintrc.json"),
-		FixSafety:   filepath.Join(dict, "fix-safety.txt"),
+		Dir:        dir,
+		Dicts:      []string{filepath.Join(dict, "ai-tone.yml"), filepath.Join(dict, "ai-tone-review.yml")},
+		TextlintRC: filepath.Join(dir, ".textlintrc.json"),
+		FixRC:      filepath.Join(dir, ".textlintrc.fix.json"),
+		FixSafety:  filepath.Join(dict, "fix-safety.txt"),
 	}
 }
 
-// Ready は textlint が入っているか。入っていなければ検査を諦めて黙って通す。
+// Textlint は textlint を呼ぶコマンドを組み立てる。
+// 設定ファイルの相対パスが辞書を指すので、必ず設定のあるディレクトリで動かす。
+func (c Config) Textlint(args ...string) *exec.Cmd {
+	command := exec.Command("npx", append(append([]string{}, textlintPackages...), args...)...)
+	command.Dir = c.Dir
+	return command
+}
+
+// Ready は npx が使えるか。使えなければ検査を諦めて黙って通す。
 func (c Config) Ready() bool {
-	_, err := os.Stat(c.TextlintBin)
+	_, err := exec.LookPath("npx")
 	return err == nil
 }
