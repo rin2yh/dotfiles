@@ -33,7 +33,6 @@ in
     git
     go
     google-cloud-sdk
-    jq
     lazydocker
     lazygit
     lua-language-server
