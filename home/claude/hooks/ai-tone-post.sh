@@ -1,6 +1,8 @@
 #!/bin/sh
 # PreToolUse フック。GitHub へ投稿しようとしているタイトルと本文を textlint に当てて、
-# 指摘があれば投稿の前に止める。settings.json 側で mcp__github__* に絞ってある。
+# 指摘があれば投稿の前に止める。
+# settings.json の matcher は mcp__github__* 全体なので、読み取り系のツールも入ってくる。
+# それらは title も body も持たないため、下の空判定がそのまま振り分けになる。
 
 set -u
 
@@ -9,7 +11,7 @@ DIR="${CLAUDE_AI_TONE_DIR:-$HOME/workspace/dotfiles/home/textlint}"
 input=$(cat)
 title=$(printf '%s' "$input" | jq -r '.tool_input.title // ""')
 body=$(printf '%s' "$input" | jq -r '.tool_input.body // ""')
-[ -n "$(printf '%s%s' "$title" "$body" | tr -d '[:space:]')" ] || exit 0
+[ -n "$title$body" ] || exit 0
 
 # タイトルは見出しとして渡す。裸の一行にすると、文末が「。」で終わっていないと
 # 毎回言われて、投稿のたびに必ず止まることになる。
@@ -21,8 +23,7 @@ NODE_PATH="$(mise where npm:textlint-rule-prh)/lib/node_modules"
 NODE_PATH="$NODE_PATH:$(mise where npm:textlint-rule-preset-ja-technical-writing)/lib/node_modules"
 export NODE_PATH
 
-cd "$DIR" || exit 0
-report=$(printf '%s' "$text" | textlint --config .textlintrc.json --format compact --stdin --stdin-filename post.md)
+report=$(printf '%s' "$text" | textlint --config "$DIR/.textlintrc.json" --format compact --stdin --stdin-filename post.md)
 [ -n "$report" ] || exit 0
 
 {

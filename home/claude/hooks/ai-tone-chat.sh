@@ -13,7 +13,7 @@ input=$(cat)
 [ "$(printf '%s' "$input" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 
 text=$(printf '%s' "$input" | jq -r '.last_assistant_message // ""')
-[ -n "$(printf '%s' "$text" | tr -d '[:space:]')" ] || exit 0
+[ -n "$text" ] || exit 0
 
 # mise は npm パッケージごとに別の prefix へ入れるため、textlint は隣に置かれた
 # ルールを自力では見つけられない。NODE_PATH で場所を渡す。
@@ -21,8 +21,7 @@ NODE_PATH="$(mise where npm:textlint-rule-prh)/lib/node_modules"
 NODE_PATH="$NODE_PATH:$(mise where npm:textlint-rule-preset-ja-technical-writing)/lib/node_modules"
 export NODE_PATH
 
-cd "$DIR" || exit 0
-report=$(printf '%s' "$text" | textlint --config .textlintrc.json --format compact --stdin --stdin-filename chat.md)
+report=$(printf '%s' "$text" | textlint --config "$DIR/.textlintrc.json" --format compact --stdin --stdin-filename chat.md)
 [ -n "$report" ] || exit 0
 
 {
