@@ -76,6 +76,7 @@ in
     "mise/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/mise/config.toml";
     "nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/nvim";
     "starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/starship/starship.toml";
+    "textlint".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/textlint";
     "fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/fastfetch";
     "ghostty".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/ghostty";
   };

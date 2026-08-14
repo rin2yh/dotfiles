@@ -92,6 +92,32 @@
           {
             "type": "command",
             "command": "/Users/yuuki/.claude/hooks/notify.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ai-tone-chat.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ai-tone-file.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__github__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ai-tone-post.sh"
           }
         ]
       }
