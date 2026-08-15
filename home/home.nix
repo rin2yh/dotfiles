@@ -36,6 +36,7 @@ in
     neovim
     nixd
     nixfmt-rfc-style
+    opam
     ripgrep
     shfmt
     starship

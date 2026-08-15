@@ -87,7 +87,7 @@ safely('now', function()
   require('nvim-treesitter').install({
     'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
     'tsx', 'typescript', 'html',
-    'go', 'rust',
+    'go', 'rust', 'ocaml', 'ocaml_interface',
     'terraform', 'dockerfile', 'nix'
   })
   -- tree-sitterとfiletypeが違う罠
@@ -110,6 +110,15 @@ safely('now', function()
       require('nvim-treesitter').install({ lang }, { force = true }):await(function()
         vim.schedule(function() pcall(vim.treesitter.start, ev.buf) end)
       end)
+    end,
+  })
+  -- ocaml は上のループに入れられない: .ml と .mli は同じ filetype 'ocaml' なのに
+  -- parser は別 (signature 側は ocaml_interface) で、filetype からは判別できないため。
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'ocaml',
+    callback = function(ev)
+      local ext = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ':e')
+      pcall(vim.treesitter.start, ev.buf, ext == 'mli' and 'ocaml_interface' or 'ocaml')
     end,
   })
 end)
