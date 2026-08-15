@@ -15,10 +15,10 @@ M.root_markers = { 'dune-project', 'dune-workspace', '.git' }
 -- codelens / inlayHints は vim.lsp.codelens.refresh() / vim.lsp.inlay_hint.enable() を
 -- クライアント側で呼んでいないため有効にしても効かないので入れていない。
 M.settings = {
-  -- 型に加えて doc コメントもホバーに出す（K にバインド済み）
+  -- K (lsp/init.lua の hover) で doc コメントまで出すために両方必要
   extendedHover = { enable = true },
   syntaxDocumentation = { enable = true },
-  -- 定義・実装への移動を code action として出す（<space>w にバインド済み）
+  -- Merlin のジャンプは <space>w (code_action) 経由でしか呼べない
   merlinJumpCodeActions = { enable = true },
 }
 
