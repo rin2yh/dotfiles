@@ -21,6 +21,7 @@ make mise-install     # Install mise via curl (if not installed)
 make nix-install      # Install Nix via official installer (if not installed)
 make darwin-switch    # Apply nix-darwin + home-manager configuration (flake)
 make tools            # Install development tools (mise install, gopls)
+make ocaml            # Bootstrap opam (init, ocamllsp/ocamlformat)
 make help             # Show available targets
 ```
 
@@ -43,3 +44,11 @@ make help             # Show available targets
   - `darwin/` 配下 (`configuration.nix` / `homebrew.nix` など) の変更
   - `flake.nix` / `flake.lock` の更新
 - `flake.lock` を更新する場合は `nix flake update` 後に `make darwin-switch`。
+
+## OCaml
+
+- Nix (`home.packages`) が管理するのは `opam` 本体のみ。OCaml コンパイラ・`ocamllsp`・`ocamlformat`・プロジェクト依存はすべて opam switch 側の責務で、Nix / mise は関与しない。
+- `ocamlformat` は `.ocamlformat` の `version` とバイナリのバージョンが一致していないとエラーになるため、グローバルに固定せずプロジェクトの switch に入れる。プリビルドバイナリが配布されていないので mise では扱えない。
+- 初回のみ `make ocaml` でデフォルト switch を用意する。プロジェクトごとには `opam switch create . && opam install ocaml-lsp-server ocamlformat dune` する。
+- Neovim は `opam exec -- ocamllsp` で switch を解決するため `.zshrc` への `eval $(opam env)` は不要。逆にターミナルで `dune` / `utop` を直接叩くときは都度 `eval $(opam env)` する。
+- フォーマットは `ocamllsp` が switch 内の `ocamlformat` を呼ぶ形なので、`<M-f>` (`vim.lsp.buf.format`) がそのまま効く。
