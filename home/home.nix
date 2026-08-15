@@ -2,19 +2,16 @@
   config,
   lib,
   pkgs,
-  username,
   ...
 }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles/home";
+  # home.username / home.homeDirectory are provided by the nix-darwin module
+  # (from users.users.<name>), so the home directory is never hardcoded here.
+  dotfilesDir = "${config.home.homeDirectory}/workspace/dotfiles";
+  dotfiles = "${dotfilesDir}/home";
 in
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = username;
-  home.homeDirectory = "/Users/${username}";
-
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.
@@ -95,7 +92,7 @@ in
   #
   # or
   #
-  #  /etc/profiles/per-user/yuuki/etc/profile.d/hm-session-vars.sh
+  #  /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
@@ -131,7 +128,7 @@ in
 
   programs.nh = {
     enable = true;
-    flake = "${config.home.homeDirectory}/workspace/dotfiles";
+    flake = dotfilesDir;
     clean = {
       enable = true;
       dates = "weekly";

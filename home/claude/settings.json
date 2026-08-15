@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
@@ -91,7 +91,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/yuuki/.claude/hooks/notify.sh"
+            "command": "~/.claude/hooks/notify.sh"
           },
           {
             "type": "command",
