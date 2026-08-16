@@ -1,9 +1,11 @@
 local M = {}
 
--- ocamllsp は Nix でも mise でもなく opam switch の中に入るため PATH に直接は載らない。
--- `opam exec --` を挟んで switch を解決してから起動する。switch はプロセスの cwd から
--- 決まるので、`nvim .` のようにプロジェクトルートで起動している前提。
-M.cmd = { 'opam', 'exec', '--', 'ocamllsp' }
+-- ocamllsp は Nix でも mise でもなく dune の dev-tool として
+-- `_build/.dev-tools.locks/` 以下に入るため PATH に直接は載らない。`dune tools exec` を
+-- 挟むと、未インストールならその場で lock/build してから起動してくれる (初回はビルドを
+-- 待たされる)。対象のワークスペースは dune がプロセスの cwd から辿って決めるので、
+-- `nvim .` のようにプロジェクトルートで起動している前提。
+M.cmd = { 'dune', 'tools', 'exec', 'ocamllsp' }
 
 -- .ml / .mli / .mll / .mly はすべて filetype 'ocaml'（Neovim の filetype.lua）。
 -- dune / dune-project / dune-workspace は filetype 'dune' で、ocamllsp が
@@ -22,7 +24,9 @@ M.settings = {
   merlinJumpCodeActions = { enable = true },
 }
 
--- フォーマットは ocamllsp が switch 内の ocamlformat を呼ぶため、<M-f>
--- (vim.lsp.buf.format) がそのまま効く。gopls の gofumpt / nixd の nixfmt と同じ扱い。
+-- フォーマットは ocamllsp が ocamlformat を PATH から探して呼ぶ。`dune tools exec` は
+-- 全 dev-tool の bin ディレクトリを PATH に足してから exec するので、プロジェクトで
+-- 一度 `dune tools install ocamlformat` しておけば <M-f> (vim.lsp.buf.format) が効く。
+-- gopls の gofumpt / nixd の nixfmt と同じ扱い。
 
 return M

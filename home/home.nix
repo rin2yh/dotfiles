@@ -24,6 +24,7 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    dune_3
     emmet-language-server
     fastfetch
     fzf
@@ -36,7 +37,6 @@ in
     neovim
     nixd
     nixfmt-rfc-style
-    opam
     ripgrep
     shfmt
     starship
