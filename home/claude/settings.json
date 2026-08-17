@@ -70,7 +70,7 @@
       "Bash(git push -f:*)",
       "Bash(git reset:*)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "model": "opus[1m]",
   "hooks": {
@@ -132,7 +132,8 @@
     "lua-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "example-skills@anthropic-agent-skills": true,
-    "chrome-devtools-mcp@claude-plugins-official": true
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "general-skills@rin2yh-plugins": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {

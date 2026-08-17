@@ -8,6 +8,21 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then
   . "$HOME/google-cloud-sdk/path.zsh.inc"
 fi
 
+# OCaml (nix には dune_3 だけ入れ、処理系は dune の package management に任せている)
+if command -v dune &>/dev/null; then
+  # ocaml / ocamlc などのコンパイラ本体は dune pkg が ~/.cache/dune/toolchains 以下に
+  # ビルドするため PATH に載らない。最新の toolchain の bin を PATH に足す。
+  _ocaml_toolchain=(${XDG_CACHE_HOME:-$HOME/.cache}/dune/toolchains/ocaml-compiler.*/target/bin(N/om))
+  (( $#_ocaml_toolchain )) && export PATH=$PATH:$_ocaml_toolchain[1]
+  unset _ocaml_toolchain
+
+  # ocamlformat / ocamllsp / utop は dev-tool としてプロジェクトの _build 以下に入る。
+  # dune 経由で呼ぶため、dune-project のあるディレクトリで実行すること。
+  ocamlformat() { dune tools exec ocamlformat -- "$@" }
+  ocamllsp() { dune tools exec ocamllsp -- "$@" }
+  utop() { dune utop "$@" }
+fi
+
 # alias
 alias path='echo $PATH | tr ":" "\n"'
 alias g="git"
