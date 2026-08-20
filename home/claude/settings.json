@@ -74,10 +74,25 @@
   },
   "model": "sonnet",
   "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify.sh"
+          },
           {
             "type": "command",
             "command": "~/.claude/hooks/ai-tone-chat.sh"
