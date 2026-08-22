@@ -62,11 +62,8 @@ safely('later', function()
   end, { desc = 'mini.pick.files' })
   vim.keymap.set('n', '<space>b', MiniPick.builtin.buffers)
 
-  local MiniExtra = require('mini.extra')
-  vim.keymap.set('n', '<space>d', function()
-    MiniExtra.pickers.diagnostic({ scope = 'current' })
-  end, { desc = 'Diagnostics (current buffer)' })
-  vim.keymap.set('n', '<space>D', function()
-    MiniExtra.pickers.diagnostic({ scope = 'all' })
-  end, { desc = 'Diagnostics (all buffers)' })
+  vim.keymap.set('n', '<space>d', vim.diagnostic.setloclist,
+    { desc = 'Diagnostics (current buffer)' })
+  vim.keymap.set('n', '<space>D', vim.diagnostic.setqflist,
+    { desc = 'Diagnostics (all buffers)' })
 end)
