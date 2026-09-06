@@ -1,10 +1,5 @@
 local M = {}
 
-M.cmd = { 'rust-analyzer' }
-M.filetypes = { 'rust' }
-
-M.root_dir = vim.fs.root(0, { 'Cargo.toml', 'rust-project.json', '.git' })
-
 M.settings = {
   ['rust-analyzer'] = {
     -- 保存時のチェックはlinterにしたいので、checkでない

@@ -70,7 +70,7 @@
       "Bash(git push -f:*)",
       "Bash(git reset:*)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "model": "sonnet",
   "hooks": {
@@ -137,7 +137,8 @@
     "slack@claude-plugins-official": true,
     "notion@claude-plugins-official": true,
     "chrome-devtools-mcp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "general-skills@rin2yh-plugins": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {

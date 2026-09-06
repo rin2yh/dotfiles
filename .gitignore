@@ -10,5 +10,9 @@
 /**/pkg
 /**/session-state
 
+# Codex / ChatGPT アプリ (~/.codex はここへの symlink)
+# 中身は認証情報・DB・アプリが展開するプラグインなので丸ごと追跡しない
+**/.codex/
+
 # npx で都度取得するのでリポジトリには置かない
 node_modules/
