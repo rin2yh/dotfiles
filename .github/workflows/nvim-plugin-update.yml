@@ -1,0 +1,61 @@
+name: Update Neovim plugins
+
+on:
+  schedule:
+    # 毎月 1 日 09:00 JST (00:00 UTC)。dependabot の monthly と揃えている
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: nvim-plugin-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: vim.pack update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@febef33995d6649302e9d88dda81e071b68f16a7 # v1.6.1
+        with:
+          neovim: true
+          version: stable
+
+      # vim.pack のロックファイルは $XDG_CONFIG_HOME/nvim/nvim-pack-lock.json に置かれる。
+      # リポジトリの home/ を設定ディレクトリの親として渡すことで、追跡済みの
+      # home/nvim/nvim-pack-lock.json がそのまま更新対象になる。
+      # プラグイン本体は "data" standard-path (~/.local/share/nvim) に入るため
+      # ワークスペースにはロックファイル以外の差分が出ない。
+      - name: Update plugins
+        env:
+          XDG_CONFIG_HOME: ${{ github.workspace }}/home
+        # -u NONE で init.lua は読み込まない。ロックファイルにあるプラグインは
+        # 最初の vim.pack 呼び出しでロックファイルのリビジョンのまま入るので、
+        # LSP や treesitter パーサーを用意せずに更新だけを実行できる。
+        # headless の Neovim は Lua のエラーでも終了コード 0 になるため、
+        # pcall で捕まえて :cquit で失敗を伝える。
+        run: |
+          nvim --headless -u NONE -c 'lua local ok, err = pcall(vim.pack.update, nil, { force = true }); if not ok then io.stderr:write(tostring(err) .. "\n") end; vim.cmd(ok and "qall" or "cquit")'
+
+      # 差分がなければ PR は作られない (自動マージもしない)
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          add-paths: home/nvim/nvim-pack-lock.json
+          branch: chore/nvim-plugin-update
+          delete-branch: true
+          commit-message: "chore(nvim): vim.pack のプラグインを更新する"
+          title: "chore(nvim): vim.pack のプラグインを更新する"
+          body: |
+            `vim.pack.update()` によるプラグインの月次更新です。
+
+            - 更新対象は `home/nvim/nvim-pack-lock.json` のみです
+            - 取り込んだあと、手元では `:restart` で新しいリビジョンが読み込まれます
+            - 個別に戻したい場合は、該当プラグインの `rev` を元に戻して
+              `vim.pack.update({ 'plugin' }, { offline = true, target = 'lockfile' })` を実行してください
