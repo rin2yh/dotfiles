@@ -1,9 +1,5 @@
 local M = {}
 
-M.cmd = { 'typescript-language-server', '--stdio' }
-M.filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
-M.root_markers = { 'package.json', 'tsconfig.json' }
-
 local inlayHints = {
   includeInlayParameterNameHints = 'all',
   includeInlayParameterNameHintsWhenArgumentMatchesName = false,

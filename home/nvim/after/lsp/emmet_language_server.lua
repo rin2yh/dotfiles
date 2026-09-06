@@ -1,8 +1,5 @@
 local M = {}
 
-M.name = 'emmet-language-server'
-M.cmd = { 'emmet-language-server', '--stdio' }
-
 M.init_options = {
   showAbbreviationSuggestions = true,
   showExpandedAbbreviation = "always",
@@ -18,8 +15,5 @@ M.init_options = {
     },
   },
 }
-
-M.root_patterns = { 'package.json', '.git' }
-M.filetypes = { 'typescriptreact', 'javascriptreact', 'html', 'css' }
 
 return M
