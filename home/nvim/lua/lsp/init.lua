@@ -1,4 +1,6 @@
--- config of lsp
+vim.pack.add({
+  'https://github.com/neovim/nvim-lspconfig',
+})
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -39,10 +41,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.lsp.config('*', {
-  root_markers = { '.git' },
-})
-
 vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'LSP hover information' })
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
@@ -54,24 +52,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
--- load lsp/lua_ls.lua
-local dirname = vim.fn.stdpath('config') .. '/lua/lsp'
+require('lsp.tinygo')
 
--- 設定したlspを保存する配列
-local lsp_names = {}
-
--- 同一ディレクトリのファイルをループ
-for file, ftype in vim.fs.dir(dirname) do
-  if ftype == 'file' and vim.endswith(file, '.lua') and file ~= 'init.lua' then
-    local lsp_name = file:sub(1, -5)
-    local ok, result = pcall(require, 'lsp/' .. lsp_name)
-    if ok then
-      vim.lsp.config(lsp_name, result)
-      table.insert(lsp_names, lsp_name)
-    else
-      vim.notify('Error loading LSP: ' .. lsp_name .. '\n' .. result, vim.log.levels.WARN)
-    end
-  end
-end
-
-vim.lsp.enable(lsp_names)
+vim.lsp.enable({
+  'cssls',
+  'emmet_language_server',
+  'gopls',
+  'lua_ls',
+  'nixd',
+  'ocamllsp',
+  'rust_analyzer',
+  'terraformls',
+  'ts_ls',
+})
