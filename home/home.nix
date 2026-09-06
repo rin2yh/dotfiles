@@ -36,7 +36,7 @@ in
     lua-language-server
     neovim
     nixd
-    nixfmt-rfc-style
+    nixfmt
     ripgrep
     shfmt
     starship
