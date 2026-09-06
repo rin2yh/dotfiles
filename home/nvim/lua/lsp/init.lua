@@ -2,12 +2,6 @@ vim.pack.add({
   'https://github.com/neovim/nvim-lspconfig',
 })
 
--- lsp/*.lua は runtimepath 順にマージされる。標準定義を先に読み、
--- この設定の lsp/*.lua の override を優先する。
-local lspconfig_path = vim.pack.get({ 'nvim-lspconfig' }, { info = false })[1].path
-vim.opt.runtimepath:remove(lspconfig_path)
-vim.opt.runtimepath:prepend(lspconfig_path)
-
 vim.diagnostic.config({
   virtual_text = true,
 })
