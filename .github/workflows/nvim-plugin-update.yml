@@ -6,9 +6,7 @@ on:
     - cron: "0 0 1 * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 concurrency:
   group: nvim-plugin-update
@@ -18,8 +16,16 @@ jobs:
   update:
     name: vim.pack update
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # create-pull-request が更新用ブランチを push するため
+      pull-requests: write # create-pull-request が PR を作成・更新するため
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # ブランチへの push と PR 作成は create-pull-request が token から
+          # 自前で認証を組み立てるため、checkout の資格情報は残さない
+          persist-credentials: false
 
       - name: Install Neovim
         uses: rhysd/action-setup-vim@febef33995d6649302e9d88dda81e071b68f16a7 # v1.6.1
