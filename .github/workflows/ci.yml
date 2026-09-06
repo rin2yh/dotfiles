@@ -8,6 +8,8 @@ on:
       - "flake.lock"
       - ".github/workflows/ci.yml"
 
+permissions: {}
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -16,8 +18,13 @@ jobs:
   lint:
     name: nixfmt
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read # checkout がリポジトリを読むため
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
@@ -28,8 +35,13 @@ jobs:
   build:
     name: build darwinConfiguration
     runs-on: macos-26
+    timeout-minutes: 60
+    permissions:
+      contents: read # checkout がリポジトリを読むため
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
