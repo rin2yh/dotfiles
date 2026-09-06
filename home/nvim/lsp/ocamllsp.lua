@@ -4,12 +4,6 @@ local M = {}
 -- ワークスペースは cwd から解決されるので `nvim .` で開いている前提。
 M.cmd = { 'dune', 'tools', 'exec', 'ocamllsp' }
 
--- .ml / .mli / .mll / .mly はすべて filetype 'ocaml'（Neovim の filetype.lua）。
--- dune / dune-project / dune-workspace は filetype 'dune' で、ocamllsp が
--- `dune format-dune-file` 相当のフォーマットを提供する。
-M.filetypes = { 'ocaml', 'dune' }
-M.root_markers = { 'dune-project', 'dune-workspace', '.git' }
-
 -- ocamllsp の設定は didChangeConfiguration の settings 直下に置く（`ocaml` でラップしない）。
 -- codelens / inlayHints は vim.lsp.codelens.refresh() / vim.lsp.inlay_hint.enable() を
 -- クライアント側で呼んでいないため有効にしても効かないので入れていない。
