@@ -1,0 +1,49 @@
+name: Update Neovim plugins
+
+on:
+  schedule:
+    - cron: "0 0 1 * *" # 毎月 1 日 09:00 JST
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: nvim-plugin-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: vim.pack update
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # push
+      pull-requests: write # PR
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@febef33995d6649302e9d88dda81e071b68f16a7 # v1.6.1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Update plugins
+        env:
+          XDG_CONFIG_HOME: ${{ github.workspace }}/home # lockfile は nvim/ の下
+        # init.lua は読まない。Lua エラーでも exit 0 なので :cquit で返す
+        run: |
+          nvim --headless -u NONE -c 'lua local ok, err = pcall(vim.pack.update, nil, { force = true }); if not ok then io.stderr:write(tostring(err) .. "\n") end; vim.cmd(ok and "qall" or "cquit")'
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          add-paths: home/nvim/nvim-pack-lock.json
+          branch: chore/nvim-plugin-update
+          delete-branch: true
+          commit-message: "chore(nvim): vim.pack のプラグインを更新する"
+          title: "chore(nvim): vim.pack のプラグインを更新する"
+          body: |
+            `vim.pack.update()` による月次更新です。取り込んだあとは `:restart` で反映されます。

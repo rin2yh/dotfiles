@@ -43,3 +43,4 @@ make help             # Show available targets
   - `darwin/` 配下 (`configuration.nix` / `homebrew.nix` など) の変更
   - `flake.nix` / `flake.lock` の更新
 - `flake.lock` を更新する場合は `nix flake update` 後に `make darwin-switch`。
+- Neovim のプラグインは `vim.pack` 管理で、リビジョンは `home/nvim/nvim-pack-lock.json` に記録される。GitHub Actions の `Update Neovim plugins` が毎月 1 日に `vim.pack.update()` を実行し、lockfile に差分があるときだけ PR を作る（手動実行は Actions タブの workflow_dispatch から）。取り込んだあとは `:restart` で新しいリビジョンが読み込まれる。
