@@ -17,12 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      contents: write # ブランチの push
-      pull-requests: write # PR の作成・更新
+      contents: write # push
+      pull-requests: write # PR
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # push の認証は create-pull-request が token から自前で組み立てる
           persist-credentials: false
 
       - name: Install Neovim
@@ -33,10 +32,8 @@ jobs:
 
       - name: Update plugins
         env:
-          # lockfile は $XDG_CONFIG_HOME/nvim/nvim-pack-lock.json に置かれる
-          XDG_CONFIG_HOME: ${{ github.workspace }}/home
-        # lockfile のプラグインは -u NONE でも入るため init.lua は読まない。
-        # headless は Lua エラーでも exit 0 になるので :cquit で失敗を伝える。
+          XDG_CONFIG_HOME: ${{ github.workspace }}/home # lockfile は nvim/ の下
+        # init.lua は読まない。Lua エラーでも exit 0 なので :cquit で返す
         run: |
           nvim --headless -u NONE -c 'lua local ok, err = pcall(vim.pack.update, nil, { force = true }); if not ok then io.stderr:write(tostring(err) .. "\n") end; vim.cmd(ok and "qall" or "cquit")'
 
