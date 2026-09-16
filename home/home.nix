@@ -30,10 +30,12 @@ in
     fzf
     git
     go
+    gopls
     google-cloud-sdk
     lazydocker
     lazygit
     lua-language-server
+    mise
     neovim
     nixd
     nixfmt

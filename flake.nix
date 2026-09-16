@@ -52,5 +52,39 @@
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
+
+      apps."aarch64-darwin" =
+        let
+          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
+        in
+        {
+          darwin-switch = {
+            type = "app";
+            program = "${pkgs.writeShellScript "darwin-switch" ''
+              set -euo pipefail
+              if command -v darwin-rebuild >/dev/null 2>&1; then
+                sudo darwin-rebuild switch --flake .#default
+              else
+                sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#default
+              fi
+              echo ""
+              echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."
+            ''}";
+          };
+
+          tools = {
+            type = "app";
+            program = "${pkgs.writeShellScript "tools" ''
+              exec ${pkgs.mise}/bin/mise install
+            ''}";
+          };
+
+          clean = {
+            type = "app";
+            program = "${pkgs.writeShellScript "nh-clean" ''
+              exec ${pkgs.nh}/bin/nh clean all --keep-since 30d --keep-one
+            ''}";
+          };
+        };
     };
 }
