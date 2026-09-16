@@ -18,6 +18,7 @@ alias n="nvim ."
 alias c="cargo"
 alias lg="lazygit"
 alias ld="lazydocker"
+alias kc="kubectl"
 
 # load completion
 autoload -U compinit
@@ -45,7 +46,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
 # mise
 if command -v mise &>/dev/null; then
-  eval "$(mise activate zsh --shims)"
+  eval "$(mise activate zsh)"
 fi
 
 # starship

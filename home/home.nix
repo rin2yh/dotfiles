@@ -48,6 +48,7 @@ in
     zenn-cli
     zoxide
     zsh-autosuggestions
+    ollama
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

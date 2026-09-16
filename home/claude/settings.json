@@ -138,7 +138,9 @@
     "notion@claude-plugins-official": true,
     "chrome-devtools-mcp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "general-skills@rin2yh-plugins": true
+    "general-skills@rin2yh-plugins": true,
+    "development-skills@rin2yh-plugins": true,
+    "meta-skills@rin2yh-plugins": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
@@ -151,6 +153,12 @@
       "source": {
         "source": "github",
         "repo": "anthropics/skills"
+      }
+    },
+    "rin2yh-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "rin2yh/claude-code-plugins"
       }
     }
   },

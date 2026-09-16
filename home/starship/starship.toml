@@ -58,6 +58,11 @@ format = """
 [](fg:#1f2335)\
 """
 
+[kubernetes]
+disabled = false
+format = 'on [⛵ $context\($namespace\)](dimmed green) '
+
+
 # ----------------------------------------------------
 # right module
 # ----------------------------------------------------
