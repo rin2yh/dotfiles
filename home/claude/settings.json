@@ -133,7 +133,8 @@
     "commit-commands@claude-plugins-official": true,
     "example-skills@anthropic-agent-skills": true,
     "chrome-devtools-mcp@claude-plugins-official": true,
-    "general-skills@rin2yh-plugins": true
+    "general-skills@rin2yh-plugins": true,
+    "document-skills@anthropic-agent-skills": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
