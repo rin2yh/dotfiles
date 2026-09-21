@@ -35,14 +35,16 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 
 ## Notes
 
-- `home/` 配下のファイルは `mkOutOfStoreSymlink` でリポジトリ実体への symlink として配置されている。既存ファイル（`.zshrc` / `nvim/` / `claude/CLAUDE.md` など）の内容だけを編集する場合、`darwin-rebuild switch` は不要で保存すれば即反映される。
-- 以下のケースでは `nix run .#darwin-switch` が必要:
-  - `home/home.nix` の `home.packages` にパッケージを追加/削除
-  - `home.file` / `xdg.configFile` に新しい symlink エントリを追加
-  - `darwin/` 配下 (`configuration.nix` / `homebrew.nix` など) の変更
-  - `flake.nix` / `flake.lock` の更新
-- `flake.lock` を更新する場合は `nix flake update` 後に `nix run .#darwin-switch`。
-- Neovim のプラグインは `vim.pack` 管理で、リビジョンは `home/nvim/nvim-pack-lock.json` に記録される。
-  GitHub Actions の `Update Neovim plugins` が毎月 1 日に `vim.pack.update()` を実行する。
-  lockfile に差分があるときだけ PR を作る（手動実行は Actions タブの workflow_dispatch から）。
-  取り込んだあとは `:restart` で新しいリビジョンが読み込まれる。
+* `home/` 配下は `mkOutOfStoreSymlink` で配置
+  * `.zshrc` / `nvim/` / `claude/CLAUDE.md` など、既存ファイルの編集は保存後すぐ反映
+* `nix run .#darwin-switch` が必要な変更
+  * `home.packages` の追加・削除
+  * `home.file` / `xdg.configFile` の symlink 追加
+  * `darwin/` 配下の変更
+  * `flake.nix` / `flake.lock` の更新
+    * `flake.lock` は `nix flake update` 後に実行
+* Neovim plugins
+  * `vim.pack` で管理し、`home/nvim/nvim-pack-lock.json` に revision を記録
+  * GitHub Actions が毎月1日に更新し、差分がある場合のみ PR を作成
+  * 手動更新は `Update Neovim plugins` の `workflow_dispatch`
+  * 更新取り込み後は `:restart`
