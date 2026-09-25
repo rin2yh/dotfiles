@@ -24,13 +24,13 @@ Then apply the configuration via flake apps:
 
 ```bash
 exec zsh -l              # Nix を PATH に反映
-nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration (mise 等のパッケージもここで入る)
+nix run .#switch   # Apply nix-darwin + home-manager configuration (mise 等のパッケージもここで入る)
 nix run .#tools           # Install development tools (mise install)
 ```
 
-`darwin-switch` は `sudo` を付けずに実行してください。ユーザー名や配置先を変更した場合だけ、`machine.nix` を更新して再実行します。
+`switch` は `sudo` を付けずに実行してください。ユーザー名や配置先を変更した場合だけ、`machine.nix` を更新して再実行します。
 
-`darwin-switch` 完了時の案内に従ってシェルを再起動してから、`tools` を実行します。
+`switch` 完了時の案内に従ってシェルを再起動してから、`tools` を実行します。
 
 Claude Code の初回起動時にマーケットプレイスの確認が出たら承認します。`rin2yh-plugins` の取得元と有効プラグインは `home/claude/settings.json` で管理しています。
 
@@ -55,7 +55,7 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 
 * `home/` 配下は `mkOutOfStoreSymlink` で配置
   * `.zshrc` / `nvim/` / `claude/CLAUDE.md` など、既存ファイルの編集は保存後すぐ反映
-* `nix run .#darwin-switch` が必要な変更
+* `nix run .#switch` が必要な変更
   * `machine.nix` の変更
   * `home.packages` の追加・削除
   * `home.file` / `xdg.configFile` の symlink 追加
