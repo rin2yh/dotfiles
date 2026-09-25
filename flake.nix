@@ -61,9 +61,9 @@
           pkgs = nixpkgs.legacyPackages."aarch64-darwin";
         in
         {
-          darwin-switch = {
+          switch = {
             type = "app";
-            program = "${pkgs.writeShellScript "darwin-switch" ''
+            program = "${pkgs.writeShellScript "switch" ''
               set -euo pipefail
               sudo ${nix-darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild \
                 switch --flake .#default
