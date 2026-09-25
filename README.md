@@ -28,8 +28,6 @@ nix run .#switch   # Apply nix-darwin + home-manager configuration (mise 等の�
 nix run .#tools           # Install development tools (mise install)
 ```
 
-`switch` 完了時の案内に従ってシェルを再起動してから、`tools` を実行します。
-
 ### Other flake apps
 
 ```bash
