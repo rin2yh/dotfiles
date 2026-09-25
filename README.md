@@ -2,9 +2,15 @@
 
 ## Setup
 
-Apple Silicon Mac 向け。Xcode 本体は不要ですが、Git・Homebrew 用に Command Line Tools が必要です（未導入なら `xcode-select --install`）。
+Apple Silicon Mac 向け。Xcode 本体は不要ですが、Git・Homebrew 用に Command Line Tools が必要です。
 
-任意の場所に clone し、リポジトリ直下で実行します。
+未導入の場合は、先に次を実行してダイアログからインストールします。
+
+```bash
+xcode-select --install
+```
+
+インストール完了後、`xcode-select -p` で開発ツールのパスが表示されることを確認します。その後、任意の場所に clone し、リポジトリ直下で実行します。
 
 ```bash
 ./bootstrap.sh
