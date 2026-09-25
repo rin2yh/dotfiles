@@ -65,10 +65,6 @@
             type = "app";
             program = "${pkgs.writeShellScript "darwin-switch" ''
               set -euo pipefail
-              if [ "$(id -u)" -eq 0 ]; then
-                echo "Run this app as your macOS user, without sudo." >&2
-                exit 1
-              fi
               sudo ${nix-darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild \
                 switch --flake .#default
               echo ""
