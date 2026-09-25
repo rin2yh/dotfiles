@@ -34,6 +34,9 @@
       homebrew-cask,
       ...
     }:
+    let
+      machine = import ./machine.nix;
+    in
     {
       darwinConfigurations."default" = nix-darwin.lib.darwinSystem {
         specialArgs = {
@@ -43,7 +46,7 @@
             homebrew-core
             homebrew-cask
             ;
-          username = "yuuki";
+          inherit (machine) username dotfilesDir;
         };
         modules = [
           ./darwin/configuration.nix
@@ -58,15 +61,12 @@
           pkgs = nixpkgs.legacyPackages."aarch64-darwin";
         in
         {
-          darwin-switch = {
+          switch = {
             type = "app";
-            program = "${pkgs.writeShellScript "darwin-switch" ''
+            program = "${pkgs.writeShellScript "switch" ''
               set -euo pipefail
-              if command -v darwin-rebuild >/dev/null 2>&1; then
-                sudo darwin-rebuild switch --flake .#default
-              else
-                sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#default
-              fi
+              sudo ${nix-darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild \
+                switch --flake .#default
               echo ""
               echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."
             ''}";

@@ -30,7 +30,6 @@ alias dc="docker-compose"
 alias mtr="mise t r"
 alias m="mise"
 alias n="nvim ."
-alias c="cargo"
 alias lg="lazygit"
 alias ld="lazydocker"
 

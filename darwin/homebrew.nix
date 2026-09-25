@@ -25,6 +25,8 @@
       cleanup = "none";
     };
     global.autoUpdate = false;
+    taps = [ "daipeihust/tap" ];
+    brews = [ "daipeihust/tap/im-select" ];
     casks = [
       "claude"
       "discord"
