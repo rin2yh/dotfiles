@@ -28,11 +28,7 @@ nix run .#switch   # Apply nix-darwin + home-manager configuration (mise 等の�
 nix run .#tools           # Install development tools (mise install)
 ```
 
-`switch` は `sudo` を付けずに実行してください。ユーザー名や配置先を変更した場合だけ、`machine.nix` を更新して再実行します。
-
 `switch` 完了時の案内に従ってシェルを再起動してから、`tools` を実行します。
-
-Claude Code の初回起動時にマーケットプレイスの確認が出たら承認します。`rin2yh-plugins` の取得元と有効プラグインは `home/claude/settings.json` で管理しています。
 
 ### Other flake apps
 
