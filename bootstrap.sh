@@ -18,14 +18,13 @@ git -C "$DOTFILES_DIR" submodule update --init --recursive --force
 if [ ! -e "$NIX" ]; then
   echo "==> Installing Nix..."
   curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
-  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
 cat <<EOF
 
 ==> Next steps:
     cd "$DOTFILES_DIR"
-    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    exec zsh -l              # Reload PATH after installing Nix
     nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration
     exec zsh -l              # Reload PATH before installing tools
     nix run .#tools           # Install development tools (mise install)
