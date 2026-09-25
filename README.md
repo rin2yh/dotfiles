@@ -2,9 +2,9 @@
 
 ## Setup
 
-Apple Silicon Mac 向け。Xcode 本体は不要ですが、Git・Homebrew 用に Command Line Tools が必要です。
+Git・Homebrew 用に Command Line Tools が必要です。
 
-未導入の場合は、先に次を実行してダイアログからインストールします。
+未導入の場合は、先に以下のコマンドを実行してダイアログからインストールします。
 
 ```bash
 xcode-select --install
