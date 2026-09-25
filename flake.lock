@@ -17,6 +17,22 @@
         "type": "github"
       }
     },
+    "daipeihust-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1682907593,
+        "narHash": "sha256-lfyc4D2Tt6BCmPLqHWFL9I2ZDpAtVYxE10bLuQBMfdQ=",
+        "owner": "daipeihust",
+        "repo": "homebrew-tap",
+        "rev": "bc45a5fba4923578dcdea333b5b795a9d84b9126",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daipeihust",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -125,6 +141,7 @@
     },
     "root": {
       "inputs": {
+        "daipeihust-tap": "daipeihust-tap",
         "home-manager": "home-manager",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",

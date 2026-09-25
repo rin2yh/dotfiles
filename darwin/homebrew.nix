@@ -2,6 +2,7 @@
   nix-homebrew,
   homebrew-core,
   homebrew-cask,
+  daipeihust-tap,
   username,
   ...
 }:
@@ -14,7 +15,9 @@
     taps = {
       "homebrew/homebrew-core" = homebrew-core;
       "homebrew/homebrew-cask" = homebrew-cask;
+      "daipeihust/homebrew-tap" = daipeihust-tap;
     };
+    trust.formulae = [ "daipeihust/tap/im-select" ];
   };
 
   homebrew = {
