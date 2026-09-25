@@ -25,6 +25,6 @@ cat <<EOF
 ==> Next steps:
     cd "$DOTFILES_DIR"
     exec zsh -l              # Reload PATH after installing Nix
-    nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration
+    nix run .#switch   # Apply nix-darwin + home-manager configuration
     nix run .#tools           # Install development tools (mise install)
 EOF
