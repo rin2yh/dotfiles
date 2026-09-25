@@ -23,7 +23,7 @@ This will:
 Then apply the configuration via flake apps:
 
 ```bash
-. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+exec zsh -l              # Nix を PATH に反映
 nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration (mise 等のパッケージもここで入る)
 exec zsh -l              # 新しい PATH を読み込む
 nix run .#tools           # Install development tools (mise install)
@@ -31,7 +31,7 @@ nix run .#tools           # Install development tools (mise install)
 
 `darwin-switch` は実行ユーザーと現在の配置先を取得します。`sudo` を付けずに実行してください。配置先を移動した場合は、新しい場所で再実行します。
 
-Nix 導入時の環境読み込みは `bootstrap.sh` の外に引き継がれないため、上記の `.` コマンドが必要です。
+`exec zsh -l` でログインシェルを再起動し、Nix 導入後・設定適用後の PATH を読み込みます。
 
 Claude Code の初回起動時にマーケットプレイスの確認が出たら承認します。`rin2yh-plugins` の取得元と有効プラグインは `home/claude/settings.json` で管理しています。
 
