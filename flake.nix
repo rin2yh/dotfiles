@@ -35,15 +35,7 @@
       ...
     }:
     let
-      requireEnv =
-        name:
-        let
-          value = builtins.getEnv name;
-        in
-        if value == "" then
-          throw "${name} is required; run nix run .#darwin-switch from the dotfiles directory"
-        else
-          value;
+      machine = import ./machine.nix;
     in
     {
       darwinConfigurations."default" = nix-darwin.lib.darwinSystem {
@@ -54,8 +46,7 @@
             homebrew-core
             homebrew-cask
             ;
-          username = requireEnv "DOTFILES_USER";
-          dotfilesDir = requireEnv "DOTFILES_DIR";
+          inherit (machine) username dotfilesDir;
         };
         modules = [
           ./darwin/configuration.nix
@@ -78,10 +69,8 @@
                 echo "Run this app as your macOS user, without sudo." >&2
                 exit 1
               fi
-              dotfiles_dir="$(pwd -P)"
-              sudo /usr/bin/env DOTFILES_USER="$(id -un)" DOTFILES_DIR="$dotfiles_dir" \
-                ${nix-darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild \
-                switch --impure --flake "$dotfiles_dir#default"
+              sudo ${nix-darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild \
+                switch --flake .#default
               echo ""
               echo "==> Run 'exec zsh -l' to reload the shell with the new configuration."
             ''}";

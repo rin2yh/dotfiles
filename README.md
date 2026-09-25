@@ -10,7 +10,7 @@ Git・Homebrew 用に Command Line Tools が必要です。
 xcode-select --install
 ```
 
-インストール完了後、`xcode-select -p` で開発ツールのパスが表示されることを確認します。その後、任意の場所に clone し、リポジトリ直下で実行します。
+インストール完了後、`xcode-select -p` で開発ツールのパスが表示されることを確認します。任意の場所に clone し、`machine.nix` の `username` と `dotfilesDir`（絶対パス）を設定してから、リポジトリ直下で実行します。
 
 ```bash
 ./bootstrap.sh
@@ -28,7 +28,7 @@ nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration (mise 
 nix run .#tools           # Install development tools (mise install)
 ```
 
-`darwin-switch` は実行ユーザーと現在の配置先を取得します。`sudo` を付けずに実行してください。配置先を移動した場合は、新しい場所で再実行します。
+`darwin-switch` は `sudo` を付けずに実行してください。ユーザー名や配置先を変更した場合だけ、`machine.nix` を更新して再実行します。
 
 `darwin-switch` 完了時の案内に従ってシェルを再起動してから、`tools` を実行します。
 
@@ -46,6 +46,7 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 .
 ├── bootstrap.sh    # Nix 導入前の最小限のセットアップ
 ├── flake.nix
+├── machine.nix     # ユーザー名・dotfiles の配置先
 ├── darwin/         # nix-darwin システム設定 + home-manager 統合
 └── home/           # home-manager 配下の各ツール設定
 ```
@@ -55,6 +56,7 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 * `home/` 配下は `mkOutOfStoreSymlink` で配置
   * `.zshrc` / `nvim/` / `claude/CLAUDE.md` など、既存ファイルの編集は保存後すぐ反映
 * `nix run .#darwin-switch` が必要な変更
+  * `machine.nix` の変更
   * `home.packages` の追加・削除
   * `home.file` / `xdg.configFile` の symlink 追加
   * `darwin/` 配下の変更
