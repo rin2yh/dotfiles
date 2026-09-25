@@ -45,7 +45,6 @@
       "Bash(git push -f origin main)",
       "Bash(docker system prune -af)",
       "Bash(npm publish:*)",
-      "Bash(cargo publish:*)",
       "Bash(deno publish:*)",
       "Edit(/etc/**)",
       "Edit(/usr/**)",
@@ -137,6 +136,12 @@
     "document-skills@anthropic-agent-skills": true
   },
   "extraKnownMarketplaces": {
+    "rin2yh-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "rin2yh/claude-code-plugins"
+      }
+    },
     "anthropic-agent-skills": {
       "source": {
         "source": "github",

@@ -2,14 +2,16 @@
   config,
   lib,
   pkgs,
+  dotfilesDir,
   ...
 }:
 
 let
-  # home.username / home.homeDirectory are provided by the nix-darwin module
-  # (from users.users.<name>), so the home directory is never hardcoded here.
-  dotfilesDir = "${config.home.homeDirectory}/workspace/dotfiles";
   dotfiles = "${dotfilesDir}/home";
+  # Use the same Go that the pinned TinyGo package uses at runtime.
+  tinygoGo = lib.findFirst (pkg: (pkg.pname or "") == "go") (
+    throw "TinyGo no longer declares its Go runtime dependency"
+  ) pkgs.tinygo.runtimeDeps;
 in
 {
   # This value determines the Home Manager release that your configuration is
@@ -24,14 +26,16 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    clang
     dune_3
     emmet-language-server
     fastfetch
     fzf
     git
-    go
+    tinygoGo
     gopls
     google-cloud-sdk
+    jq
     lazydocker
     lazygit
     lua-language-server
@@ -43,6 +47,7 @@ in
     shfmt
     starship
     terraform-ls
+    tinygo
     tree
     tree-sitter
     typescript

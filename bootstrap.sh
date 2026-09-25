@@ -19,6 +19,8 @@ cat <<EOF
 
 ==> Next steps:
     cd "$DOTFILES_DIR"
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
     nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration
+    exec zsh -l              # Reload PATH before installing tools
     nix run .#tools           # Install development tools (mise install)
 EOF

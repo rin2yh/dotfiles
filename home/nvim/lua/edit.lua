@@ -87,7 +87,7 @@ safely('now', function()
   require('nvim-treesitter').install({
     'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
     'tsx', 'typescript', 'html',
-    'go', 'rust', 'ocaml', 'ocaml_interface',
+    'go', 'ocaml', 'ocaml_interface',
     'terraform', 'dockerfile', 'nix'
   })
   -- tree-sitterとfiletypeが違う罠
@@ -97,7 +97,7 @@ safely('now', function()
     pattern = {
       'lua', 'vim', 'markdown', 'sh', 'yaml', 'zsh',
       'typescriptreact', 'typescript', 'html',
-      'go', 'rust',
+      'go',
       'terraform', 'dockerfile', 'nix'
     },
     callback = function(ev)
