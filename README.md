@@ -54,7 +54,6 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 ## Notes
 
 * Go / TinyGo は Nix で管理し、Go は TinyGo が依存するバージョンに合わせる
-* `jq` は Nix、`im-select` は Homebrew で導入
 * `home/` 配下は `mkOutOfStoreSymlink` で配置
   * `.zshrc` / `nvim/` / `claude/CLAUDE.md` など、既存ファイルの編集は保存後すぐ反映
 * `nix run .#darwin-switch` が必要な変更
