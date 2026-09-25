@@ -10,7 +10,7 @@ let
   dotfiles = "${dotfilesDir}/home";
   # Use the same Go that the pinned TinyGo package uses at runtime.
   isGo = pkg: (pkg.pname or "") == "go";
-  tinygoGo = lib.findFirst isGo (throw "TinyGo Go dependency missing") pkgs.tinygo.runtimeDeps;
+  go = lib.findFirst isGo (throw "TinyGo Go dependency missing") pkgs.tinygo.runtimeDeps;
 in
 {
   # This value determines the Home Manager release that your configuration is
@@ -31,7 +31,7 @@ in
     fastfetch
     fzf
     git
-    tinygoGo
+    go
     gopls
     google-cloud-sdk
     jq
