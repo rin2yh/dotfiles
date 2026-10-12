@@ -95,7 +95,6 @@ vim.lsp.enable({
   'gopls',
   'lua_ls',
   'nixd',
-  'ocamllsp',
   'rust_analyzer',
   'terraformls',
   'ts_ls',

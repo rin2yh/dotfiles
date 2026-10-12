@@ -8,9 +8,6 @@
 
 let
   dotfiles = "${dotfilesDir}/home";
-  # Use the same Go that the pinned TinyGo package uses at runtime.
-  isGo = pkg: (pkg.pname or "") == "go";
-  go = lib.findFirst isGo (throw "TinyGo Go dependency missing") pkgs.tinygo.runtimeDeps;
 in
 {
   # This value determines the Home Manager release that your configuration is
@@ -44,7 +41,6 @@ in
     shfmt
     starship
     terraform-ls
-    tinygo
     tree
     tree-sitter
     typescript
