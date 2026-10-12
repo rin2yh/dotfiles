@@ -42,7 +42,6 @@ safely('later', function()
       local opts = { buffer = args.buf, silent = true }
       local is_float = vim.api.nvim_win_get_config(0).relative ~= ''
       if not is_float then
-        vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
         vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
       end
       vim.keymap.set('t', '<C-h>', [[<cmd>wincmd h<cr>]], opts)

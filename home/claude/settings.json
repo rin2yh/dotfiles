@@ -140,7 +140,8 @@
     "typescript-lsp@claude-plugins-official": true,
     "general-skills@rin2yh-plugins": true,
     "development-skills@rin2yh-plugins": true,
-    "meta-skills@rin2yh-plugins": true
+    "meta-skills@rin2yh-plugins": true,
+    "document-skills@anthropic-agent-skills": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
