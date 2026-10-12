@@ -2,13 +2,11 @@
   config,
   lib,
   pkgs,
+  dotfilesDir,
   ...
 }:
 
 let
-  # home.username / home.homeDirectory are provided by the nix-darwin module
-  # (from users.users.<name>), so the home directory is never hardcoded here.
-  dotfilesDir = "${config.home.homeDirectory}/workspace/dotfiles";
   dotfiles = "${dotfilesDir}/home";
 in
 {
@@ -31,6 +29,7 @@ in
     go
     gopls
     google-cloud-sdk
+    jq
     lazydocker
     lazygit
     lua-language-server

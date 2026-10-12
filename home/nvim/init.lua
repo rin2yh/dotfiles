@@ -10,9 +10,6 @@ vim.pack.add({ 'https://github.com/echasnovski/mini.nvim' })
 require('mini.misc').setup()
 
 -- keymaps
--- jkで抜ける系
-vim.keymap.set("i", "jk", "<Esc>")
-vim.keymap.set("v", "jk", "<Esc>")
 
 -- /検索のハイライトを消す
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { silent = true })

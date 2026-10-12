@@ -6,6 +6,11 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NIX="/nix/var/nix/profiles/default/bin/nix"
 
+if ! xcode-select -p >/dev/null 2>&1; then
+  echo "Command Line Tools are required for Git and Homebrew." >&2
+  echo "Run 'xcode-select --install', finish the installation, then rerun ./bootstrap.sh." >&2
+  exit 1
+fi
 echo "==> Initializing git submodules..."
 git -C "$DOTFILES_DIR" submodule update --init --recursive --force
 
@@ -19,6 +24,7 @@ cat <<EOF
 
 ==> Next steps:
     cd "$DOTFILES_DIR"
-    nix run .#darwin-switch   # Apply nix-darwin + home-manager configuration
+    exec zsh -l              # Reload PATH after installing Nix
+    nix run .#switch          # Apply nix-darwin + home-manager configuration
     nix run .#tools           # Install development tools (mise install)
 EOF
