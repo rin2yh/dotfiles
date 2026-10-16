@@ -33,6 +33,9 @@ alias n="nvim ."
 alias lg="lazygit"
 alias ld="lazydocker"
 
+# Vi keybindings
+bindkey -v
+
 # load completion
 autoload -U compinit
 compinit -ui
