@@ -34,7 +34,7 @@ jobs:
         run: nix run nixpkgs#nixfmt -- --check $(git ls-files '*.nix')
 
   build:
-    name: build darwinConfiguration
+    name: Build darwinConfiguration
     runs-on: macos-26
     timeout-minutes: 60
     permissions:
@@ -50,6 +50,21 @@ jobs:
 
       - name: Build darwin system
         run: nix build --print-build-logs '.#darwinConfigurations.default.system'
+
+  mise-tools:
+    name: Install changed mise tools
+    runs-on: macos-26
+    timeout-minutes: 60
+    permissions:
+      contents: read # checkout のみ
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
 
       - name: Install changed pinned mise tools
         run: |
