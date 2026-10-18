@@ -21,27 +21,41 @@
       "managerFilePatterns": [
         "/^home\\/nvim\\/nvim-pack-lock\\.json$/"
       ],
+      "datasourceTemplate": "git-refs",
+      "packageNameTemplate": "https://github.com/{{{packageName}}}",
       "matchStrings": [
-        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:kdheepak/lazygit\\.nvim|nwiizo/marp\\.nvim|nvim-mini/mini\\.nvim|nvim-treesitter/nvim-treesitter|sago35/tinygo\\.vim|akinsho/toggleterm\\.nvim|folke/tokyonight\\.nvim|folke/ts-comments\\.nvim))\"\\s*\\}"
+        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>[^\"]+)\"\\s*\\}"
       ],
       "currentValueTemplate": "main",
-      "datasourceTemplate": "git-refs",
-      "packageNameTemplate": "https://github.com/{{{packageName}}}"
+      "depTypeTemplate": "vim-pack-default"
     },
     {
       "customType": "regex",
       "managerFilePatterns": [
         "/^home\\/nvim\\/nvim-pack-lock\\.json$/"
       ],
+      "datasourceTemplate": "git-refs",
+      "packageNameTemplate": "https://github.com/{{{packageName}}}",
       "matchStrings": [
         "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:neovim/nvim-lspconfig|vim-jp/vimdoc-ja))\"\\s*\\}"
       ],
       "currentValueTemplate": "master",
-      "datasourceTemplate": "git-refs",
-      "packageNameTemplate": "https://github.com/{{{packageName}}}"
+      "depTypeTemplate": "vim-pack-master"
     }
   ],
   "nix": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchDepTypes": [
+        "vim-pack-default"
+      ],
+      "matchPackageNames": [
+        "https://github.com/neovim/nvim-lspconfig",
+        "https://github.com/vim-jp/vimdoc-ja"
+      ],
+      "enabled": false
+    }
+  ]
 }
