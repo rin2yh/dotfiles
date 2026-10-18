@@ -22,7 +22,7 @@
         "/^home\\/nvim\\/nvim-pack-lock\\.json$/"
       ],
       "matchStrings": [
-        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:kdheepak/lazygit\\.nvim|nwiizo/marp\\.nvim|echasnovski/mini\\.nvim|nvim-treesitter/nvim-treesitter|sago35/tinygo\\.vim|akinsho/toggleterm\\.nvim|folke/tokyonight\\.nvim|folke/ts-comments\\.nvim))\"\\s*\\}"
+        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:kdheepak/lazygit\\.nvim|nwiizo/marp\\.nvim|nvim-mini/mini\\.nvim|nvim-treesitter/nvim-treesitter|sago35/tinygo\\.vim|akinsho/toggleterm\\.nvim|folke/tokyonight\\.nvim|folke/ts-comments\\.nvim))\"\\s*\\}"
       ],
       "currentValueTemplate": "main",
       "datasourceTemplate": "git-refs",
