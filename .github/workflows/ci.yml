@@ -68,7 +68,7 @@ jobs:
 
       - name: Install changed pinned mise tools
         run: |
-          MISE_STORE_PATH="$(nix eval --raw .#darwinConfigurations.default.pkgs.mise.outPath)"
+          MISE_STORE_PATH="$(nix build --no-link --print-out-paths '.#darwinConfigurations.default.pkgs.mise')"
           export MISE_BIN="$MISE_STORE_PATH/bin/mise"
           python3 - <<'PY'
           import re
