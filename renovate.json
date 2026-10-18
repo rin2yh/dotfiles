@@ -8,6 +8,22 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 10,
   "automerge": false,
+  "automergeType": "pr",
+  "platformAutomerge": false,
+  "packageRules": [
+    {
+      "description": "Automerge mise CLI patch updates after a timestamped seven-day release age",
+      "matchManagers": ["mise"],
+      "matchDepTypes": ["tools"],
+      "matchCurrentValue": "/^v?\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$/",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "ignoreTests": false,
+      "internalChecksAsSuccess": false,
+      "minimumReleaseAge": "7 days",
+      "minimumReleaseAgeBehaviour": "timestamp-required"
+    }
+  ],
   "git-submodules": {
     "enabled": true
   },
@@ -28,6 +44,6 @@
   },
   "baseBranchPatterns": [
     "main",
-    "business"
+    "for-business"
   ]
 }
