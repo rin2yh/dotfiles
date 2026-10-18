@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "minimumReleaseAge": "7 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "automerge": false,
+  "git-submodules": {
+    "enabled": true
+  },
+  "customManagers": [
+    {
+      "customType": "jsonata",
+      "fileFormat": "json",
+      "managerFilePatterns": [
+        "/^home\\/nvim\\/nvim-pack-lock\\.json$/"
+      ],
+      "matchStrings": [
+        "$each(plugins, function($v, $k) { { \"depName\": $k, \"packageName\": $substringAfter($v.src, \"https://github.com/\"), \"currentValue\": ($substringAfter($v.src, \"https://github.com/\") = \"neovim/nvim-lspconfig\" or $substringAfter($v.src, \"https://github.com/\") = \"vim-jp/vimdoc-ja\") ? \"master\" : \"main\", \"currentDigest\": $v.rev, \"datasource\": \"github-digest\", \"versioning\": \"exact\" } })"
+      ]
+    }
+  ],
+  "nix": {
+    "enabled": true
+  },
+  "baseBranchPatterns": [
+    "main",
+    "business"
+  ]
+}
