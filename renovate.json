@@ -20,8 +20,7 @@
       ],
       "matchStrings": [
         "$each(plugins, function($v, $k) { { \"depName\": $k, \"packageName\": $substringAfter($v.src, \"https://github.com/\"), \"currentValue\": ($substringAfter($v.src, \"https://github.com/\") = \"neovim/nvim-lspconfig\" or $substringAfter($v.src, \"https://github.com/\") = \"vim-jp/vimdoc-ja\") ? \"master\" : \"main\", \"currentDigest\": $v.rev, \"datasource\": \"github-digest\", \"versioning\": \"exact\" } })"
-      ],
-      "autoReplaceStringTemplate": "{{{newDigest}}}"
+      ]
     }
   ],
   "nix": {
