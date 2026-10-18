@@ -43,14 +43,42 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+          fetch-depth: 2
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
 
-      - name: Check mise tool versions
-        run: nix run nixpkgs#mise -- install --dry-run
-        env:
-          MISE_CONFIG_FILE: home/mise/config.toml
-
       - name: Build darwin system
         run: nix build --print-build-logs '.#darwinConfigurations.default.system'
+
+      - name: Install changed pinned mise tools
+        run: |
+          MISE_STORE_PATH="$(nix eval --raw .#darwinConfigurations.default.pkgs.mise.outPath)"
+          export MISE_BIN="$MISE_STORE_PATH/bin/mise"
+          python3 - <<'PY'
+          import re
+          import subprocess
+          import tomllib
+          import os
+
+          before = tomllib.loads(subprocess.check_output(
+              ["git", "show", "HEAD^1:home/mise/config.toml"], text=True
+          ))["tools"]
+          with open("home/mise/config.toml", "rb") as config_file:
+              after = tomllib.load(config_file)["tools"]
+
+          fixed_semver = re.compile(r"^v?\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
+          changed = [
+              (tool, version)
+              for tool, version in after.items()
+              if before.get(tool) != version
+              and isinstance(version, str)
+              and fixed_semver.fullmatch(version)
+          ]
+
+          if not changed:
+              print("No changed pinned mise tools to install.")
+          for tool, version in changed:
+              print(f"Installing {tool}@{version}", flush=True)
+              subprocess.run([os.environ["MISE_BIN"], "install", f"{tool}@{version}"], check=True)
+          PY
