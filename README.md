@@ -58,6 +58,4 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
     * `flake.lock` は `nix flake update` 後に実行
 * Neovim plugins
   * `vim.pack` で管理し、`home/nvim/nvim-pack-lock.json` に revision を記録
-  * GitHub Actions が毎月1日に更新し、差分がある場合のみ PR を作成
-  * 手動更新は `Update Neovim plugins` の `workflow_dispatch`
   * 更新取り込み後は `:restart`
