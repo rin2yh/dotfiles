@@ -24,10 +24,10 @@
       "datasourceTemplate": "git-refs",
       "packageNameTemplate": "https://github.com/{{{packageName}}}",
       "matchStrings": [
-        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>[^\"]+)\"\\s*\\}"
+        "\"(?<depName>[^\\\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:[^nv\"][^\"]*|(?:n[^e\"][^\"]*|ne[^o\"][^\"]*|neo[^v\"][^\"]*|neov[^i\"][^\"]*|neovi[^m\"][^\"]*|neovim[^/\"][^\"]*|neovim/[^n\"][^\"]*|neovim/n[^v\"][^\"]*|neovim/nv[^i\"][^\"]*|neovim/nvi[^m\"][^\"]*|neovim/nvim[^-\"][^\"]*|neovim/nvim-[^l\"][^\"]*|neovim/nvim-l[^s\"][^\"]*|neovim/nvim-ls[^p\"][^\"]*|neovim/nvim-lsp[^c\"][^\"]*|neovim/nvim-lspc[^o\"][^\"]*|neovim/nvim-lspco[^n\"][^\"]*|neovim/nvim-lspcon[^f\"][^\"]*|neovim/nvim-lspconf[^i\"][^\"]*|neovim/nvim-lspconfi[^g\"][^\"]*|neovim/nvim-lspconfig[^\"]+)|(?:v[^i\"][^\"]*|vi[^m\"][^\"]*|vim[^-\"][^\"]*|vim-[^j\"][^\"]*|vim-j[^p\"][^\"]*|vim-jp[^/\"][^\"]*|vim-jp/[^v\"][^\"]*|vim-jp/v[^i\"][^\"]*|vim-jp/vi[^m\"][^\"]*|vim-jp/vim[^d\"][^\"]*|vim-jp/vimd[^o\"][^\"]*|vim-jp/vimdo[^c\"][^\"]*|vim-jp/vimdoc[^-\"][^\"]*|vim-jp/vimdoc-[^j\"][^\"]*|vim-jp/vimdoc-j[^a\"][^\"]*|vim-jp/vimdoc-ja[^\"]+)))\"\\s*\\}"
       ],
       "currentValueTemplate": "main",
-      "depTypeTemplate": "vim-pack-default"
+      "depTypeTemplate": "vim-pack-main"
     },
     {
       "customType": "regex",
@@ -37,7 +37,7 @@
       "datasourceTemplate": "git-refs",
       "packageNameTemplate": "https://github.com/{{{packageName}}}",
       "matchStrings": [
-        "\"(?<depName>[^\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:neovim/nvim-lspconfig|vim-jp/vimdoc-ja))\"\\s*\\}"
+        "\"(?<depName>[^\\\"]+)\":\\s*\\{\\s*\"rev\":\\s*\"(?<currentDigest>[a-f0-9]{40})\",\\s*\"src\":\\s*\"https://github\\.com/(?<packageName>(?:neovim/nvim-lspconfig|vim-jp/vimdoc-ja))\"\\s*\\}"
       ],
       "currentValueTemplate": "master",
       "depTypeTemplate": "vim-pack-master"
@@ -45,17 +45,5 @@
   ],
   "nix": {
     "enabled": true
-  },
-  "packageRules": [
-    {
-      "matchDepTypes": [
-        "vim-pack-default"
-      ],
-      "matchPackageNames": [
-        "https://github.com/neovim/nvim-lspconfig",
-        "https://github.com/vim-jp/vimdoc-ja"
-      ],
-      "enabled": false
-    }
-  ]
+  }
 }
