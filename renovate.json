@@ -12,10 +12,13 @@
   "platformAutomerge": false,
   "packageRules": [
     {
-      "description": "Automerge npm patch updates after a timestamped seven-day release age",
-      "matchDatasources": ["npm"],
+      "description": "Automerge mise CLI patch updates after a timestamped seven-day release age",
+      "matchManagers": ["mise"],
+      "matchDepTypes": ["tools"],
       "matchUpdateTypes": ["patch"],
       "automerge": true,
+      "ignoreTests": false,
+      "internalChecksAsSuccess": false,
       "minimumReleaseAge": "7 days",
       "minimumReleaseAgeBehaviour": "timestamp-required"
     }
