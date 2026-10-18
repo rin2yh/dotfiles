@@ -6,6 +6,7 @@ on:
     paths:
       - "**/*.nix"
       - "flake.lock"
+      - "home/mise/config.toml"
       - ".github/workflows/ci.yml"
 
 permissions: {}
@@ -45,6 +46,11 @@ jobs:
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      - name: Check mise tool versions
+        run: nix run nixpkgs#mise -- install --dry-run
+        env:
+          MISE_CONFIG_FILE: home/mise/config.toml
 
       - name: Build darwin system
         run: nix build --print-build-logs '.#darwinConfigurations.default.system'
