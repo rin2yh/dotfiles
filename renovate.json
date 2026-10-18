@@ -8,6 +8,18 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 10,
   "automerge": false,
+  "automergeType": "pr",
+  "platformAutomerge": false,
+  "packageRules": [
+    {
+      "description": "Automerge npm patch updates after a timestamped seven-day release age",
+      "matchDatasources": ["npm"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "minimumReleaseAge": "7 days",
+      "minimumReleaseAgeBehaviour": "timestamp-required"
+    }
+  ],
   "git-submodules": {
     "enabled": true
   },
@@ -28,6 +40,6 @@
   },
   "baseBranchPatterns": [
     "main",
-    "business"
+    "for-business"
   ]
 }
