@@ -72,7 +72,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -141,7 +141,9 @@
     "general-skills@rin2yh-plugins": true,
     "development-skills@rin2yh-plugins": true,
     "meta-skills@rin2yh-plugins": true,
-    "document-skills@anthropic-agent-skills": true
+    "document-skills@anthropic-agent-skills": true,
+    "nvidia-blog-review@3shake-plugins": true,
+    "skill-spector@3shake-plugins": true
   },
   "extraKnownMarketplaces": {
     "3shake-plugins": {
@@ -170,6 +172,7 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
+  "preferredNotifChannel": "ghostty",
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
