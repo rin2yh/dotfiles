@@ -1,6 +1,6 @@
 [tools]
 "aqua:anthropics/claude-code" = "latest"
-"aqua:cli/cli" = "2.87.3"
+"aqua:cli/cli" = "2.102.0"
 "aqua:marp-team/marp-cli" = "4.5.1"
 "github:k1LoW/mo" = "v1.6.9"
 node = "latest"
