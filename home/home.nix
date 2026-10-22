@@ -8,6 +8,12 @@
 
 let
   dotfiles = "${dotfilesDir}/home";
+  go = pkgs.go;
+  # Nixpkgs' default Go builder can lag behind point security releases.
+  buildGoModule = pkgs.buildGoModule.override { inherit go; };
+  lazydocker = pkgs.lazydocker.override { inherit buildGoModule; };
+  lazygit = pkgs.lazygit.override { inherit buildGoModule; };
+  terraform-ls = pkgs.terraform-ls.override { inherit buildGoModule; };
 in
 {
   # This value determines the Home Manager release that your configuration is
