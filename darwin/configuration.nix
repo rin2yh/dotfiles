@@ -9,6 +9,10 @@
     ./homebrew.nix
   ];
 
+  security.pki.caCertificateBlacklist = [
+    "emSign ECC Root CA - G3"
+  ];
+
   system = {
     stateVersion = 6;
     configurationRevision = self.rev or self.dirtyRev or null;
