@@ -11,6 +11,11 @@ let
   # Use the same Go that the pinned TinyGo package uses at runtime.
   isGo = pkg: (pkg.pname or "") == "go";
   go = lib.findFirst isGo (throw "TinyGo Go dependency missing") pkgs.tinygo.runtimeDeps;
+  # Nixpkgs' default Go builder can lag behind point security releases.
+  buildGoModule = pkgs.buildGoModule.override { inherit go; };
+  lazydocker = pkgs.lazydocker.override { inherit buildGoModule; };
+  lazygit = pkgs.lazygit.override { inherit buildGoModule; };
+  terraform-ls = pkgs.terraform-ls.override { inherit buildGoModule; };
 in
 {
   # This value determines the Home Manager release that your configuration is
