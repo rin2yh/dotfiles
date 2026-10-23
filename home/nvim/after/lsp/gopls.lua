@@ -1,32 +1,28 @@
 local M = {}
 
--- mise の go shim は GOROOT env を無視するため、直接の go binary を PATH 先頭に
--- 置いてから gopls を起動する（gopls 内部の `go env` に TinyGo overlay を反映）。
-local go_dir = vim.fs.dirname(vim.trim(vim.fn.system('mise which go')))
-local prefix = { 'env', 'PATH=' .. go_dir .. ':' .. vim.env.PATH }
-local cmd_lazy = vim.list_extend(vim.deepcopy(prefix), { 'gopls-lazy' })
-M.cmd = cmd_lazy
+-- golance は `go list` を使うため、Go と golance の実体を PATH shim 経由にしない。
+local function mise_which(tool)
+  local path = vim.trim(vim.fn.system({ 'mise', 'which', tool }))
+  if vim.v.shell_error == 0 and path ~= '' then return path end
+  return vim.fn.exepath(tool)
+end
 
-M.settings = {
-  gopls = {
-    analyses = {
-      unusedparams = true,
-      shadow = true,
-    },
-    staticcheck = true,
-    gofumpt = true,
-    completeUnimported = true,
-    semanticTokens = true,
-    hints = {
-      assignVariableTypes = true,
-      compositeLiteralFields = true,
-      compositeLiteralTypes = true,
-      constantValues = true,
-      functionTypeParameters = true,
-      parameterNames = true,
-      rangeVariableTypes = true,
-    },
-  }
+local go_bin = mise_which('go')
+local golance_bin = mise_which('golance')
+local go_dir = go_bin ~= '' and vim.fs.dirname(go_bin) or ''
+local path = go_dir ~= '' and (go_dir .. ':' .. vim.env.PATH) or vim.env.PATH
+M.cmd = { 'env', 'PATH=' .. path, golance_bin ~= '' and golance_bin or 'golance' }
+
+M.init_options = {
+  hints = {
+    assignVariableTypes = true,
+    compositeLiteralFields = true,
+    compositeLiteralTypes = true,
+    constantValues = true,
+    functionTypeParameters = true,
+    parameterNames = true,
+    rangeVariableTypes = true,
+  },
 }
 
 return M

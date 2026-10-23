@@ -1,12 +1,12 @@
 [tools]
 "aqua:anthropics/claude-code" = "latest"
 "aqua:marp-team/marp-cli" = "4.5.1"
-# Build Go CLIs from source with the fixed Go toolchain. mo's release embeds
-# assets omitted from the module archive; its HTTP traffic is loopback-only.
+# Use mo's GitHub release because its module archive omits embedded assets.
+# Its HTTP traffic is loopback-only.
 "github:k1LoW/mo" = "v1.6.9"
-"go:github.com/cli/cli/v2/cmd/gh" = { version = "v2.102.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
-"go:github.com/sago35/tinygo-autocmpl" = { version = "v0.8.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
-"go:github.com/sivchari/gopls-lazy/cmd/gopls-lazy" = { version = "v0.4.1", install_env = { GOTOOLCHAIN = "go1.27.3" } }
+"github:cli/cli" = "2.102.0"
+"github:sago35/tinygo-autocmpl" = "0.8.0"
+"github:sivchari/golance" = "0.7.23"
 node = "latest"
 "npm:ccusage" = "latest"
 "npm:textlint" = "15.8.0"
