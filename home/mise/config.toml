@@ -1,7 +1,8 @@
 [tools]
 "aqua:anthropics/claude-code" = "latest"
 "aqua:marp-team/marp-cli" = "4.5.1"
-"go:github.com/cli/cli/v2/cmd/gh" = { version = "v2.102.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
+"github:cli/cli" = "2.102.0"
+"github:sivchari/golance" = "0.7.23"
 "github:k1LoW/mo" = "v1.6.9"
 node = "latest"
 "npm:ccusage" = "latest"
