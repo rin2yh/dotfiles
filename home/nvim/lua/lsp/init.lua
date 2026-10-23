@@ -49,6 +49,12 @@ local function format_buffer(bufnr)
 
   local formatted = vim.split(result.stdout, '\n', { trimempty = false })
   if formatted[#formatted] == '' then table.remove(formatted) end
+  -- gofumpt retains trailing empty lines in some blocks, such as for loops.
+  for i = #formatted - 1, 1, -1 do
+    if formatted[i]:match('^%s*$') and formatted[i + 1]:match('^%s*}') then
+      table.remove(formatted, i)
+    end
+  end
   if not vim.deep_equal(lines, formatted) then
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
   end
