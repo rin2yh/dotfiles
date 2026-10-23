@@ -49,7 +49,9 @@ local function format_buffer(bufnr)
 
   local formatted = vim.split(result.stdout, '\n', { trimempty = false })
   if formatted[#formatted] == '' then table.remove(formatted) end
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
+  if not vim.deep_equal(lines, formatted) then
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
+  end
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
