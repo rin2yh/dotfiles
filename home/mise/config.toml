@@ -7,6 +7,7 @@
 "go:github.com/cli/cli/v2/cmd/gh" = { version = "v2.102.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
 "go:github.com/sago35/tinygo-autocmpl" = { version = "v0.8.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
 "go:github.com/sivchari/golance/cmd/golance" = { version = "v0.7.23", install_env = { GOTOOLCHAIN = "go1.27.3" } }
+"go:mvdan.cc/gofumpt" = { version = "v0.11.0", install_env = { GOTOOLCHAIN = "go1.27.3" } }
 node = "latest"
 "npm:ccusage" = "latest"
 "npm:textlint" = "15.8.0"
