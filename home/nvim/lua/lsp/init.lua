@@ -25,41 +25,6 @@ end, { desc = 'Restart all LSP clients' })
 local augroup = vim.api.nvim_create_augroup('lsp/init.lua', {})
 
 -- format
-local function mise_which(tool)
-  local path = vim.trim(vim.fn.system({ 'mise', 'which', tool }))
-  if vim.v.shell_error == 0 and path ~= '' then return path end
-  return vim.fn.exepath(tool)
-end
-
-local function format_buffer(bufnr)
-  vim.lsp.buf.format({ bufnr = bufnr })
-  if vim.bo[bufnr].filetype ~= 'go' then return end
-
-  local gofumpt = mise_which('gofumpt')
-  if gofumpt == '' then return end
-
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local text = table.concat(lines, '\n')
-  if vim.bo[bufnr].endofline then text = text .. '\n' end
-  local result = vim.system({ gofumpt }, { stdin = text, text = true }):wait()
-  if result.code ~= 0 then
-    vim.notify(result.stderr, vim.log.levels.ERROR, { title = 'gofumpt' })
-    return
-  end
-
-  local formatted = vim.split(result.stdout, '\n', { trimempty = false })
-  if formatted[#formatted] == '' then table.remove(formatted) end
-  -- gofumpt retains trailing empty lines in some blocks, such as for loops.
-  for i = #formatted - 1, 1, -1 do
-    if formatted[i]:match('^%s*$') and formatted[i + 1]:match('^%s*}') then
-      table.remove(formatted, i)
-    end
-  end
-  if not vim.deep_equal(lines, formatted) then
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
-  end
-end
-
 vim.api.nvim_create_autocmd('LspAttach', {
   group = augroup,
   callback = function(args)
@@ -68,7 +33,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, { buffer = args.buf, desc = 'vim.lsp.buf.definition()' })
 
     vim.keymap.set('n', '<M-f>', function()
-      format_buffer(args.buf)
+      vim.lsp.buf.format({ bufnr = args.buf })
     end, { buffer = args.buf, desc = 'Format buffer' })
 
     vim.keymap.set('n', '<space>w', vim.lsp.buf.code_action,
