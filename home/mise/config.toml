@@ -3,7 +3,7 @@
 "aqua:marp-team/marp-cli" = "4.5.1"
 # Use mo's GitHub release because its module archive omits embedded assets.
 # Its HTTP traffic is loopback-only.
-"github:k1LoW/mo" = "v1.6.9"
+"github:k1LoW/mo" = "v1.7.0"
 "github:cli/cli" = "2.102.1"
 "github:sago35/tinygo-autocmpl" = "0.8.0"
 "github:sivchari/golance" = "0.7.23"
