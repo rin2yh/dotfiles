@@ -61,6 +61,11 @@ in
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
+    # This config applies to the curl CLI only; Git, gh, and other TLS clients use their own settings.
+    ".curlrc".text = ''
+      cacert = "/etc/ssl/certs/ca-certificates.crt"
+    '';
+
     ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/git/.gitconfig";
 
     ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/zsh/.zshrc";
