@@ -37,7 +37,7 @@
       "src": "https://github.com/folke/ts-comments.nvim"
     },
     "vimdoc-ja": {
-      "rev": "ee16ecb8f802287302ff0317e52e27c274c16194",
+      "rev": "b6f393e5e3e11ea3a088ef47cbaaa46e02a69af7",
       "src": "https://github.com/vim-jp/vimdoc-ja"
     }
   }
