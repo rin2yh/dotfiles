@@ -1,19 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC=${1:?usage: claude-code-notifier.sh <notify.applescript>}
-APP="$HOME/Applications/ClaudeCodeNotifier.app"
-ICON="/Applications/Claude.app/Contents/Resources/electron.icns"
-
-if [[ ! -f "$ICON" || ! -f "$SRC" ]]; then
-  exit 0
-fi
-
-if [[ -x "$APP/Contents/MacOS/applet" ]] \
-  && [[ ! "$SRC" -nt "$APP/Contents/MacOS/applet" ]] \
-  && [[ ! "$ICON" -nt "$APP/Contents/Resources/applet.icns" ]]; then
-  exit 0
-fi
+APP=${1:?usage: claude-code-notifier.sh <app> <icon> <source>}
+ICON=${2:?usage: claude-code-notifier.sh <app> <icon> <source>}
+SRC=${3:?usage: claude-code-notifier.sh <app> <icon> <source>}
 
 mkdir -p "$HOME/Applications"
 rm -rf "$APP"

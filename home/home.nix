@@ -115,7 +115,17 @@ in
   };
 
   home.activation.claudeCodeNotifier = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    ${pkgs.bash}/bin/bash "${dotfiles}/scripts/claude-code-notifier.sh" "${dotfiles}/claude/hooks/notify.applescript"
+    APP="$HOME/Applications/ClaudeCodeNotifier.app"
+    ICON="/Applications/Claude.app/Contents/Resources/electron.icns"
+    SRC="${dotfiles}/claude/hooks/notify.applescript"
+
+    if [ -f "$ICON" ] && [ -f "$SRC" ]; then
+      if [ ! -x "$APP/Contents/MacOS/applet" ] \
+         || [ "$SRC" -nt "$APP/Contents/MacOS/applet" ] \
+         || [ "$ICON" -nt "$APP/Contents/Resources/applet.icns" ]; then
+        ${pkgs.bash}/bin/bash "${dotfiles}/scripts/claude-code-notifier.sh" "$APP" "$ICON" "$SRC"
+      fi
+    fi
   '';
 
   programs.nh = {
