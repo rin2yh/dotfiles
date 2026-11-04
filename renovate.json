@@ -12,6 +12,11 @@
   "platformAutomerge": false,
   "packageRules": [
     {
+      "description": "GitHub Actions lockfile updates are handled manually",
+      "matchManagers": ["github-actions"],
+      "enabled": false
+    },
+    {
       "description": "Automerge mise CLI patch updates after a timestamped seven-day release age",
       "matchManagers": ["mise"],
       "matchDepTypes": ["tools"],

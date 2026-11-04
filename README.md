@@ -45,6 +45,18 @@ nix run .#clean           # nh clean all --keep-since 30d --keep-one
 └── home/           # home-manager 配下の各ツール設定
 ```
 
+## GitHub Actions
+
+Workflow の Action はバージョンタグで指定し、`.github/workflows/actions.lock` で検証済みコミットに固定します。`uses:` を追加・変更したら、GitHub CLI 拡張をインストールして lockfile を更新・検証します。
+
+```bash
+gh extension install github/gh-actions-lock
+gh actions-lock
+gh actions-lock --verify
+```
+
+Renovate の `github-actions` manager は workflow の参照だけを更新し、`actions.lock` を再生成しないため無効にしています。Action の更新は `main` と `for-business` の両方で手動で行い、workflow と lockfile を同じ変更に含めてください。
+
 ## Notes
 
 * `home/` 配下は `mkOutOfStoreSymlink` で配置
