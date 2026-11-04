@@ -7,6 +7,7 @@ on:
       - "**/*.nix"
       - "flake.lock"
       - "home/mise/config.toml"
+      - ".github/workflows/actions.lock"
       - ".github/workflows/ci.yml"
 
 permissions: {}
@@ -23,12 +24,22 @@ jobs:
     permissions:
       contents: read # checkout のみ
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
+      - name: Install gh-actions-lock
+        run: gh extension install github/gh-actions-lock --pin v0.4.1
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Verify workflow dependency lockfile
+        run: gh actions-lock --verify
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+        uses: DeterminateSystems/nix-installer-action@v23
 
       - name: Check formatting
         run: nix run nixpkgs#nixfmt -- --check $(git ls-files '*.nix')
@@ -40,13 +51,13 @@ jobs:
     permissions:
       contents: read # checkout のみ
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 2
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+        uses: DeterminateSystems/nix-installer-action@v23
 
       - name: Build darwin system
         run: nix build --print-build-logs '.#darwinConfigurations.default.system'
@@ -58,13 +69,13 @@ jobs:
     permissions:
       contents: read # checkout のみ
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 2
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+        uses: DeterminateSystems/nix-installer-action@v23
 
       - name: Install changed pinned mise tools
         run: |
