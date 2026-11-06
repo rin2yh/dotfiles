@@ -13,6 +13,6 @@ require('config.nvim')
 require('config.mini')
 
 -- プラグイン設定は対象名で読み込む。
-for _, name in ipairs({ 'tokyonight', 'treesitter', 'ts-comments', 'marp', 'toggleterm', 'lsp' }) do
+for _, name in ipairs({ 'tokyonight', 'vimdoc-ja', 'treesitter', 'ts-comments', 'marp', 'toggleterm', 'lsp' }) do
   require('config.' .. name)
 end
