@@ -1,0 +1,52 @@
+local safely = MiniMisc.safely
+
+-- treesitter
+safely('now', function()
+  -- mini.deps の hooks.post_checkout 相当: install/update 時に parser を更新
+  vim.api.nvim_create_autocmd('PackChanged', {
+    callback = function(ev)
+      if ev.data.spec.name == 'nvim-treesitter'
+          and (ev.data.kind == 'install' or ev.data.kind == 'update') then
+        vim.cmd.TSUpdate()
+      end
+    end,
+  })
+  vim.pack.add({ 'https://github.com/nvim-treesitter/nvim-treesitter' })
+  require('nvim-treesitter').install({
+    'lua', 'vim', 'markdown', 'markdown_inline', 'bash', 'yaml', 'zsh',
+    'tsx', 'typescript', 'html',
+    'go', 'ocaml', 'ocaml_interface',
+    'terraform', 'dockerfile', 'nix'
+  })
+  -- tree-sitterとfiletypeが違う罠
+  -- tsx:typescriptreact, bash:sh
+  local reinstalled = {}
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = {
+      'lua', 'vim', 'markdown', 'sh', 'yaml', 'zsh',
+      'typescriptreact', 'typescript', 'html',
+      'go',
+      'terraform', 'dockerfile', 'nix'
+    },
+    callback = function(ev)
+      if pcall(vim.treesitter.start, ev.buf) then return end
+      local ft = vim.bo[ev.buf].filetype
+      local lang = vim.treesitter.language.get_lang(ft) or ft
+      if reinstalled[lang] then return end
+      reinstalled[lang] = true
+      vim.notify(('treesitter %s: reinstalling parser...'):format(lang), vim.log.levels.WARN)
+      require('nvim-treesitter').install({ lang }, { force = true }):await(function()
+        vim.schedule(function() pcall(vim.treesitter.start, ev.buf) end)
+      end)
+    end,
+  })
+  -- ocaml は上のループに入れられない: .ml と .mli は同じ filetype 'ocaml' なのに
+  -- parser は別 (signature 側は ocaml_interface) で、filetype からは判別できないため。
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'ocaml',
+    callback = function(ev)
+      local ext = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ':e')
+      pcall(vim.treesitter.start, ev.buf, ext == 'mli' and 'ocaml_interface' or 'ocaml')
+    end,
+  })
+end)

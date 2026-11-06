@@ -2,6 +2,8 @@ vim.pack.add({
   'https://github.com/neovim/nvim-lspconfig',
 })
 
+require('config.tinygo')
+
 vim.diagnostic.config({
   virtual_text = true,
 })
@@ -52,8 +54,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-require('lsp.tinygo')
-
 vim.lsp.enable({
   'cssls',
   'emmet_language_server',
