@@ -1,4 +1,5 @@
 -- editor options
+vim.o.winbar = " %m %f "
 vim.opt.number = true
 vim.cmd('syntax enable')
 vim.opt.clipboard:append('unnamedplus,unnamed')
