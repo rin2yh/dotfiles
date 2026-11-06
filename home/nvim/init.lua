@@ -9,42 +9,10 @@ vim.pack.add({ 'https://github.com/echasnovski/mini.nvim' })
 -- 他モジュールを読み込む前にここでセットアップしておく。
 require('mini.misc').setup()
 
--- keymaps
+require('config.nvim')
+require('config.mini')
 
--- /検索のハイライトを消す
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { silent = true })
-
--- 一括置換 :s<Space>
-vim.keymap.set('ca', 's', function()
-  if vim.fn.getcmdtype() == ':' and vim.fn.getcmdline() == 's' then
-    return '%s///g<Left><Left><Left>'
-  end
-  return 's'
-end, { expr = true })
-
-require('appearance')
-require('edit')
-require('completion')
-require('nav')
-require('git')
-require('markdown')
-require('terminal')
-require('lsp')
-
-vim.api.nvim_create_user_command('PackUpdate', function(ctx)
-  vim.pack.update(#ctx.fargs > 0 and ctx.fargs or nil)
-end, {
-  nargs = '*',
-  -- info = false で git のブランチ・タグ取得を省く（有効にすると補完が 70ms 遅くなる）
-  complete = function(arg)
-    return vim.iter(vim.pack.get(nil, { info = false }))
-      :map(function(plugin)
-        return plugin.spec.name
-      end)
-      :filter(function(name)
-        return vim.startswith(name, arg)
-      end)
-      :totable()
-  end,
-  desc = 'Update vim.pack plugins (no args = all)',
-})
+-- プラグイン設定は対象名で読み込む。
+for _, name in ipairs({ 'tokyonight', 'vimdoc-ja', 'treesitter', 'ts-comments', 'marp', 'toggleterm', 'lsp' }) do
+  require('config.' .. name)
+end
