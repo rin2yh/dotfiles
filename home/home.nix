@@ -115,7 +115,7 @@ in
   };
 
   home.activation.claudeCodeNotifier = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    ${pkgs.bash}/bin/bash "${dotfiles}/scripts/claude-code-notifier.sh" "${dotfiles}/claude/hooks/notify.applescript"
+    ${pkgs.bash}/bin/bash "${dotfiles}/claude/setup-notifier.sh" "${dotfiles}/claude/hooks/notify.applescript"
   '';
 
   programs.nh = {
