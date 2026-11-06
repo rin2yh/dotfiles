@@ -2,6 +2,8 @@ vim.pack.add({
   'https://github.com/neovim/nvim-lspconfig',
 })
 
+require('config.tinygo')
+
 vim.diagnostic.config({
   virtual_text = true,
 })
@@ -62,5 +64,3 @@ vim.lsp.enable({
   'terraformls',
   'ts_ls',
 })
-
-require('config.tinygo')
