@@ -52,8 +52,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-require('lsp.tinygo')
-
 vim.lsp.enable({
   'cssls',
   'emmet_language_server',
@@ -64,3 +62,5 @@ vim.lsp.enable({
   'terraformls',
   'ts_ls',
 })
+
+require('config.tinygo')
