@@ -21,8 +21,3 @@ safely('now', function()
   vim.cmd.colorscheme('tokyonight')
 end)
 
-safely('later', function()
-  vim.pack.add({ 'https://github.com/vim-jp/vimdoc-ja' })
-  vim.opt.helplang:prepend('ja')
-end)
-
