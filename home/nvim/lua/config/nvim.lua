@@ -17,7 +17,7 @@ vim.opt.autoread = true
 vim.api.nvim_create_autocmd("InsertLeave", {
   pattern = "*",
   callback = function()
-    vim.fn.system("im-select com.apple.keylayout.ABC")
+    vim.fn.system({ "im-alter", "abc" })
   end,
 })
 

@@ -5,6 +5,7 @@
 # Its HTTP traffic is loopback-only.
 "github:k1LoW/mo" = "v1.7.0"
 "github:cli/cli" = "2.103.3"
+"github:rin2yh/im-alter" = "v0.0.1"
 "github:sago35/tinygo-autocmpl" = "0.8.0"
 "github:sivchari/golance" = "0.7.23"
 node = "latest"
