@@ -1,0 +1,58 @@
+name: zsh startup
+
+on:
+  pull_request:
+    branches: [for-business]
+    # zshの起動に関係しないことが明らかなものだけ除外し、それ以外はすべて計測する
+    paths:
+      - "**"
+      - "!**/*.md"
+      - "!renovate.json"
+      - "!bootstrap.sh"
+      - "!home/claude/**"
+      - "!home/ghostty/**"
+      - "!home/git/**"
+      - "!home/nvim/**"
+      - "!home/textlint/**"
+      - "!.github/**"
+      - ".github/zsh-startup/**"
+      - ".github/workflows/zsh-startup.yml"
+
+permissions: {}
+
+concurrency:
+  group: zsh-startup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    name: Measure zsh startup time
+    runs-on: macos-26
+    timeout-minutes: 15
+    permissions:
+      contents: read # checkout のみ
+      pull-requests: write # 計測結果のコメント
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          path: head
+
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v23
+
+      - name: Measure
+        run: |
+          zsh head/.github/zsh-startup/bench.zsh base head 30 | tee "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v3.0.5
+        with:
+          header: zsh-startup-bench
+          path: ${{ runner.temp }}/report.md
