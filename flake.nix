@@ -21,10 +21,6 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-    daipeihust-tap = {
-      url = "github:daipeihust/homebrew-tap";
-      flake = false;
-    };
   };
 
   outputs =
@@ -36,7 +32,6 @@
       nix-homebrew,
       homebrew-core,
       homebrew-cask,
-      daipeihust-tap,
       ...
     }:
     let
@@ -50,7 +45,6 @@
             nix-homebrew
             homebrew-core
             homebrew-cask
-            daipeihust-tap
             ;
           inherit (machine) username dotfilesDir;
         };
