@@ -49,8 +49,7 @@ jobs:
 
       - name: Measure
         run: |
-          zsh head/.github/zsh-startup/bench.zsh base head 30 > "$RUNNER_TEMP/report.md"
-          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+          zsh head/.github/zsh-startup/bench.zsh base head 30 | tee "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Comment on PR
         env:
