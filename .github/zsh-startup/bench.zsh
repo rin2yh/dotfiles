@@ -98,7 +98,6 @@ for i in {0..$rounds}; do
   done
 done
 
-print -- '<!-- zsh-startup-bench -->'
 print -- '### zsh 起動時間'
 print
 print -- "コマンド入力を受け付けるまでの時間（${rounds}回の中央値）"

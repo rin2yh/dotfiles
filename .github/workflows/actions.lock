@@ -9,6 +9,7 @@ workflows:
     '.github/workflows/zsh-startup.yml':
         - 'actions/checkout@v7.0.1'
         - 'determinatesystems/nix-installer-action@v23'
+        - 'marocchino/sticky-pull-request-comment@v3.0.5'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
@@ -20,3 +21,8 @@ dependencies:
         commit: 'sha1-3138316df39ed29be04236d7ffc686fa525866aa'
         owner_id: 80991770
         repo_id: 588678074
+    'marocchino/sticky-pull-request-comment@v3.0.5':
+        ref: 'v3.0.5'
+        commit: 'sha1-5770ad5eb8f42dd2c4f34da00c94c5381e49af88'
+        owner_id: 128431
+        repo_id: 223043916
