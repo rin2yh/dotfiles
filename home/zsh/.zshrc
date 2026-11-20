@@ -38,7 +38,15 @@ bindkey -v
 
 # load completion
 autoload -U compinit
-compinit -ui
+# skip the security check and dump regeneration if the dump was updated within 24 hours
+_zcompdump=(${ZDOTDIR:-$HOME}/.zcompdump(N.mh-24))
+if (( $#_zcompdump )); then
+  compinit -C
+else
+  compinit -ui
+  touch "${ZDOTDIR:-$HOME}/.zcompdump"
+fi
+unset _zcompdump
 
 # Docker completion
 if type docker &>/dev/null; then
@@ -87,8 +95,8 @@ if command -v zoxide &>/dev/null; then
   }
 fi
 
-# fastfetch
-if command -v fastfetch &>/dev/null; then
+# fastfetch (top-level shells only)
+if [[ $SHLVL -eq 1 ]] && command -v fastfetch &>/dev/null; then
   case $((RANDOM % 3)) in
     0) fastfetch ;;
     1) fastfetch --logo apple ;;

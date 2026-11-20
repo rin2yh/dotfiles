@@ -123,7 +123,13 @@
   # Nix is managed by the Determinate installer; let it own /etc/nix/nix.conf.
   nix.enable = false;
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    # compinit is run from ~/.zshrc; skip the duplicate global call
+    enableGlobalCompInit = false;
+    # the prompt is set by starship
+    promptInit = "";
+  };
 
   security.pam.services.sudo_local.touchIdAuth = true;
 }
