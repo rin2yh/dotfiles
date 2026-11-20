@@ -1,0 +1,62 @@
+name: zsh startup
+
+on:
+  pull_request:
+    branches: [for-business]
+    paths:
+      - "**/*.nix"
+      - "flake.lock"
+      - "home/zsh/**"
+      - "home/fastfetch/**"
+      - "home/starship/**"
+      - "home/mise/**"
+      - ".github/zsh-startup/**"
+      - ".github/workflows/actions.lock"
+      - ".github/workflows/zsh-startup.yml"
+
+permissions: {}
+
+concurrency:
+  group: zsh-startup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    name: Measure zsh startup time
+    runs-on: macos-26
+    timeout-minutes: 90
+    permissions:
+      contents: read # checkout のみ
+      pull-requests: write # 計測結果のコメント
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          path: head
+
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v23
+
+      - name: Measure
+        run: |
+          zsh head/.github/zsh-startup/bench.zsh base head 30 > "$RUNNER_TEMP/report.md"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          comment_id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" --paginate \
+            --jq '.[] | select(.body | startswith("<!-- zsh-startup-bench -->")) | .id' | head -n 1)
+          if [ -n "$comment_id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$comment_id" -F body=@"$RUNNER_TEMP/report.md" > /dev/null
+          else
+            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/report.md"
+          fi
