@@ -3,15 +3,19 @@ name: zsh startup
 on:
   pull_request:
     branches: [main, for-business]
+    # zshの起動に関係しないことが明らかなものだけ除外し、それ以外はすべて計測する
     paths:
-      - "**/*.nix"
-      - "flake.lock"
-      - "home/zsh/**"
-      - "home/fastfetch/**"
-      - "home/starship/**"
-      - "home/mise/**"
+      - "**"
+      - "!**/*.md"
+      - "!renovate.json"
+      - "!bootstrap.sh"
+      - "!home/claude/**"
+      - "!home/ghostty/**"
+      - "!home/git/**"
+      - "!home/nvim/**"
+      - "!home/textlint/**"
+      - "!.github/**"
       - ".github/zsh-startup/**"
-      - ".github/workflows/actions.lock"
       - ".github/workflows/zsh-startup.yml"
 
 permissions: {}
