@@ -8,6 +8,8 @@
 {
   nix-homebrew = {
     enable = true;
+    # ~/.zprofile already runs `brew shellenv` for login shells
+    enableZshIntegration = false;
     user = username;
     autoMigrate = true;
     mutableTaps = true;
