@@ -28,7 +28,7 @@ jobs:
   bench:
     name: Measure zsh startup time
     runs-on: macos-26
-    timeout-minutes: 90
+    timeout-minutes: 30
     permissions:
       contents: read # checkout のみ
       pull-requests: write # 計測結果のコメント
