@@ -1,7 +1,7 @@
 {
   "plugins": {
     "lazygit.nvim": {
-      "rev": "9ffc6103926718f7070fb4017694543cd7dc9718",
+      "rev": "8557434b285217fd0e284da252638567cebb3240",
       "src": "https://github.com/kdheepak/lazygit.nvim"
     },
     "marp.nvim": {
