@@ -14,12 +14,7 @@ vim.opt.inccommand = "split"
 vim.opt.autoread = true
 
 -- IME auto-off
-vim.api.nvim_create_autocmd("InsertLeave", {
-  pattern = "*",
-  callback = function()
-    vim.fn.system("im-alter abc")
-  end,
-})
+require('config.ime')
 
 vim.api.nvim_create_user_command(
   'InitLua',
